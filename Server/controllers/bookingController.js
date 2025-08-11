@@ -122,7 +122,11 @@ export const createBooking = async (req, res) => {
 export const confirmPayment = async (req, res) => {
     try {
         const { paymentIntentId, bookingId } = req.body;
+
+        console.log('Confirming payment:', { paymentIntentId, bookingId });
+
         const result = await verifyPaymentIntent(paymentIntentId);
+        console.log('Payment verification result:', result);
 
         if (!result.success) {
             return res.status(400).json(result);
@@ -135,19 +139,22 @@ export const confirmPayment = async (req, res) => {
         ).populate('court venue user');
 
         if (!booking) {
+            console.error('Booking not found for ID:', bookingId);
             return res.status(404).json({ success: false, message: 'Booking not found.' });
         }
-        
-        // Send confirmation email
+
+        console.log('Booking confirmed:', {
+            id: booking._id,
+            user: booking.user.email,
+            venue: booking.venue.name,
+            court: booking.court.name
+        });
+
+        // Send confirmation email (temporarily disabled due to SMTP config)
         try {
-            await sendBookingConfirmationEmail(booking.user.email, {
-                venueName: booking.venue.name,
-                courtName: booking.court.name,
-                date: booking.date,
-                startTime: booking.startTime,
-                endTime: booking.endTime,
-                totalPrice: booking.totalPrice,
-            });
+            console.log('Email service temporarily disabled - booking confirmed without email');
+            // TODO: Fix Gmail SMTP configuration or use alternative email service
+            // await sendBookingConfirmationEmail(booking.user.email, { ... });
         } catch (emailError) {
             console.error('Failed to send confirmation email:', emailError);
             // Don't fail the request if email fails
@@ -155,6 +162,7 @@ export const confirmPayment = async (req, res) => {
 
         res.json({ success: true, message: 'Booking confirmed and paid.', booking });
     } catch (error) {
+        console.error('Payment confirmation error:', error);
         res.status(500).json({ success: false, message: 'Failed to confirm payment.', error: error.message });
     }
 };
@@ -162,11 +170,17 @@ export const confirmPayment = async (req, res) => {
 export const getMyBookings = async (req, res) => {
     try {
         const userId = req.user._id;
+        console.log('Fetching bookings for user:', userId);
+
         const bookings = await bookingModel.find({ user: userId })
             .populate('venue', 'name')
-            .populate('court', 'name sportType');
+            .populate('court', 'name sportType')
+            .sort({ createdAt: -1 }); // Sort by newest first
+
+        console.log('Found bookings:', bookings.length);
         res.json({ success: true, data: bookings });
     } catch (error) {
+        console.error('Error fetching bookings:', error);
         res.status(500).json({ success: false, message: 'Failed to fetch bookings', error: error.message });
     }
 };

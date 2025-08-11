@@ -1,11 +1,16 @@
 import nodemailer from 'nodemailer';
 
 const transporter = nodemailer.createTransport({
-    service: "gmail",
+    host: 'smtp.gmail.com',
+    port: 587,
+    secure: false, // true for 465, false for other ports
     auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+        user: process.env.SENDER_EMAIL,
+        pass: process.env.SMTP_PASS,
     },
+    tls: {
+        rejectUnauthorized: false
+    }
 });
 
 export const sendBookingConfirmationEmail = async (userEmail, bookingDetails) => {
@@ -17,7 +22,7 @@ export const sendBookingConfirmationEmail = async (userEmail, bookingDetails) =>
     });
 
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: process.env.SENDER_EMAIL,
         to: userEmail,
         subject: 'QuickCourt - Booking Confirmed! 🎾',
         html: `
@@ -127,7 +132,7 @@ export const sendBookingCancellationEmail = async (userEmail, bookingDetails) =>
     });
 
     const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: process.env.SENDER_EMAIL,
         to: userEmail,
         subject: 'QuickCourt - Booking Cancelled ❌',
         html: `
