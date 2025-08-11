@@ -7,9 +7,9 @@ const URI = process.env.MONGODB_URL;
 
 export const connection = () => {
     mongoose.connect(URI, {
-        dbName: `QuickCourt`  // Fixed: Use correct database name
+        dbName: 'MERN_AUTHENTICATION'
     }).then(() => {
-        console.log(`Mongo DB IS CONNECTED to QuickCourt database`)
+        console.log(`Mongo DB IS CONNECTED`)
     }).catch(err => {
         console.log(`some error occured while connecting : ${err}`);
     });

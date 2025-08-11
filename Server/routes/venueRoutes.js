@@ -6,16 +6,7 @@ import uploadMiddleware from '../middlewares/uploadMiddleware.js';
 
 const venueRoutes = express.Router();
 
-// Debug middleware to log all venue route requests
-venueRoutes.use((req, res, next) => {
-  console.log(`=== VENUE ROUTE DEBUG ===`);
-  console.log(`${req.method} ${req.path}`);
-  console.log('Headers:', req.headers);
-  console.log('Body:', req.body);
-  console.log('Files:', req.files);
-  console.log('User:', req.user);
-  next();
-});
+
 
 // Public routes
 venueRoutes.get('/', venueController.getAllVenues);

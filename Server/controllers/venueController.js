@@ -1,12 +1,15 @@
 import venueModel from '../models/venueModel.js';
 // Import cloudinary and other services here for image uploads
 
-// Get all approved venues for the public Venues page 
+// Get all approved venues for the public Venues page
 export const getAllVenues = async (req, res) => {
     try {
-        const venues = await venueModel.find({ isApproved: true });
+        // Temporarily get all venues to debug
+        const venues = await venueModel.find({});
+        console.log(`Found ${venues.length} venues in database`);
         res.json({ success: true, data: venues });
     } catch (error) {
+        console.error('Error fetching venues:', error);
         res.json({ success: false, message: error.message });
     }
 };
@@ -29,42 +32,35 @@ export const getVenueDetails = async (req, res) => {
 
 export const createVenue = async (req, res) => {
     try {
-        console.log('=== CREATE VENUE DEBUG ===');
-        console.log('Request body:', req.body);
-        console.log('Request files:', req.files);
-        console.log('User:', req.user);
-
         let { name, description, address, sportTypes, amenities } = req.body;
         const ownerId = req.user._id;
-
-        console.log('Raw data:', { name, description, address, sportTypes, amenities });
 
         // Parse JSON-encoded fields when multipart/form-data is used
         try {
             if (typeof address === 'string') address = JSON.parse(address);
         } catch (e) {
-            console.log('Error parsing address:', e.message);
+            return res.status(400).json({ success: false, message: 'Invalid address format' });
         }
         try {
             if (typeof sportTypes === 'string') sportTypes = JSON.parse(sportTypes);
         } catch (e) {
-            console.log('Error parsing sportTypes:', e.message);
+            return res.status(400).json({ success: false, message: 'Invalid sport types format' });
         }
         try {
             if (typeof amenities === 'string') amenities = JSON.parse(amenities);
         } catch (e) {
-            console.log('Error parsing amenities:', e.message);
+            return res.status(400).json({ success: false, message: 'Invalid amenities format' });
         }
 
         // Normalize arrays
         if (!Array.isArray(sportTypes)) sportTypes = sportTypes ? [sportTypes] : [];
         if (!Array.isArray(amenities)) amenities = amenities ? [amenities] : [];
 
-        console.log('Parsed data:', { name, description, address, sportTypes, amenities });
+       
 
         // Extract uploaded file URLs/paths (Cloudinary middleware sets .path)
         const photos = (req.files || []).map(file => file.path);
-        console.log('Photos:', photos);
+        
 
         const venueData = {
             name,
@@ -76,12 +72,12 @@ export const createVenue = async (req, res) => {
             owner: ownerId,
         };
 
-        console.log('Final venue data:', venueData);
+       
 
         const newVenue = new venueModel(venueData);
         await newVenue.save();
 
-        console.log('Venue saved successfully:', newVenue._id);
+        
         res.status(201).json({ success: true, message: 'Venue created successfully', venue: newVenue });
     } catch (error) {
         console.error('Error creating venue:', error);
