@@ -1,0 +1,235 @@
+/* Admin Dashboard Styles */
+.header-adminDashboard {
+  background: #f5f7fa;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.header-adminDashboard .header-content h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: #222;
+}
+.header-adminDashboard .header-role {
+  color: #888;
+  font-size: 1rem;
+  margin-top: 0.25rem;
+}
+.btn-adminDashboard {
+  background: #ff7043;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.btn-adminDashboard:hover {
+  background: #b63c15;
+}
+.section-adminDashboard {
+  background: #fff;
+  margin: 2rem 0;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+/* Enhanced admin dashboard styles */
+.approval-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.approval-card {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: grid;
+  grid-template-columns: 200px 1fr auto;
+  gap: 1.5rem;
+  align-items: start;
+  transition: all 0.2s;
+}
+
+.approval-card:hover {
+  border-color: #ff7043;
+  box-shadow: 0 4px 12px rgba(255, 112, 67, 0.1);
+}
+
+.venue-image {
+  width: 200px;
+  height: 150px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.venue-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.venue-image .placeholder {
+  width: 100%;
+  height: 100%;
+  background: #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+}
+
+.venue-details h4 {
+  margin: 0 0 0.5rem 0;
+  color: #1f2937;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.venue-description {
+  color: #4b5563;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.venue-meta p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.venue-meta strong {
+  color: #374151;
+}
+
+.approval-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 120px;
+}
+
+.approve-btn,
+.reject-btn {
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.875rem;
+}
+
+.approve-btn {
+  background: #059669;
+  color: white;
+}
+
+.approve-btn:hover:not(:disabled) {
+  background: #047857;
+}
+
+.reject-btn {
+  background: #dc2626;
+  color: white;
+}
+
+.reject-btn:hover:not(:disabled) {
+  background: #b91c1c;
+}
+
+.approve-btn:disabled,
+.reject-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 3rem;
+  color: #6b7280;
+}
+
+.empty-state p {
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+/* KPI Cards Enhancement */
+.kpi-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+.kpi-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  transition: all 0.2s;
+}
+
+.kpi-card:hover {
+  border-color: #ff7043;
+  box-shadow: 0 2px 8px rgba(255, 112, 67, 0.1);
+}
+
+.kpi-card h4 {
+  margin: 0 0 0.5rem 0;
+  color: #6b7280;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.kpi-card div {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+@media (max-width: 768px) {
+  .approval-card {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .venue-image {
+    width: 100%;
+    height: 200px;
+  }
+
+  .approval-actions {
+    flex-direction: row;
+    justify-content: stretch;
+  }
+
+  .approve-btn,
+  .reject-btn {
+    flex: 1;
+  }
+}
+
+@media (max-width: 600px) {
+  .header-adminDashboard {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 1rem;
+  }
+  .section-adminDashboard {
+    padding: 1rem;
+  }
+
+  .kpi-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

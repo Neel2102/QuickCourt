@@ -6,7 +6,6 @@ import '../../CSS/Header.css';
 const Header = ({ userName = 'User' }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { authUser, loading } = useAuth();
 
   const getPageTitle = () => {
     const path = location.pathname.split('/').pop();
