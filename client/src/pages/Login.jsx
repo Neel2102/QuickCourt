@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import "../CSS/Login.css"
-import "../CSS/EmailVerify.css";
 import InfinityGlowBackground from "./InfinityGlow";
 import Navbar from "../components/Navbar";
 
@@ -269,11 +268,11 @@ const LoginRegister = () => {
     };
 
     return (
-        <div className="auth-container">
-            <div className="auth-background">
-                <div className="auth-shape shape-1"></div>
-                <div className="auth-shape shape-2"></div>
-                <div className="auth-shape shape-3"></div>
+        <div className="auth-container-login">
+            <div className="auth-background-login">
+                <div className="auth-shape-login shape-1-login"></div>
+                <div className="auth-shape-login shape-2-login"></div>
+                <div className="auth-shape-login shape-3-login"></div>
                 <InfinityGlowBackground />
             </div>
 
@@ -281,30 +280,30 @@ const LoginRegister = () => {
             
             {showEmailVerify ? (
                 // Email Verification Form
-                <div className="auth-card-1">
-                    <div className="auth-header-1">
-                        <div className="logo-container">
-                            <div className="logo-circle">
+                <div className="auth-card-1-login">
+                    <div className="auth-header-1-login">
+                        <div className="logo-container-login">
+                            <div className="logo-circle-login">
                                 <Mail size={32} />
                             </div>
                         </div>
-                        <h1 className="auth-title">
+                        <h1 className="auth-title-login">
                             Verify Your Email
                         </h1>
-                        <p className="auth-subtitle">
+                        <p className="auth-subtitle-login">
                             We've sent a verification code to
                         </p>
                         {userEmail && (
-                            <p className="email-display">
+                            <p className="email-display-login">
                                 {userEmail}
                             </p>
                         )}
                     </div>
 
-                    <div className="auth-form">
-                        <div className="form-group">
-                            <div className="otp-container">
-                                <div className="otp-input-group">
+                    <div className="auth-form-login">
+                        <div className="form-group-login">
+                            <div className="otp-container-login">
+                                <div className="otp-input-group-login">
                                     {otp.map((digit, index) => (
                                         <input
                                             key={index}
@@ -313,7 +312,7 @@ const LoginRegister = () => {
                                             value={digit}
                                             onChange={(e) => handleOtpChange(index, e.target.value)}
                                             onKeyDown={(e) => handleKeyDown(index, e)}
-                                            className="otp-input"
+                                            className="otp-input-login"
                                             maxLength={1}
                                             autoFocus={index === 0}
                                         />
@@ -321,24 +320,24 @@ const LoginRegister = () => {
                                     <button
                                         type="button"
                                         onClick={() => setShowOtp(!showOtp)}
-                                        className="otp-toggle"
+                                        className="otp-toggle-login"
                                     >
                                         {showOtp ? <EyeOff size={20} /> : <Eye size={20} />}
                                     </button>
                                 </div>
-                                {otpError && <span className="error-message">{otpError}</span>}
+                                {otpError && <span className="error-message-login">{otpError}</span>}
                             </div>
                         </div>
 
                         <button 
                             type="button" 
                             onClick={handleOtpSubmit} 
-                            className="auth-button"
+                            className="auth-button-login"
                             disabled={isLoading || otp.join('').length !== 6}
                         >
                             {isLoading ? (
-                                <div className="loading-spinner">
-                                    <div className="spinner"></div>
+                                <div className="loading-spinner-login">
+                                    <div className="spinner-login"></div>
                                     <span>Verifying...</span>
                                 </div>
                             ) : (
@@ -346,24 +345,24 @@ const LoginRegister = () => {
                             )}
                         </button>
 
-                        <div className="resend-container">
+                        <div className="resend-container-login">
                             Didn't receive the code?{' '}
                             <button
                                 type="button"
                                 onClick={handleResendOtp}
                                 disabled={isLoading}
-                                className="resend-button"
+                                className="resend-button-login"
                             >
                                 Resend OTP
                             </button>
                         </div>
                     </div>
 
-                    <div className="auth-switch">
+                    <div className="auth-switch-login">
                         <p>
                             <button 
                                 type="button" 
-                                className="switch-button"
+                                className="switch-button-login"
                                 onClick={goBackToLogin}
                             >
                                 <ArrowLeft size={16} />
@@ -374,17 +373,17 @@ const LoginRegister = () => {
                 </div>
             ) : (
                 // Login/Register Form
-                <div className="auth-card">
-                <div className="auth-header">
-                    <div className="logo-container">
-                        <div className="logo-circle">
+                <div className="auth-card-login">
+                <div className="auth-header-login">
+                    <div className="logo-container-login">
+                        <div className="logo-circle-login">
                             <User size={32} />
                         </div>
                     </div>
-                    <h1 className="auth-title">
+                    <h1 className="auth-title-login">
                         {isLogin ? 'Welcome to QuickCourt!' : 'Join QuickCourt'}
                     </h1>
-                    <p className="auth-subtitle">
+                    <p className="auth-subtitle-login">
                         {isLogin 
                             ? 'Sign in to book your perfect court' 
                             : 'Create your account and start playing'
@@ -392,95 +391,95 @@ const LoginRegister = () => {
                     </p>
                 </div>
 
-                <div className="auth-form">
+                <div className="auth-form-login">
                     {!isLogin && (
-                        <div className="form-group">
-                            <div className={`input-wrapper ${errors.name ? 'error' : ''}`}>
-                                <User className="input-icon" size={20} />
+                        <div className="form-group-login">
+                            <div className={`input-wrapper-login ${errors.name ? 'error' : ''}`}>
+                                <User className="input-icon-login" size={20} />
                                 <input
                                     type="text"
                                     name="name"
                                     placeholder="Full Name"
                                     value={formData.name}
                                     onChange={handleInputChange}
-                                    className="form-input"
+                                    className="form-input-login"
                                 />
                             </div>
-                            {errors.name && <span className="error-message">{errors.name}</span>}
+                            {errors.name && <span className="error-message-login">{errors.name}</span>}
                         </div>
                     )}
 
-                    <div className="form-group">
-                        <div className={`input-wrapper ${errors.email ? 'error' : ''}`}>
-                            <Mail className="input-icon" size={20} />
+                    <div className="form-group-login">
+                        <div className={`input-wrapper-login ${errors.email ? 'error' : ''}`}>
+                            <Mail className="input-icon-login" size={20} />
                             <input
                                 type="email"
                                 name="email"
                                 placeholder="Email Address"
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className="form-input"
+                                className="form-input-login"
                             />
                         </div>
-                        {errors.email && <span className="error-message">{errors.email}</span>}
+                        {errors.email && <span className="error-message-login">{errors.email}</span>}
                     </div>
 
-                    <div className="form-group">
-                        <div className={`input-wrapper ${errors.password ? 'error' : ''}`}>
-                            <Lock className="input-icon" size={20} />
+                    <div className="form-group-login">
+                        <div className={`input-wrapper-login ${errors.password ? 'error' : ''}`}>
+                            <Lock className="input-icon-login" size={20} />
                             <input
                                 type={showPassword ? "text" : "password"}
                                 name="password"
                                 placeholder="Password"
                                 value={formData.password}
                                 onChange={handleInputChange}
-                                className="form-input"
+                                className="form-input-login"
                             />
                             <button
                                 type="button"
-                                className="password-toggle"
+                                className="password-toggle-login"
                                 onClick={() => setShowPassword(!showPassword)}
                             >
                                 {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                             </button>
                         </div>
-                        {errors.password && <span className="error-message">{errors.password}</span>}
+                        {errors.password && <span className="error-message-login">{errors.password}</span>}
                     </div>
 
                     {!isLogin && (
-                        <div className="form-group">
-                            <div className={`input-wrapper ${errors.confirmPassword ? 'error' : ''}`}>
-                                <Lock className="input-icon" size={20} />
+                        <div className="form-group-login">
+                            <div className={`input-wrapper-login ${errors.confirmPassword ? 'error' : ''}`}>
+                                <Lock className="input-icon-login" size={20} />
                                 <input
                                     type={showConfirmPassword ? "text" : "password"}
                                     name="confirmPassword"
                                     placeholder="Confirm Password"
                                     value={formData.confirmPassword}
                                     onChange={handleInputChange}
-                                    className="form-input"
+                                    className="form-input-login"
                                 />
                                 <button
                                     type="button"
-                                    className="password-toggle"
+                                    className="password-toggle-login"
                                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                                 >
                                     {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                                 </button>
                             </div>
-                            {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+                            {errors.confirmPassword && <span className="error-message-login">{errors.confirmPassword}</span>}
                         </div>
                     )}
 
                     {isLogin && (
-                        <div className="form-options">
-                            <label className="checkbox-container">
+                        <div className="form-options-login">
+                            <label className="checkbox-container-login">
                                 <input type="checkbox" />
                                 <span className="checkmark"></span>
                                 Remember me
                             </label>
                             <button 
                                 type="button" 
-                                className="forgot-password"
+                                className="forgot-password-login"
                                 onClick={() => navigate('/reset-password')}
                             >
                                 Forgot Password?
@@ -491,12 +490,12 @@ const LoginRegister = () => {
                     <button 
                         type="button" 
                         onClick={handleSubmit} 
-                        className="auth-button"
+                        className="auth-button-login"
                         disabled={isLoading}
                     >
                         {isLoading ? (
-                            <div className="loading-spinner">
-                                <div className="spinner"></div>
+                            <div className="loading-spinner-login">
+                                <div className="spinner-login"></div>
                                 <span>Processing...</span>
                             </div>
                         ) : (
@@ -505,12 +504,12 @@ const LoginRegister = () => {
                     </button>
                 </div>
 
-                <div className="auth-divider">
+                <div className="auth-divider-login">
                     <span>or</span>
                 </div>
 
-                <div className="social-login">
-                    <button className="social-button google">
+                <div className="social-login-login">
+                    <button className="social-button-login google">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
                             <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
@@ -521,12 +520,12 @@ const LoginRegister = () => {
                     </button>
                 </div>
 
-                <div className="auth-switch">
+                <div className="auth-switch-login">
                     <p>
                         {isLogin ? "Don't have an account? " : "Already have an account? "}
                         <button 
                             type="button" 
-                            className="switch-button"
+                            className="switch-button-login"
                             onClick={toggleMode}
                         >
                             {isLogin ? 'Sign Up' : 'Login'}

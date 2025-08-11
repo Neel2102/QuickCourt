@@ -157,43 +157,43 @@ const ResetPassword = () => {
 
     const renderStep1 = () => (
         <>
-            <div className="resetpassword-header">
-                <div className="logo-container">
-                    <div className="logo-circle">
+            <div className="resetpassword-header-resetpass">
+                <div className="logo-container-resetpass">
+                    <div className="logo-circle-resetpass">
                         <Mail size={32} />
                     </div>
                 </div>
-                <h1 className="resetpassword-title">Reset Password</h1>
-                <p className="resetpassword-subtitle">
+                <h1 className="resetpassword-title-resetpass">Reset Password</h1>
+                <p className="resetpassword-subtitle-resetpass">
                     Enter your email address to receive a password reset OTP
                 </p>
             </div>
 
-            <div className="resetpassword-form">
-                <div className="form-group">
-                    <div className={`input-wrapper ${errors.email ? 'error' : ''}`}>
-                        <Mail className="input-icon" size={20} />
+            <div className="resetpassword-form-resetpass">
+                <div className="form-group-resetpass">
+                    <div className={`input-wrapper-resetpass ${errors.email ? 'error-resetpass' : ''}`}>
+                        <Mail className="input-icon-resetpass" size={20} />
                         <input
                             type="email"
                             name="email"
                             placeholder="Email Address"
                             value={formData.email}
                             onChange={handleInputChange}
-                            className="form-input"
+                            className="form-input-resetpass"
                         />
                     </div>
-                    {errors.email && <span className="error-message">{errors.email}</span>}
+                    {errors.email && <span className="error-message-resetpass">{errors.email}</span>}
                 </div>
 
                 <button 
                     type="button" 
                     onClick={handleSendOtp} 
-                    className="resetpassword-button"
+                    className="resetpassword-button-resetpass"
                     disabled={isLoading}
                 >
                     {isLoading ? (
-                        <div className="loading-spinner">
-                            <div className="spinner"></div>
+                        <div className="loading-spinner-resetpass">
+                            <div className="spinner-resetpass"></div>
                             <span>Sending OTP...</span>
                         </div>
                     ) : (
@@ -206,42 +206,42 @@ const ResetPassword = () => {
 
     const renderStep2 = () => (
         <>
-            <div className="resetpassword-header">
-                <button className="back-button" onClick={handleBack}>
+            <div className="resetpassword-header-resetpass">
+                <button className="back-button-resetpass" onClick={handleBack}>
                     <ArrowLeft size={20} />
                 </button>
-                <div className="logo-container">
-                    <div className="logo-circle">
+                <div className="logo-container-resetpass">
+                    <div className="logo-circle-resetpass">
                         <Lock size={32} />
                     </div>
                 </div>
-                <h1 className="resetpassword-title">Enter OTP</h1>
-                <p className="resetpassword-subtitle">
+                <h1 className="resetpassword-title-resetpass">Enter OTP</h1>
+                <p className="resetpassword-subtitle-resetpass">
                     We've sent a 6-digit OTP to {formData.email}
                 </p>
             </div>
 
-            <div className="resetpassword-form">
-                <div className="form-group">
-                    <div className={`input-wrapper ${errors.otp ? 'error' : ''}`}>
-                        <Lock className="input-icon" size={20} />
+            <div className="resetpassword-form-resetpass">
+                <div className="form-group-resetpass">
+                    <div className={`input-wrapper-resetpass ${errors.otp ? 'error-resetpass' : ''}`}>
+                        <Lock className="input-icon-resetpass" size={20} />
                         <input
                             type="text"
                             name="otp"
                             placeholder="Enter 6-digit OTP"
                             value={formData.otp}
                             onChange={handleInputChange}
-                            className="form-input"
+                            className="form-input-resetpass"
                             maxLength={6}
                         />
                     </div>
-                    {errors.otp && <span className="error-message">{errors.otp}</span>}
+                    {errors.otp && <span className="error-message-resetpass">{errors.otp}</span>}
                 </div>
 
                 <button 
                     type="button" 
                     onClick={handleVerifyOtp} 
-                    className="resetpassword-button"
+                    className="resetpassword-button-resetpass"
                     disabled={isLoading}
                 >
                     Verify OTP
@@ -252,75 +252,75 @@ const ResetPassword = () => {
 
     const renderStep3 = () => (
         <>
-            <div className="resetpassword-header">
-                <button className="back-button" onClick={handleBack}>
+            <div className="resetpassword-header-resetpass">
+                <button className="back-button-resetpass" onClick={handleBack}>
                     <ArrowLeft size={20} />
                 </button>
-                <div className="logo-container">
-                    <div className="logo-circle">
+                <div className="logo-container-resetpass">
+                    <div className="logo-circle-resetpass">
                         <Lock size={32} />
                     </div>
                 </div>
-                <h1 className="resetpassword-title">Set New Password</h1>
-                <p className="resetpassword-subtitle">
+                <h1 className="resetpassword-title-resetpass">Set New Password</h1>
+                <p className="resetpassword-subtitle-resetpass">
                     Create a new password for your account
                 </p>
             </div>
 
-            <div className="resetpassword-form">
-                <div className="form-group">
-                    <div className={`input-wrapper ${errors.newPassword ? 'error' : ''}`}>
-                        <Lock className="input-icon" size={20} />
+            <div className="resetpassword-form-resetpass">
+                <div className="form-group-resetpass">
+                    <div className={`input-wrapper-resetpass ${errors.newPassword ? 'error-resetpass' : ''}`}>
+                        <Lock className="input-icon-resetpass" size={20} />
                         <input
                             type={showPassword ? "text" : "password"}
                             name="newPassword"
                             placeholder="New Password"
                             value={formData.newPassword}
                             onChange={handleInputChange}
-                            className="form-input"
+                            className="form-input-resetpass"
                         />
                         <button
                             type="button"
-                            className="password-toggle"
+                            className="password-toggle-resetpass"
                             onClick={() => setShowPassword(!showPassword)}
                         >
                             {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         </button>
                     </div>
-                    {errors.newPassword && <span className="error-message">{errors.newPassword}</span>}
+                    {errors.newPassword && <span className="error-message-resetpass">{errors.newPassword}</span>}
                 </div>
 
-                <div className="form-group">
-                    <div className={`input-wrapper ${errors.confirmPassword ? 'error' : ''}`}>
-                        <Lock className="input-icon" size={20} />
+                <div className="form-group-resetpass">
+                    <div className={`input-wrapper-resetpass ${errors.confirmPassword ? 'error-resetpass' : ''}`}>
+                        <Lock className="input-icon-resetpass" size={20} />
                         <input
                             type={showConfirmPassword ? "text" : "password"}
                             name="confirmPassword"
                             placeholder="Confirm New Password"
                             value={formData.confirmPassword}
                             onChange={handleInputChange}
-                            className="form-input"
+                            className="form-input-resetpass"
                         />
                         <button
                             type="button"
-                            className="password-toggle"
+                            className="password-toggle-resetpass"
                             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                         >
                             {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                         </button>
                     </div>
-                    {errors.confirmPassword && <span className="error-message">{errors.confirmPassword}</span>}
+                    {errors.confirmPassword && <span className="error-message-resetpass">{errors.confirmPassword}</span>}
                 </div>
 
                 <button 
                     type="button" 
                     onClick={handleResetPassword} 
-                    className="resetpassword-button"
+                    className="resetpassword-button-resetpass"
                     disabled={isLoading}
                 >
                     {isLoading ? (
-                        <div className="loading-spinner">
-                            <div className="spinner"></div>
+                        <div className="loading-spinner-resetpass">
+                            <div className="spinner-resetpass"></div>
                             <span>Resetting Password...</span>
                         </div>
                     ) : (
@@ -333,27 +333,27 @@ const ResetPassword = () => {
 
     return (
 
-        <div className="resetpassword-container">
+        <div className="resetpassword-container-resetpass">
             <Navbar/>
 
-            <div className="resetpassword-background">
-                <div className="resetpassword-shape shape-1-reset"></div>
-                <div className="resetpassword-shape shape-2-reset"></div>
-                <div className="resetpassword-shape shape-3-reset"></div>
+            <div className="resetpassword-background-resetpass">
+                <div className="resetpassword-shape-resetpass shape-1-reset-resetpass"></div>
+                <div className="resetpassword-shape-resetpass shape-2-reset-resetpass"></div>
+                <div className="resetpassword-shape-resetpass shape-3-reset-resetpass"></div>
                 <InfinityGlowBackground/>
             </div>
             
-            <div className="resetpassword-card">
+            <div className="resetpassword-card-resetpass">
                 {step === 1 && renderStep1()}
                 {step === 2 && renderStep2()}
                 {step === 3 && renderStep3()}
 
-                <div className="resetpassword-switch">
+                <div className="resetpassword-switch-resetpass">
                     <p>
                         Remember your password? 
                         <button 
                             type="button" 
-                            className="switch-button"
+                            className="switch-button-resetpass"
                             onClick={() => navigate('/login')}
                         >
                             Sign In
