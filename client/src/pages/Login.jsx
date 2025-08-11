@@ -49,11 +49,11 @@ const Login = () => {
     return Object.keys(newErrors).length === 0;
   };
 
+  // This function already prevents default, so it's good to go
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
     setIsLoading(true);
-
 
     try {
       const res = await fetch("/api/auth/login", {
@@ -69,11 +69,9 @@ const Login = () => {
       setIsLoading(false);
       if (res.ok) {
         if (data.user && data.user.isAccountVerified) {
-          // Store user info in localStorage
           localStorage.setItem("userId", data.user.id);
           localStorage.setItem("name", data.user.name);
 
-          // Prefer explicit role from backend if provided
           const role = data.user.role || (data.user.isAdmin ? "Admin" : (data.user.isFacilityOwner ? "FacilityOwner" : "User"));
           localStorage.setItem("role", role);
 
@@ -166,12 +164,10 @@ const Login = () => {
       if (data.success) {
         toast.success("Email Verified successfully!");
 
-        // Store user info in localStorage if provided
         if (data.user) {
           localStorage.setItem("userId", data.user.id);
           localStorage.setItem("name", data.user.name);
 
-          // Determine role and redirect accordingly
           const role = data.user.role || (data.user.isAdmin ? "Admin" : (data.user.isFacilityOwner ? "FacilityOwner" : "User"));
           localStorage.setItem("role", role);
 
@@ -185,7 +181,6 @@ const Login = () => {
           }
           navigate("/user-dashboard");
         } else {
-          // Fallback if user data not provided
           navigate("/user-dashboard");
         }
       } else {
@@ -331,6 +326,7 @@ const Login = () => {
           </div>
         </div>
       ) : (
+        // Wrap login inputs in a <form> with onSubmit
         <div className="auth-card-login">
           <div className="auth-header-login">
             <div className="logo-container-login">
@@ -342,7 +338,7 @@ const Login = () => {
             <p className="auth-subtitle-login">Sign in to book your perfect court</p>
           </div>
 
-          <div className="auth-form-login">
+          <form className="auth-form-login" onSubmit={handleSubmit}>
             <div className="form-group-login">
               <div className={`input-wrapper-login ${errors.email ? "error" : ""}`}>
                 <Mail className="input-icon-login" size={20} />
@@ -399,9 +395,9 @@ const Login = () => {
               </button>
             </div>
 
+            {/* Change button type to submit */}
             <button
-              type="button"
-              onClick={handleSubmit}
+              type="submit"
               className="auth-button-login"
               disabled={isLoading}
             >
@@ -414,7 +410,7 @@ const Login = () => {
                 "Sign In"
               )}
             </button>
-          </div>
+          </form>
 
           <div className="auth-switch-login">
             <p>

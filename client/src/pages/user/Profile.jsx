@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { getUserProfile, updateUserProfile, uploadProfilePicture } from '../../services/userService';
+import { getMyBookings } from '../../services/bookingService';
+import { formatDate, formatTime } from '../../utils/dateUtils';
 import '../../CSS/Profile.css';
 
 const Profile = () => {
