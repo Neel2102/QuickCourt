@@ -1,39 +1,74 @@
 /* User Reviews Page Styles */
-.user-reviews-container {
-  max-width: 1000px;
+:root {
+  --primary-color: #e7e7e7;
+  --primary-dark: #1f1f1f;
+  --primary-light: #ffffff;
+  --secondary-color: #c9c9c9;
+  --accent-color: #4b4b4b;
+  --error-color: #929292;
+  --warning-color: #9ca3af;
+  --text-primary: #141414;
+  --text-secondary: #5f5f5f;
+  --text-light: #9e9e9e;
+  --border-color: #d4d4d4;
+  --border-focus: #4b4b4b;
+  --background-primary: #ffffff;
+  --background-secondary: #fafafa;
+}
+
+@keyframes fade-in-login {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.user-reviews-container-review {
   margin: 0 auto;
   padding: 2rem;
-  background: #f8fafc;
+  background: var(--background-secondary);
   min-height: 100vh;
 }
 
-.page-header {
-  background: linear-gradient(135deg, #43b97f 0%, #2e7d5a 100%);
-  border-radius: 15px;
+.page-header-review {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
   padding: 2rem;
   margin-bottom: 2rem;
-  color: white;
+  color: var(--text-primary);
+  box-shadow: inset 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 10px 10px -6px rgb(0 0 0 / 0.1);
+  position: relative;
+  z-index: 2;
+  animation: fade-in-login 1s ease-in-out;
 }
 
-.header-content {
+.header-content-review {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.header-content h1 {
+.header-content-review h1 {
   margin: 0 0 0.5rem 0;
   font-size: 2rem;
   font-weight: 600;
+  color: var(--text-primary);
 }
 
-.header-content p {
+.header-content-review p {
   margin: 0;
-  opacity: 0.9;
+  color: var(--text-secondary);
   font-size: 1.1rem;
 }
 
-.loading-state {
+.loading-state-review {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -42,145 +77,160 @@
   text-align: center;
 }
 
-.loading-state p {
+.loading-state-review p {
   margin-top: 1rem;
-  color: #6b7280;
+  color: var(--text-light);
 }
 
 /* No Reviews State */
-.no-reviews {
+.no-reviews-review {
   text-align: center;
   padding: 3rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
+  box-shadow: inset 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 10px 10px -6px rgb(0 0 0 / 0.1);
+  position: relative;
+  z-index: 2;
+  animation: fade-in-login 1s ease-in-out;
 }
 
-.no-reviews h3 {
+.no-reviews-review h3 {
   margin: 1rem 0 0.5rem 0;
-  color: #374151;
+  color: var(--text-primary);
   font-size: 1.25rem;
 }
 
-.no-reviews p {
-  color: #6b7280;
+.no-reviews-review p {
+  color: var(--text-secondary);
   max-width: 400px;
   margin: 0 auto;
 }
 
 /* Reviews List */
-.reviews-list {
+.reviews-list-review {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.review-card {
-  background: white;
-  border-radius: 12px;
+.review-card-review {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 1rem;
   padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
-  border: 1px solid #f3f4f6;
-  transition: all 0.2s;
+  box-shadow: inset 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 10px 10px -6px rgb(0 0 0 / 0.1);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+  animation: fade-in-login 1s ease-in-out;
 }
 
-.review-card:hover {
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12);
-  border-color: #e5e7eb;
+.review-card-review:hover {
+  box-shadow: inset 0 25px 30px -5px rgb(0 0 0 / 0.15),
+    0 15px 15px -6px rgb(0 0 0 / 0.15);
+  border-color: var(--border-focus);
+  transform: translateY(-2px);
 }
 
-.review-header {
+.review-header-review {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1rem;
 }
 
-.venue-info {
+.venue-info-review {
   display: flex;
   gap: 1rem;
   flex: 1;
 }
 
-.venue-image {
+.venue-image-review {
   width: 60px;
   height: 60px;
-  border-radius: 8px;
+  border-radius: 0.5rem;
   overflow: hidden;
-  background: #f3f4f6;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 }
 
-.venue-thumbnail {
+.venue-thumbnail-review {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.venue-placeholder {
-  color: #9ca3af;
+.venue-placeholder-review {
+  color: var(--text-light);
 }
 
-.venue-details {
+.venue-details-review {
   flex: 1;
 }
 
-.venue-details h3 {
+.venue-details-review h3 {
   margin: 0 0 0.5rem 0;
-  color: #1f2937;
+  color: var(--text-primary);
   font-size: 1.1rem;
   font-weight: 600;
 }
 
-.review-meta {
+.review-meta-review {
   display: flex;
   align-items: center;
   gap: 1rem;
 }
 
-.review-rating {
+.review-rating-review {
   display: flex;
   gap: 0.125rem;
 }
 
-.star {
+.star-review {
   background: none;
   border: none;
   padding: 0;
   cursor: default;
-  color: #d1d5db;
+  color: var(--text-light);
 }
 
-.star.interactive {
+.star-review.interactive {
   cursor: pointer;
   transition: color 0.2s;
 }
 
-.star.interactive:hover {
-  color: #fbbf24;
+.star-review.interactive:hover {
+  color: var(--warning-color);
 }
 
-.star.filled {
-  color: #fbbf24;
+.star-review.filled {
+  color: var(--warning-color);
 }
 
-.review-date {
+.review-date-review {
   display: flex;
   align-items: center;
   gap: 0.25rem;
-  color: #6b7280;
+  color: var(--text-light);
   font-size: 0.8rem;
 }
 
-.review-actions {
+.review-actions-review {
   display: flex;
   gap: 0.5rem;
 }
 
-.action-btn {
+.action-btn-review {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -190,96 +240,105 @@
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
+  backdrop-filter: blur(5px);
 }
 
-.edit-btn {
-  background: #dbeafe;
-  color: #2563eb;
+.edit-btn-review {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--accent-color);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.edit-btn:hover {
-  background: #bfdbfe;
+.edit-btn-review:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: var(--border-focus);
 }
 
-.delete-btn {
-  background: #fee2e2;
-  color: #dc2626;
+.delete-btn-review {
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--error-color);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-.delete-btn:hover {
-  background: #fecaca;
+.delete-btn-review:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: var(--error-color);
 }
 
 /* Review Content */
-.review-content {
-  color: #374151;
+.review-content-review {
+  color: var(--text-primary);
   line-height: 1.6;
 }
 
-.review-text p {
+.review-text-review p {
   margin: 0;
 }
 
 /* Edit Form */
-.edit-form {
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
+.edit-form-review {
+  border: 1px solid var(--border-color);
+  border-radius: 0.5rem;
   padding: 1rem;
-  background: #f9fafb;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(5px);
 }
 
-.form-group {
+.form-group-review {
   margin-bottom: 1rem;
 }
 
-.form-group:last-child {
+.form-group-review:last-child {
   margin-bottom: 0;
 }
 
-.form-group label {
+.form-group-review label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #374151;
+  color: var(--text-primary);
 }
 
-.rating-input {
+.rating-input-review {
   display: flex;
   gap: 0.25rem;
 }
 
-.comment-input {
+.comment-input-review {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   resize: vertical;
   font-family: inherit;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  color: var(--text-primary);
 }
 
-.comment-input:focus {
+.comment-input-review:focus {
   outline: none;
-  border-color: #43b97f;
-  box-shadow: 0 0 0 3px rgba(67, 185, 127, 0.1);
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(75, 75, 75, 0.1);
 }
 
-.form-group small {
+.form-group-review small {
   display: block;
   margin-top: 0.25rem;
-  color: #6b7280;
+  color: var(--text-light);
   font-size: 0.8rem;
 }
 
-.form-actions {
+.form-actions-review {
   display: flex;
   gap: 0.75rem;
   margin-top: 1rem;
 }
 
-.save-btn {
+.save-btn-review {
   padding: 0.5rem 1rem;
-  background: #43b97f;
-  color: white;
+  background: var(--accent-color);
+  color: var(--primary-light);
   border: none;
   border-radius: 6px;
   font-weight: 500;
@@ -287,27 +346,55 @@
   transition: all 0.2s;
 }
 
-.save-btn:hover {
-  background: #2e7d5a;
+.save-btn-review:hover {
+  background: var(--primary-dark);
 }
 
-.cancel-btn {
+.cancel-btn-review {
   padding: 0.5rem 1rem;
-  background: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  color: var(--text-primary);
+  border: 1px solid var(--border-color);
   border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.cancel-btn:hover {
-  background: #e5e7eb;
+.cancel-btn-review:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--border-focus);
+}
+
+/* Like Button */
+.like-btn-review {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: 0.85rem;
+}
+
+.like-btn-review:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--border-focus);
+}
+
+.like-btn-review.liked {
+  color: var(--accent-color);
+  background: rgba(75, 75, 75, 0.1);
 }
 
 /* Pagination */
-.pagination {
+.pagination-review {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -316,78 +403,80 @@
   padding: 1rem;
 }
 
-.pagination-btn {
+.pagination-btn-review {
   padding: 0.5rem 1rem;
-  background: #43b97f;
-  color: white;
-  border: none;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.2s;
 }
 
-.pagination-btn:hover:not(:disabled) {
-  background: #2e7d5a;
+.pagination-btn-review:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--border-focus);
 }
 
-.pagination-btn:disabled {
-  background: #d1d5db;
-  color: #9ca3af;
+.pagination-btn-review:disabled {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-light);
   cursor: not-allowed;
 }
 
-.pagination-info {
-  color: #6b7280;
+.pagination-info-review {
+  color: var(--text-light);
   font-size: 0.9rem;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .user-reviews-container {
+  .user-reviews-container-review {
     padding: 1rem;
   }
 
-  .page-header {
+  .page-header-review {
     padding: 1.5rem;
   }
 
-  .header-content h1 {
+  .header-content-review h1 {
     font-size: 1.5rem;
   }
 
-  .review-card {
+  .review-card-review {
     padding: 1rem;
   }
 
-  .review-header {
+  .review-header-review {
     flex-direction: column;
     gap: 1rem;
   }
 
-  .review-actions {
+  .review-actions-review {
     align-self: flex-end;
   }
 
-  .venue-info {
+  .venue-info-review {
     gap: 0.75rem;
   }
 
-  .venue-image {
+  .venue-image-review {
     width: 50px;
     height: 50px;
   }
 
-  .review-meta {
+  .review-meta-review {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
 
-  .form-actions {
+  .form-actions-review {
     flex-direction: column;
   }
 
-  .pagination {
+  .pagination-review {
     flex-direction: column;
     gap: 0.5rem;
   }

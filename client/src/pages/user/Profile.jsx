@@ -136,37 +136,37 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="profile-container">
-        <div className="loading">Loading profile...</div>
+      <div className="profile-container-profile">
+        <div className="loading-profile">Loading profile...</div>
       </div>
     );
   }
 
   return (
-    <div className="profile-container">
-      <div className="page-header">
+    <div className="profile-container-profile">
+      {/* <div className="page-header-profile">
         <h1>My Profile</h1>
         <p>Manage your account information and preferences</p>
-      </div>
+      </div> */}
 
-      <div className="profile-content">
+      <div className="profile-content-profile">
         {/* Profile Header */}
-        <div className="profile-header">
-          <div className="avatar-section">
-            <div className="avatar-container">
+        <div className="profile-header-profile">
+          <div className="avatar-section-profile">
+            <div className="avatar-container-profile">
               {avatarPreview ? (
                 <img 
                   src={avatarPreview} 
                   alt="Profile" 
-                  className="profile-avatar"
+                  className="profile-avatar-profile"
                 />
               ) : (
-                <div className="avatar-placeholder">
+                <div className="avatar-placeholder-profile">
                   {user?.name?.charAt(0)?.toUpperCase() || 'U'}
                 </div>
               )}
               {editing && (
-                <label className="avatar-upload">
+                <label className="avatar-upload-profile">
                   <input
                     type="file"
                     accept="image/*"
@@ -179,32 +179,32 @@ const Profile = () => {
             </div>
           </div>
 
-          <div className="profile-info">
+          <div className="profile-info-profile">
             <h2>{user?.name || 'User'}</h2>
-            <p className="user-email">{user?.email}</p>
-            <p className="user-role">Regular User</p>
-            {user?.bio && <p className="user-bio">{user.bio}</p>}
+            <p className="user-email-profile">{user?.email}</p>
+            <p className="user-role-profile">Regular User</p>
+            {user?.bio && <p className="user-bio-profile">{user.bio}</p>}
           </div>
 
-          <div className="profile-actions">
+          <div className="profile-actions-profile">
             {!editing ? (
               <button 
-                className="edit-btn"
+                className="btn-profile edit-btn-profile"
                 onClick={() => setEditing(true)}
               >
                 Edit Profile
               </button>
             ) : (
-              <div className="edit-actions">
+              <div className="edit-actions-profile">
                 <button 
-                  className="save-btn"
+                  className="btn-profile save-btn-profile"
                   onClick={handleSubmit}
                   disabled={loading}
                 >
                   {loading ? 'Saving...' : 'Save Changes'}
                 </button>
                 <button 
-                  className="cancel-btn"
+                  className="btn-profile cancel-btn-profile"
                   onClick={handleCancel}
                 >
                   Cancel
@@ -216,11 +216,11 @@ const Profile = () => {
 
         {/* Profile Form */}
         {editing && (
-          <form className="profile-form" onSubmit={handleSubmit}>
-            <div className="form-section">
+          <form className="profile-form-profile" onSubmit={handleSubmit}>
+            <div className="form-section-profile">
               <h3>Personal Information</h3>
               
-              <div className="form-group">
+              <div className="form-group-profile">
                 <label htmlFor="name">Full Name *</label>
                 <input
                   type="text"
@@ -233,7 +233,7 @@ const Profile = () => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group-profile">
                 <label htmlFor="email">Email</label>
                 <input
                   type="email"
@@ -241,12 +241,12 @@ const Profile = () => {
                   name="email"
                   value={formData.email}
                   disabled
-                  className="disabled-input"
+                  className="disabled-input-profile"
                 />
                 <small>Email cannot be changed</small>
               </div>
 
-              <div className="form-group">
+              <div className="form-group-profile">
                 <label htmlFor="bio">Bio</label>
                 <textarea
                   id="bio"
@@ -261,25 +261,25 @@ const Profile = () => {
               </div>
             </div>
 
-            <div className="form-section">
+            <div className="form-section-profile">
               <h3>Account Information</h3>
               
-              <div className="info-row">
-                <span className="info-label">Account Type:</span>
-                <span className="info-value">Regular User</span>
+              <div className="info-row-profile">
+                <span className="info-label-profile">Account Type:</span>
+                <span className="info-value-profile">Regular User</span>
               </div>
               
-              <div className="info-row">
-                <span className="info-label">Member Since:</span>
-                <span className="info-value">
+              <div className="info-row-profile">
+                <span className="info-label-profile">Member Since:</span>
+                <span className="info-value-profile">
                   {user?.createdAt ? new Date(user.createdAt).toLocaleDateString() : 'N/A'}
                 </span>
               </div>
               
-              <div className="info-row">
-                <span className="info-label">Account Status:</span>
-                <span className="info-value">
-                  <span className="status-active">Active</span>
+              <div className="info-row-profile">
+                <span className="info-label-profile">Account Status:</span>
+                <span className="info-value-profile">
+                  <span className="status-active-profile">Active</span>
                 </span>
               </div>
             </div>
@@ -288,20 +288,20 @@ const Profile = () => {
 
         {/* Profile Stats */}
         {!editing && (
-          <div className="profile-stats">
+          <div className="profile-stats-profile">
             <h3>Account Statistics</h3>
-            <div className="stats-grid">
-              <div className="stat-card">
-                <div className="stat-number">{user?.totalBookings || 0}</div>
-                <div className="stat-label">Total Bookings</div>
+            <div className="stats-grid-profile">
+              <div className="stat-card-profile">
+                <div className="stat-number-profile">{user?.totalBookings || 0}</div>
+                <div className="stat-label-profile">Total Bookings</div>
               </div>
-              <div className="stat-card">
-                <div className="stat-number">{user?.completedBookings || 0}</div>
-                <div className="stat-label">Completed</div>
+              <div className="stat-card-profile">
+                <div className="stat-number-profile">{user?.completedBookings || 0}</div>
+                <div className="stat-label-profile">Completed</div>
               </div>
-              <div className="stat-card">
-                <div className="stat-number">{user?.cancelledBookings || 0}</div>
-                <div className="stat-label">Cancelled</div>
+              <div className="stat-card-profile">
+                <div className="stat-number-profile">{user?.cancelledBookings || 0}</div>
+                <div className="stat-label-profile">Cancelled</div>
               </div>
             </div>
           </div>
@@ -309,16 +309,16 @@ const Profile = () => {
 
         {/* Recent Bookings */}
         {!editing && recentBookings.length > 0 && (
-          <div className="recent-bookings">
+          <div className="recent-bookings-profile">
             <h3>Recent Bookings</h3>
-            <div className="bookings-list">
+            <div className="bookings-list-profile">
               {recentBookings.map(booking => (
-                <div key={booking._id} className="booking-item">
-                  <div className="booking-header">
+                <div key={booking._id} className="booking-item-profile">
+                  <div className="booking-header-profile">
                     <h4>{booking.venue?.name}</h4>
-                    <span className="booking-status confirmed">Confirmed</span>
+                    <span className="booking-status-profile confirmed-profile">Confirmed</span>
                   </div>
-                  <div className="booking-details">
+                  <div className="booking-details-profile">
                     <p><strong>Court:</strong> {booking.court?.name} ({booking.court?.sportType})</p>
                     <p><strong>Date:</strong> {formatDate(booking.date)}</p>
                     <p><strong>Time:</strong> {formatTime(booking.startTime)} - {formatTime(booking.endTime)}</p>
@@ -327,9 +327,9 @@ const Profile = () => {
                 </div>
               ))}
             </div>
-            <div className="view-all-bookings">
+            <div className="view-all-bookings-profile">
               <button 
-                className="view-all-btn"
+                className="btn-profile view-all-btn-profile"
                 onClick={() => window.location.href = '/user-dashboard/my-bookings'}
               >
                 View All Bookings
@@ -342,4 +342,4 @@ const Profile = () => {
   );
 };
 
-export default Profile; 
+export default Profile;

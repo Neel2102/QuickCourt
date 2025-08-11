@@ -1,34 +1,72 @@
+/* Modal Overlay - This is where scrolling happens */
 .booking-modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
   background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  
+  /* Enable scrolling on the overlay */
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  -webkit-overflow-scrolling: touch;
+  
+  /* Center the modal content */
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  z-index: 1000;
-  padding: 1rem;
+  
+  /* Padding for better experience - REDUCED for more space */
+  padding: 20px 10px;
+  box-sizing: border-box;
+  
+  /* Ensure minimum height for proper scrolling */
+  min-height: 100vh;
 }
 
+/* Modal Container */
 .booking-modal {
   background: white;
   border-radius: 12px;
   width: 100%;
   max-width: 500px;
-  max-height: 90vh;
-  overflow-y: auto;
+  
+  /* Remove height constraints - let it grow naturally */
+  min-height: auto;
+  max-height: none;
+  
+  /* Shadows and positioning */
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  
+  /* Allow the modal to grow and shrink as needed */
+  flex-shrink: 0;
+  
+  /* Ensure modal content doesn't scroll internally */
+  overflow: visible;
+  
+  /* REDUCED margin for better fit */
+  margin: 10px auto;
+  
+  /* Ensure modal stays within viewport */
+  max-width: calc(100vw - 20px);
+  
+  /* Ensure the modal can take full available height if needed */
+  position: relative;
 }
 
+/* Modal Header */
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 1.5rem 0;
+  padding: 20px 20px 15px;
   border-bottom: 1px solid #e5e7eb;
-  margin-bottom: 1.5rem;
+  background: white;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+  flex-shrink: 0;
 }
 
 .modal-header h2 {
@@ -47,6 +85,12 @@
   padding: 0.25rem;
   border-radius: 4px;
   transition: color 0.2s, background-color 0.2s;
+  line-height: 1;
+  min-width: 32px;
+  min-height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .close-button:hover {
@@ -54,27 +98,31 @@
   background-color: #f3f4f6;
 }
 
+/* Modal Content */
 .modal-content {
-  padding: 0 1.5rem 1.5rem;
+  padding: 20px;
+  overflow: visible;
+  flex-grow: 1;
 }
 
+/* Booking Details */
 .booking-details {
   background: #f8fafc;
   border-radius: 8px;
-  padding: 1rem;
-  margin-bottom: 1.5rem;
+  padding: 15px;
+  margin-bottom: 20px;
 }
 
 .venue-info h3 {
   font-size: 1.125rem;
   font-weight: 600;
   color: #1f2937;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 8px 0;
 }
 
 .venue-info p {
   color: #6b7280;
-  margin: 0.25rem 0;
+  margin: 4px 0;
   font-size: 0.875rem;
 }
 
@@ -84,17 +132,50 @@
   font-size: 1rem;
 }
 
-.booking-form {
+/* Forms */
+.booking-form,
+.payment-form {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 20px;
+  overflow: visible;
 }
 
+/* Payment Summary */
+.payment-summary {
+  background: #f8fafc;
+  border-radius: 8px;
+  padding: 15px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 15px;
+}
+
+.payment-summary h3 {
+  margin: 0 0 15px 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.payment-amount {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.payment-amount .amount {
+  font-weight: 600;
+  color: #059669;
+  font-size: 1.25rem;
+}
+
+/* Form Elements */
 .error-message {
   background: #fef2f2;
   border: 1px solid #fecaca;
   color: #dc2626;
-  padding: 0.75rem;
+  padding: 12px;
   border-radius: 6px;
   font-size: 0.875rem;
 }
@@ -102,7 +183,7 @@
 .form-group {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 8px;
 }
 
 .form-group label {
@@ -113,11 +194,14 @@
 
 .form-group input,
 .form-group select {
-  padding: 0.75rem;
+  padding: 12px;
   border: 1px solid #d1d5db;
   border-radius: 6px;
   font-size: 0.875rem;
   transition: border-color 0.2s, box-shadow 0.2s;
+  background: white;
+  min-height: 44px;
+  box-sizing: border-box;
 }
 
 .form-group input:focus,
@@ -130,58 +214,62 @@
 .help-text {
   color: #6b7280;
   font-size: 0.75rem;
-  margin-top: 0.25rem;
+  margin-top: 4px;
   font-style: italic;
 }
 
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 15px;
 }
 
+/* Price Summary */
 .price-summary {
   background: #f8fafc;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  padding: 1rem;
-  margin-top: 1rem;
+  padding: 15px;
+  margin-top: 15px;
 }
 
 .price-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.25rem 0;
+  padding: 4px 0;
   font-size: 0.875rem;
 }
 
 .price-row.total {
   border-top: 1px solid #e5e7eb;
-  margin-top: 0.5rem;
-  padding-top: 0.75rem;
+  margin-top: 8px;
+  padding-top: 12px;
   font-weight: 600;
   font-size: 1rem;
   color: #1f2937;
 }
 
+/* Form Actions */
 .form-actions {
   display: flex;
-  gap: 1rem;
-  margin-top: 1.5rem;
-  padding-top: 1rem;
+  gap: 15px;
+  margin-top: 20px;
+  padding-top: 15px;
   border-top: 1px solid #e5e7eb;
 }
 
 .cancel-button,
 .confirm-button {
   flex: 1;
-  padding: 0.75rem 1rem;
+  padding: 12px 16px;
   border-radius: 6px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
   border: none;
+  min-height: 48px;
+  font-size: 0.875rem;
 }
 
 .cancel-button {
@@ -208,24 +296,114 @@
   cursor: not-allowed;
 }
 
-/* Loading state */
 .confirm-button:disabled {
   background: #9ca3af;
+}
+
+/* Validation Message */
+.validation-message {
+  background: #fef3c7;
+  border: 1px solid #f59e0b;
+  border-radius: 6px;
+  padding: 12px;
+  margin: 15px 0;
+  color: #92400e;
+  font-size: 0.875rem;
+}
+
+.validation-message ul {
+  margin: 8px 0 0 20px;
+  padding: 0;
+}
+
+.validation-message li {
+  margin: 4px 0;
+}
+
+/* Stripe Elements */
+.StripeElement {
+  padding: 12px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 6px !important;
+  background: white !important;
+  min-height: 44px !important;
+  font-size: 14px !important;
+  box-sizing: border-box !important;
+}
+
+.StripeElement--focus {
+  border-color: #43b97f !important;
+  box-shadow: 0 0 0 3px rgba(67, 185, 127, 0.1) !important;
+}
+
+.StripeElement--invalid {
+  border-color: #dc2626 !important;
+}
+
+/* Test Card Info */
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.p-3 {
+  padding: 0.75rem;
+}
+
+.bg-blue-50 {
+  background-color: #eff6ff;
+}
+
+.border-blue-200 {
+  border: 1px solid #bfdbfe;
+}
+
+.rounded-lg {
+  border-radius: 8px;
+}
+
+.text-sm {
+  font-size: 0.875rem;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.text-blue-800 {
+  color: #1e40af;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+}
+
+.text-blue-700 {
+  color: #1d4ed8;
+}
+
+.space-y-1 > * + * {
+  margin-top: 0.25rem;
+}
+
+.mb-2 {
+  margin-bottom: 0.5rem;
 }
 
 /* Responsive Design */
 @media (max-width: 640px) {
   .booking-modal-overlay {
-    padding: 0.5rem;
+    padding: 10px 5px;
   }
   
   .booking-modal {
-    max-height: 95vh;
+    margin: 5px auto;
+    max-width: calc(100vw - 10px);
+    border-radius: 8px;
   }
   
   .modal-header {
-    padding: 1rem 1rem 0;
-    margin-bottom: 1rem;
+    padding: 15px;
+    border-radius: 8px 8px 0 0;
   }
   
   .modal-header h2 {
@@ -233,22 +411,129 @@
   }
   
   .modal-content {
-    padding: 0 1rem 1rem;
+    padding: 15px;
   }
   
   .form-row {
     grid-template-columns: 1fr;
-    gap: 0.75rem;
+    gap: 15px;
   }
   
   .form-actions {
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 12px;
   }
   
   .cancel-button,
   .confirm-button {
     width: 100%;
+  }
+  
+  .booking-details {
+    padding: 12px;
+    margin-bottom: 15px;
+  }
+  
+  .payment-summary,
+  .price-summary {
+    padding: 12px;
+  }
+}
+
+/* Very small screens */
+@media (max-width: 480px) {
+  .booking-modal-overlay {
+    padding: 5px;
+  }
+  
+  .booking-modal {
+    margin: 0 auto;
+    border-radius: 8px;
+    max-width: calc(100vw - 10px);
+  }
+  
+  .modal-header {
+    padding: 12px;
+    border-radius: 8px 8px 0 0;
+  }
+  
+  .modal-content {
+    padding: 12px;
+  }
+  
+  .form-group input,
+  .form-group select {
+    padding: 10px;
+    min-height: 40px;
+  }
+  
+  .cancel-button,
+  .confirm-button {
+    padding: 10px 12px;
+    min-height: 44px;
+  }
+}
+
+/* High DPI / Zoom levels */
+@media (min-resolution: 150dpi), (-webkit-min-device-pixel-ratio: 1.5) {
+  .booking-modal-overlay {
+    padding: 15px 8px;
+  }
+  
+  .booking-modal {
+    margin: 8px auto;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .cancel-button,
+  .confirm-button {
+    min-height: 48px;
+    padding: 14px;
+  }
+}
+
+/* Ensure proper scrolling for tall content */
+@media (max-height: 800px) {
+  .booking-modal-overlay {
+    padding: 10px 5px;
+    align-items: flex-start;
+  }
+  
+  .booking-modal {
+    margin: 5px auto;
+  }
+  
+  .modal-content {
+    padding: 15px;
+  }
+}
+
+@media (max-height: 600px) {
+  .booking-modal-overlay {
+    padding: 5px;
+  }
+  
+  .booking-modal {
+    margin: 0 auto;
+  }
+  
+  .modal-header {
+    padding: 12px 15px;
+  }
+  
+  .modal-content {
+    padding: 12px 15px;
+  }
+  
+  .booking-details {
+    padding: 10px;
+    margin-bottom: 12px;
+  }
+  
+  .form-actions {
+    margin-top: 15px;
+    padding-top: 12px;
   }
 }
 

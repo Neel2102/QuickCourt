@@ -26,6 +26,25 @@ const BookingModal = ({ court, venue, onClose }) => {
   const [clientSecret, setClientSecret] = useState(null);
   const [bookingId, setBookingId] = useState(null);
 
+  // Manage body scroll when modal is open
+  useEffect(() => {
+    // Prevent body scrolling when modal is open
+    const originalOverflow = document.body.style.overflow;
+    const originalPaddingRight = document.body.style.paddingRight;
+    
+    // Calculate scrollbar width to prevent layout shift
+    const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+    
+    document.body.style.overflow = 'hidden';
+    document.body.style.paddingRight = `${scrollBarWidth}px`;
+    
+    return () => {
+      // Restore original scroll behavior
+      document.body.style.overflow = originalOverflow;
+      document.body.style.paddingRight = originalPaddingRight;
+    };
+  }, []);
+
   // Debug logging when component mounts or court changes
   useEffect(() => {
     console.log('BookingModal mounted/updated with court:', court);
@@ -184,7 +203,7 @@ const BookingModal = ({ court, venue, onClose }) => {
 
   return (
     <div className="booking-modal-overlay" onClick={handleOverlayClick}>
-      <div className="booking-modal">
+      <div className="booking-modal" onClick={(e) => e.stopPropagation()}>
         <div className="modal-header">
           <h2>Book Court</h2>
           <button className="close-button" onClick={onClose}>×</button>
