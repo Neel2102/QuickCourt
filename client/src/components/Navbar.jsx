@@ -25,18 +25,18 @@ const Navbar = () => {
     <nav className={`navbar ${isScrolled ? 'navbar-scrolled' : ''}`}>
       <div className="navbar-container">
         <div className="navbar-brand">
-          <span className="brand-text">YourBrand</span>
+          <span className="brand-text">QuickCourt</span>
         </div>
 
         <div className={`navbar-menu ${isMobileMenuOpen ? 'navbar-menu-active' : ''}`}>
           <a href="#home" className="navbar-link">Home</a>
+          <a href="#venues" className="navbar-link">Venues</a>
+          <a href="#sports" className="navbar-link">Sports</a>
           <a href="#about" className="navbar-link">About</a>
-          <a href="#services" className="navbar-link">Services</a>
-          <a href="#contact" className="navbar-link">Contact</a>
         </div>
 
         <div className="navbar-actions">
-          <button className="navbar-cta" onClick={() => navigate('/login')}>Get Started</button>
+          <button className="navbar-cta" onClick={() => navigate('/login')}>Login</button>
           <button 
             className={`navbar-toggle ${isMobileMenuOpen ? 'navbar-toggle-active' : ''}`}
             onClick={toggleMobileMenu}

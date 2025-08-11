@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import "../CSS/ResetPassword.css"
+import Navbar from "../components/Navbar";
+import InfinityGlowBackground from "./InfinityGlow";
 
 const ResetPassword = () => {
     const [step, setStep] = useState(1); // 1: email, 2: OTP, 3: new password
@@ -330,11 +332,15 @@ const ResetPassword = () => {
     );
 
     return (
+
         <div className="resetpassword-container">
+            <Navbar/>
+
             <div className="resetpassword-background">
-                <div className="resetpassword-shape shape-1"></div>
-                <div className="resetpassword-shape shape-2"></div>
-                <div className="resetpassword-shape shape-3"></div>
+                <div className="resetpassword-shape shape-1-reset"></div>
+                <div className="resetpassword-shape shape-2-reset"></div>
+                <div className="resetpassword-shape shape-3-reset"></div>
+                <InfinityGlowBackground/>
             </div>
             
             <div className="resetpassword-card">

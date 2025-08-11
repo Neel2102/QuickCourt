@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import "../CSS/LandingPage.css";
 import Navbar from '../components/Navbar';
+import bgVideo from '../assets/Screen Recording 2025-08-07 175941.mp4';
 
 const LandingPage = () => {
   const [isVisible, setIsVisible] = useState(false);
@@ -19,17 +20,26 @@ const LandingPage = () => {
 
   const features = [
     {
-      title: 'Modern Design',
-      description: 'Clean and contemporary interface that follows current design trends'
+      title: 'Easy Booking',
+      description: 'Book your favorite sports facilities in just a few clicks with instant confirmation'
     },
     {
-      title: 'Fast Performance',
-      description: 'Optimized for speed with lightning-fast load times'
+      title: 'Local Venues',
+      description: 'Discover and book courts, turfs, and sports facilities near you'
     },
     {
-      title: 'Responsive Layout',
-      description: 'Perfect experience across all devices and screen sizes'
+      title: 'Community Sports',
+      description: 'Join matches, create teams, and connect with fellow sports enthusiasts'
     }
+  ];
+
+  const popularSports = [
+    { name: 'Badminton', icon: '🏸' },
+    { name: 'Football', icon: '⚽' },
+    { name: 'Tennis', icon: '🎾' },
+    { name: 'Basketball', icon: '🏀' },
+    { name: 'Cricket', icon: '🏏' },
+    { name: 'Table Tennis', icon: '🏓' }
   ];
 
   return (
@@ -61,18 +71,36 @@ const LandingPage = () => {
       {/* Hero Section */}
       <section className={`hero-section ${isVisible ? 'hero-visible' : ''}`}>
         <div className="hero-container">
+          <video
+            className="hero-bg-video"
+            src={bgVideo}
+            autoPlay
+            loop
+            muted
+            playsInline
+            style={{
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              zIndex: 0,
+              pointerEvents: 'none',
+            }}
+          />
           <div className="hero-content">
             <h1 className="hero-title">
-              <span className="title-line">Build Something</span>
-              <span className="title-line title-highlight">Amazing Today</span>
+              <span className="title-line">Book Your</span>
+              <span className="title-line title-highlight">Perfect Court</span>
             </h1>
             <p className="hero-description">
-              Transform your ideas into reality with our cutting-edge solutions. 
-              We create exceptional digital experiences that drive results and inspire action.
+              Discover and book local sports facilities instantly. Join matches, create teams, 
+              and stay active with QuickCourt - your local sports community.
             </p>
             <div className="hero-actions">
-              <button className="cta-primary">Get Started</button>
-              <button className="cta-secondary">Learn More</button>
+              <button className="cta-primary">Find Venues</button>
+              <button className="cta-secondary">Join Match</button>
             </div>
           </div>
           <div className="hero-visual">
@@ -105,13 +133,33 @@ const LandingPage = () => {
         </div>
       </section>
 
+      {/* Popular Sports Section */}
+      <section className="popular-sports-section">
+        <div className="section-container">
+          <div className="section-header">
+            <h2 className="section-title">Popular Sports</h2>
+            <p className="section-subtitle">
+              Find facilities for your favorite sports and activities
+            </p>
+          </div>
+          <div className="sports-grid">
+            {popularSports.map((sport, index) => (
+              <div key={index} className="sport-card">
+                <div className="sport-icon">{sport.icon}</div>
+                <h3 className="sport-name">{sport.name}</h3>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Features Section */}
       <section className="features-section">
         <div className="section-container">
           <div className="section-header">
-            <h2 className="section-title">Why Choose Us</h2>
+            <h2 className="section-title">Why Choose QuickCourt</h2>
             <p className="section-subtitle">
-              We deliver exceptional results through innovative solutions and dedicated service
+              The easiest way to book sports facilities and join the local sports community
             </p>
           </div>
           <div className="features-grid">
@@ -134,19 +182,19 @@ const LandingPage = () => {
           <div className="stats-grid">
             <div className="stat-item">
               <div className="stat-number">500+</div>
-              <div className="stat-label">Projects Completed</div>
+              <div className="stat-label">Sports Venues</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">98%</div>
-              <div className="stat-label">Client Satisfaction</div>
+              <div className="stat-number">10K+</div>
+              <div className="stat-label">Active Users</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">24/7</div>
-              <div className="stat-label">Support Available</div>
+              <div className="stat-number">50K+</div>
+              <div className="stat-label">Bookings Made</div>
             </div>
             <div className="stat-item">
-              <div className="stat-number">5+</div>
-              <div className="stat-label">Years Experience</div>
+              <div className="stat-number">15+</div>
+              <div className="stat-label">Sports Types</div>
             </div>
           </div>
         </div>
@@ -156,11 +204,11 @@ const LandingPage = () => {
       <section className="cta-section">
         <div className="section-container">
           <div className="cta-content">
-            <h2 className="cta-title">Ready to Get Started?</h2>
+            <h2 className="cta-title">Ready to Play?</h2>
             <p className="cta-description">
-              Join thousands of satisfied customers who have transformed their business with our solutions
+              Join thousands of sports enthusiasts who book their perfect court with QuickCourt
             </p>
-            <button className="cta-button">Start Your Journey</button>
+            <button className="cta-button">Start Booking Now</button>
           </div>
         </div>
       </section>

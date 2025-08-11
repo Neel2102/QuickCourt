@@ -11,7 +11,7 @@
   width: 100%;
   height: 100%;
   pointer-events: none;
-  z-index: -1;
+  z-index: 1;
 }
 
 .floating-element {
@@ -43,8 +43,8 @@
   width: 150px;
   height: 150px;
   background: linear-gradient(90deg, var(--warning-color), var(--secondary-color));
-  top: 60%;
-  right: 20%;
+  top: 92%;
+  right: 5%;
   animation-delay: -14s;
 }
 
@@ -73,12 +73,12 @@
 }
 
 .hero-container {
-  max-width: 1200px;
+  max-width: 2000px;
   margin: 0 auto;
   padding: 0 2rem;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4rem;
+  gap: 38rem;
   align-items: center;
 }
 
@@ -340,10 +340,51 @@
   }
 }
 
+/* Popular Sports Section */
+.popular-sports-section {
+  padding: 100px 0;
+  background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+}
+
+.sports-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.sport-card {
+  background: var(--card-bg);
+  border-radius: 20px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+}
+
+.sport-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+
+.sport-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+
+.sport-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
 /* Features Section */
 .features-section {
   padding: 100px 0;
-  background-color: #ffffff00;
+  background-color: #F2F2F2;
   position: relative;
 }
 
@@ -457,7 +498,7 @@
 /* Stats Section */
 .stats-section {
   padding: 80px 0;
-  background-color: #ffffff00;
+  background-color: #F2F2F2;
 }
 
 .stats-grid {
@@ -488,7 +529,7 @@
 /* CTA Section */
 .cta-section {
   padding: 100px 0;
-  background: #ffffff00;
+  background: #F2F2F2;
   text-align: center;
 }
 
@@ -535,7 +576,7 @@
 @media (max-width: 1024px) {
   .hero-container {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 4rem;
     text-align: center;
   }
   
@@ -579,6 +620,11 @@
     gap: 1.5rem;
   }
   
+  .sports-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+  
   .cta-title {
     font-size: 2rem;
   }
@@ -597,6 +643,7 @@
   
   .hero-container {
     padding: 0 1rem;
+    gap: 2rem;
   }
   
   .hero-title {
@@ -609,6 +656,15 @@
   
   .feature-card {
     padding: 2rem 1.5rem;
+  }
+  
+  .sports-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  .sport-card {
+    padding: 1.5rem;
   }
   
   .stats-grid {
