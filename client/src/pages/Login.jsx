@@ -77,7 +77,7 @@ const Login = () => {
           const role = data.user.role || (data.user.isAdmin ? "Admin" : (data.user.isFacilityOwner ? "FacilityOwner" : "User"));
           localStorage.setItem("role", role);
 
-          alert("Login successful! Welcome back.");
+          toast.success("Login successful! Welcome back.");
 
           if (role === "Admin") {
             navigate("/admin-dashboard");
@@ -165,16 +165,36 @@ const Login = () => {
       const data = await response.json();
       if (data.success) {
         toast.success("Email Verified successfully!");
-        navigate("/dashboard");
+
+        // Store user info in localStorage if provided
+        if (data.user) {
+          localStorage.setItem("userId", data.user.id);
+          localStorage.setItem("name", data.user.name);
+
+          // Determine role and redirect accordingly
+          const role = data.user.role || (data.user.isAdmin ? "Admin" : (data.user.isFacilityOwner ? "FacilityOwner" : "User"));
+          localStorage.setItem("role", role);
+
+          if (role === "Admin") {
+            navigate("/admin-dashboard");
+            return;
+          }
+          if (role === "FacilityOwner") {
+            navigate("/facility-dashboard");
+            return;
+          }
+          navigate("/user-dashboard");
+        } else {
+          // Fallback if user data not provided
+          navigate("/user-dashboard");
+        }
       } else {
-        toast.error(data.message || "Error while Verifying Email")
+        toast.error(data.message || "Error while Verifying Email");
         setOtpError(data.message || "Invalid OTP. Please try again.");
-      
-    }
+      }
     } catch (err) {
       setOtpError("Failed to verify OTP. Please try again.");
-      toast.error(data.message || "Failed to verify OTP. Please try again");
-
+      toast.error("Failed to verify OTP. Please try again");
       console.error("Verification error:", err);
     } finally {
       setIsLoading(false);
