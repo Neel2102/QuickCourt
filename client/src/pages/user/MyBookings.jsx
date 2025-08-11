@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getMyBookings, cancelBooking } from '../../services/bookingService';
 import { formatDate, formatTime } from '../../utils/dateUtils';
+import ReportForm from '../../components/ReportForm';
 import '../../CSS/MyBookings.css';
 
 const MyBookings = () => {
@@ -10,6 +11,8 @@ const MyBookings = () => {
   const [loading, setLoading] = useState(true);
   const [statusFilter, setStatusFilter] = useState('all');
   const [dateFilter, setDateFilter] = useState('all');
+  const [showReportForm, setShowReportForm] = useState(false);
+  const [selectedBooking, setSelectedBooking] = useState(null);
   const navigate = useNavigate();
 
   const statuses = ['all', 'Confirmed', 'Completed', 'Cancelled'];
@@ -252,6 +255,15 @@ const MyBookings = () => {
                   >
                     View Venue
                   </button>
+                  <button
+                    className="report-btn-mybookings"
+                    onClick={() => {
+                      setSelectedBooking(booking);
+                      setShowReportForm(true);
+                    }}
+                  >
+                    🚨 Report Issue
+                  </button>
                 </div>
               </div>
             ))}
@@ -277,6 +289,26 @@ const MyBookings = () => {
           Clear Filters
         </button>
       </div>
+
+      {/* Report Form Modal */}
+      {showReportForm && (
+        <ReportForm
+          onClose={() => {
+            setShowReportForm(false);
+            setSelectedBooking(null);
+          }}
+          onReportSubmitted={(report) => {
+            setShowReportForm(false);
+            setSelectedBooking(null);
+            // Optionally show success message
+          }}
+          initialData={selectedBooking ? {
+            targetType: 'booking',
+            targetId: selectedBooking._id,
+            reason: `Issue with booking at ${selectedBooking.venue?.name} on ${formatDate(selectedBooking.date)}`
+          } : undefined}
+        />
+      )}
     </div>
   );
 };

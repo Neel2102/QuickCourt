@@ -10,6 +10,7 @@ import venueRouter from './routes/venueRoutes.js';
 import courtRouter from './routes/courtRoutes.js';
 import bookingRouter from './routes/bookingRoutes.js';
 import adminRouter from './routes/adminRoutes.js';
+import reportRouter from './routes/reportRoutes.js';
 
 import dashboardRouter from './routes/dashboardRoutes.js';
 
@@ -45,6 +46,7 @@ app.use('/api/courts', courtRouter);
 app.use('/api/bookings', bookingRouter); 
 app.use('/api/admin', adminRouter);
 app.use('/api/venues', venueRouter);
+app.use('/api/reports', reportRouter);
 app.use('/api/dashboard', dashboardRouter);
 
 // Global error handler - ensure we always return JSON

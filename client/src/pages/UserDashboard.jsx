@@ -8,6 +8,7 @@ import Home from "./user/Home";
 import Venues from "./user/Venues";
 import MyBookings from "./user/MyBookings";
 import Profile from "./user/Profile";
+import MyReports from "../components/MyReports";
 import { getUserProfile } from "../services/userService";
 
 const UserDashboard = () => {
@@ -82,6 +83,7 @@ const UserDashboard = () => {
             <Route path="" element={<Home />} />
             <Route path="venues" element={<Venues />} />
             <Route path="my-bookings" element={<MyBookings />} />
+            <Route path="my-reports" element={<MyReports />} />
             <Route path="profile" element={<Profile />} />
             <Route path="*" element={<Navigate to="" replace />} />
           </Routes>

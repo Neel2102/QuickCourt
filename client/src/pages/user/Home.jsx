@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { getVenues } from '../../services/venueService';
 import VenueCard from '../../components/venue/VenueCard';
 import SearchBar from '../../components/common/SearchBar';
+import ReportForm from '../../components/ReportForm';
 import '../../CSS/Home.css';
 
 const Home = () => {
@@ -11,6 +12,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSport, setSelectedSport] = useState('all');
+  const [showReportForm, setShowReportForm] = useState(false);
   const navigate = useNavigate();
 
   const sports = ['all', 'Tennis', 'Badminton', 'Football', 'Cricket', 'Basketball'];
@@ -78,12 +80,20 @@ const Home = () => {
         <div className="banner-content-header">
           <h1>Welcome to QuickCourt</h1>
           <p>Book your favorite sports facilities and join the game!</p>
-          <button 
-            className="btn-header cta-button-header"
-            onClick={() => navigate('/venues')}
-          >
-            Explore Venues
-          </button>
+          <div className="banner-buttons-header">
+            <button 
+              className="btn-header cta-button-header"
+              onClick={() => navigate('/venues')}
+            >
+              Explore Venues
+            </button>
+            <button 
+              className="btn-header report-button-header"
+              onClick={() => setShowReportForm(true)}
+            >
+              🚨 File Report
+            </button>
+          </div>
         </div>
       </section>
 
@@ -205,6 +215,17 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Report Form Modal */}
+      {showReportForm && (
+        <ReportForm
+          onClose={() => setShowReportForm(false)}
+          onReportSubmitted={(report) => {
+            setShowReportForm(false);
+            // Optionally show success message or refresh data
+          }}
+        />
+      )}
     </div>
   );
 };

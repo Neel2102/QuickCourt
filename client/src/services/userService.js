@@ -234,6 +234,25 @@ export const searchUsers = async (filters = {}) => {
   }
 };
 
+// Get public user list for reporting (non-sensitive information only)
+export const getPublicUsers = async (searchTerm = '') => {
+  try {
+    const queryParams = new URLSearchParams();
+    if (searchTerm) {
+      queryParams.append('search', searchTerm);
+    }
+
+    const response = await fetch(`${API_BASE}/users/public?${queryParams}`, {
+      credentials: 'include'
+    });
+    const data = await response.json();
+    return data.success ? data.data : [];
+  } catch (error) {
+    console.error('Error fetching public users:', error);
+    throw error;
+  }
+};
+
 // Export user data (for admins)
 export const exportUserData = async (filters = {}, format = 'csv') => {
   try {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BookingModal from '../components/booking/BookingModal';
+import ReportForm from '../components/ReportForm';
 import '../CSS/VenueDetailsPage.css';
 
 const VenueDetailsPage = () => {
@@ -13,6 +14,7 @@ const VenueDetailsPage = () => {
   const [selectedCourt, setSelectedCourt] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
+  const [showReportForm, setShowReportForm] = useState(false);
 
   useEffect(() => {
     fetchVenueDetails();
@@ -113,6 +115,12 @@ const VenueDetailsPage = () => {
               <span>({venue.numberOfReviews || 0} reviews)</span>
             </div>
           </div>
+          <button 
+            className="report-venue-btn"
+            onClick={() => setShowReportForm(true)}
+          >
+            🚨 Report This Venue
+          </button>
         </div>
       </div>
 
@@ -232,6 +240,17 @@ const VenueDetailsPage = () => {
             setSelectedCourt(null);
           }}
           onSuccess={handleBookingSuccess}
+        />
+      )}
+
+      {/* Report Form Modal */}
+      {showReportForm && (
+        <ReportForm
+          onClose={() => setShowReportForm(false)}
+          onReportSubmitted={(report) => {
+            setShowReportForm(false);
+            // Optionally show success message
+          }}
         />
       )}
     </div>

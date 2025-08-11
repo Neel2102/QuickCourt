@@ -3,6 +3,7 @@ import Sidebar from "../components/dashboard/Sidebar";
 import HeaderFacility from "../components/dashboard/HeaderFacility";
 import FacilityManagement from "./owner/FacilityManagement";
 import BookingDetails from "./BookingDetails";
+import MyReports from "../components/MyReports";
 import { getUserProfile } from "../services/userService";
 import "../CSS/facilityDashboard.css";
 import "../CSS/Dashboard.css";
@@ -495,6 +496,7 @@ const FacilityDashboard = () => {
             <Route path="manage-facilities" element={<FacilityManagement />} />
             <Route path="manage-courts" element={<ManageCourtsSection />} />
             <Route path="bookings-overview" element={<BookingsOverviewSection />} />
+            <Route path="my-reports" element={<MyReports />} />
             <Route path="bookings/:bookingId" element={<BookingDetails />} />
             <Route path="*" element={<Navigate to="" replace />} />
            </Routes>
