@@ -10,10 +10,11 @@ const bookingSchema = new mongoose.Schema({
     totalPrice: { type: Number, required: true },
     status: {
         type: String,
-        enum: ['Confirmed', 'Cancelled', 'Completed'],
-        default: 'Confirmed',
+        enum: ['Pending', 'Confirmed', 'Cancelled', 'Completed'],
+        default: 'Pending',
     },
+    paymentIntentId: { type: String, required: false },
 }, { timestamps: true });
 
 const bookingModel = mongoose.models.booking || mongoose.model('booking', bookingSchema);
-export default bookingModel; 
+export default bookingModel;
