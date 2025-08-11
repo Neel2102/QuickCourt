@@ -143,7 +143,16 @@ export const sendVerifyOtp = async (req,res) => {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Account Verification OTP',
-            text: `Your OTP is ${otp}. Verify Your account using this OTP.`
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #333; text-align: center;">Account Verification</h2>
+                    <p style="color: #666; text-align: center; margin-bottom: 30px;">Please use the verification code below to verify your account:</p>
+                    <div style="background: #f8f9fa; border: 2px solid #007bff; border-radius: 8px; padding: 20px; text-align: center; margin: 20px 0;">
+                        <h1 style="color: #007bff; font-size: 32px; font-weight: bold; letter-spacing: 4px; margin: 0;">${otp}</h1>
+                    </div>
+                    <p style="color: #666; text-align: center; font-size: 14px;">This code will expire in 24 hours.</p>
+                </div>
+            `
         };
 
         await transporter.sendMail(mailOption);
@@ -231,8 +240,16 @@ export const sendResetOtp = async (req, res) => {
             from: process.env.SENDER_EMAIL,
             to: user.email,
             subject: 'Password Reset OTP',
-            text: `Your OTP for resetting your password is ${otp}.
-    Use this OTP to proceed with resetting your password.`
+            html: `
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                    <h2 style="color: #333; text-align: center;">Password Reset</h2>
+                    <p style="color: #666; text-align: center; margin-bottom: 30px;">Please use the reset code below to reset your password:</p>
+                    <div style="background: #f8f9fa; border: 2px solid #dc3545; border-radius: 8px; padding: 20px; text-align: center; margin: 20px 0;">
+                        <h1 style="color: #dc3545; font-size: 32px; font-weight: bold; letter-spacing: 4px; margin: 0;">${otp}</h1>
+                    </div>
+                    <p style="color: #666; text-align: center; font-size: 14px;">This code will expire in 24 hours.</p>
+                </div>
+            `
         };
 
         await transporter.sendMail(mailOption);
