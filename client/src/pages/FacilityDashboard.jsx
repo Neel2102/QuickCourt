@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../components/dashboard/Sidebar";
 import HeaderFacility from "../components/dashboard/HeaderFacility";
 import "../CSS/facilityDashboard.css";
+import "../CSS/Dashboard.css";
 import { useNavigate, Routes, Route, Navigate } from "react-router-dom";
 import { Line } from 'react-chartjs-2';
 import {

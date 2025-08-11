@@ -43,26 +43,53 @@ export const getOwnerVenues = async () => {
   }
 };
 
-// Create new venue (for facility owners)
+// Create new venue (multipart/form-data for images)
 export const createVenue = async (venueData) => {
+  // venueData: { name, description, address: {street, city, state, postalCode}, sportTypes:[], amenities:[], images: File[]|base64[] }
   try {
-    const response = await fetch(`${API_BASE}/venues`, {
+    const form = new FormData();
+    form.append('name', venueData.name);
+    form.append('description', venueData.description || '');
+    form.append('address', JSON.stringify(venueData.address || {}));
+    form.append('sportTypes', JSON.stringify(venueData.sportTypes || []));
+    form.append('amenities', JSON.stringify(venueData.amenities || []));
+
+    // Photos: accepts File list or base64 strings
+    if (Array.isArray(venueData.images)) {
+      venueData.images.forEach((img) => {
+        if (img instanceof File) {
+          form.append('photos', img);
+        } else if (typeof img === 'string') {
+          // Convert base64 to Blob
+          const blob = dataURLToBlob(img);
+          form.append('photos', blob, `photo_${Date.now()}.png`);
+        }
+      });
+    }
+
+    const res = await fetch(`${API_BASE}/venues`, {
       method: 'POST',
       credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(venueData)
+      body: form,
     });
-    const data = await response.json();
-    if (!data.success) {
-      throw new Error(data.message || 'Failed to create venue');
-    }
-    return data.data;
+    const data = await res.json();
+    if (!res.ok || !data.success) throw new Error(data.message || 'Failed to create venue');
+    return data.venue;
   } catch (error) {
     console.error('Error creating venue:', error);
     throw error;
   }
+};
+
+// helper: base64 dataURL to Blob
+const dataURLToBlob = (dataURL) => {
+  const arr = dataURL.split(',');
+  const mime = arr[0].match(/:(.*?);/)[1];
+  const bstr = atob(arr[1]);
+  let n = bstr.length;
+  const u8arr = new Uint8Array(n);
+  while (n--) u8arr[n] = bstr.charCodeAt(n);
+  return new Blob([u8arr], { type: mime });
 };
 
 // Update venue (for facility owners)

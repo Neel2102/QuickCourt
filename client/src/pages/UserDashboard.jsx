@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Sidebar from "../components/dashboard/Sidebar";
 import HeaderUser from "../components/dashboard/HeaderUser";
 import "../CSS/userDashboard.css";
+import "../CSS/Dashboard.css";
 import { useNavigate, Routes, Route, Navigate } from "react-router-dom";
 import Home from "./user/Home";
 import Venues from "./user/Venues";

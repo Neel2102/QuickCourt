@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import Sidebar from "../components/dashboard/Sidebar";
 import HeaderAdmin from "../components/dashboard/HeaderAdmin";
 import "../CSS/adminDashboard.css";
+import "../CSS/Dashboard.css";
 import { useNavigate, Routes, Route, Navigate } from "react-router-dom";
 import AdminAnalytics from "./admin/Analytics";
 import UserManagement from "./admin/UserManagement";

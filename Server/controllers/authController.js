@@ -80,15 +80,21 @@ export const login = async (req,res) => {
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
         });
         
+        const role = user.isAdmin ? 'Admin' : (user.isFacilityOwner ? 'FacilityOwner' : 'User');
+
         return res.status(200).json({
-            success: true, 
-            message: 'Logged in Successfully', 
+            success: true,
+            message: 'Logged in Successfully',
             user: {
-                name: user.name, 
                 id: user._id,
-                isAccountVerified: user.isAccountVerified
-            }, 
-            token, 
+                name: user.name,
+                email: user.email,
+                isAccountVerified: user.isAccountVerified,
+                isAdmin: Boolean(user.isAdmin),
+                isFacilityOwner: Boolean(user.isFacilityOwner),
+                role,
+            },
+            token,
             statusCode: 200
         });
         

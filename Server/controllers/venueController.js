@@ -29,11 +29,26 @@ export const getVenueDetails = async (req, res) => {
 
 export const createVenue = async (req, res) => {
     try {
-        const { name, description, address, sportTypes, amenities } = req.body;
+        let { name, description, address, sportTypes, amenities } = req.body;
         const ownerId = req.user._id;
 
-        // Extract the Cloudinary URLs from the uploaded files
-        const photos = req.files.map(file => file.path);
+        // Parse JSON-encoded fields when multipart/form-data is used
+        try {
+            if (typeof address === 'string') address = JSON.parse(address);
+        } catch (_) {}
+        try {
+            if (typeof sportTypes === 'string') sportTypes = JSON.parse(sportTypes);
+        } catch (_) {}
+        try {
+            if (typeof amenities === 'string') amenities = JSON.parse(amenities);
+        } catch (_) {}
+
+        // Normalize arrays
+        if (!Array.isArray(sportTypes)) sportTypes = sportTypes ? [sportTypes] : [];
+        if (!Array.isArray(amenities)) amenities = amenities ? [amenities] : [];
+
+        // Extract uploaded file URLs/paths (Cloudinary middleware sets .path)
+        const photos = (req.files || []).map(file => file.path);
 
         const newVenue = new venueModel({
             name,

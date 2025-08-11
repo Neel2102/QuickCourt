@@ -72,25 +72,23 @@ const Login = () => {
           // Store user info in localStorage
           localStorage.setItem("userId", data.user.id);
           localStorage.setItem("name", data.user.name);
-          let role = "User";
-          if (data.user.isAdmin) {
-            role = "Admin";
-            localStorage.setItem("role", "Admin");
-            alert("Login successful! Welcome back.");
+
+          // Prefer explicit role from backend if provided
+          const role = data.user.role || (data.user.isAdmin ? "Admin" : (data.user.isFacilityOwner ? "FacilityOwner" : "User"));
+          localStorage.setItem("role", role);
+
+          alert("Login successful! Welcome back.");
+
+          if (role === "Admin") {
             navigate("/admin-dashboard");
             return;
-          } else if (data.user.isFacilityOwner) {
-            role = "FacilityOwner";
-            localStorage.setItem("role", "FacilityOwner");
-            alert("Login successful! Welcome back.");
+          }
+          if (role === "FacilityOwner") {
             navigate("/facility-dashboard");
             return;
-          } else {
-            localStorage.setItem("role", "User");
-            alert("Login successful! Welcome back.");
-            navigate("/user-dashboard");
-            return;
           }
+          navigate("/user-dashboard");
+          return;
         } else {
           try {
             const otpResponse = await fetch(
