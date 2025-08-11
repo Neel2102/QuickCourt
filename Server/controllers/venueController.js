@@ -1,5 +1,4 @@
- import venueModel from '../models/venueModel.js';
-import userModel from '../models/userModel.js';
+import venueModel from '../models/venueModel.js';
 // Import cloudinary and other services here for image uploads
 
 // Get all approved venues for the public Venues page 
@@ -26,11 +25,15 @@ export const getVenueDetails = async (req, res) => {
 };
 
 // Create a new venue (Owner only)
+// ... existing imports
+
 export const createVenue = async (req, res) => {
     try {
-        const { name, description, address, sportTypes, amenities, photos } = req.body;
-        // User is attached to the request by the protectRoute middleware [cite: 45]
+        const { name, description, address, sportTypes, amenities } = req.body;
         const ownerId = req.user._id;
+
+        // Extract the Cloudinary URLs from the uploaded files
+        const photos = req.files.map(file => file.path);
 
         const newVenue = new venueModel({
             name,
@@ -38,17 +41,16 @@ export const createVenue = async (req, res) => {
             address,
             sportTypes,
             amenities,
-            photos,
+            photos, // Store the Cloudinary URLs in the database
             owner: ownerId,
         });
 
         await newVenue.save();
-        res.status(201).json({ success: true, message: 'Venue created successfully, awaiting admin approval', venue: newVenue });
+        res.status(201).json({ success: true, message: 'Venue created successfully', venue: newVenue });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to create venue', error: error.message });
     }
 };
-
 // Update an existing venue (Owner only)
 export const updateVenue = async (req, res) => {
     try {
