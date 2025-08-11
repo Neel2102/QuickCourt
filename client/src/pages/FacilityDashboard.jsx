@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/dashboard/Sidebar";
 import HeaderFacility from "../components/dashboard/HeaderFacility";
-import OwnerProfile from "./owner/OwnerProfile";
 import FacilityManagement from "./owner/FacilityManagement";
+import BookingDetails from "./BookingDetails";
 import { getUserProfile } from "../services/userService";
 import "../CSS/facilityDashboard.css";
 import "../CSS/Dashboard.css";
@@ -285,7 +285,7 @@ const ManageCourtsSection = () => {
     </section>
   );
 };
-const TimeSlotsSection = () => <section className="section-facilityDashboard"><h3>Time Slots</h3><p>Time slot management UI here.</p></section>;
+//const TimeSlotsSection = () => <section className="section-facilityDashboard"><h3>Time Slots</h3><p>Time slot management UI here.</p></section>;
 const BookingsOverviewSection = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -390,12 +390,7 @@ const BookingsOverviewSection = () => {
                   <p><strong>Amount:</strong> ₹{booking.totalPrice}</p>
                 </div>
               </div>
-              <div className="booking-actions">
-                {booking.status === 'Confirmed' && (
-                  <button className="complete-btn">Mark Complete</button>
-                )}
-                <button className="view-btn">View Details</button>
-              </div>
+             
             </div>
           ))}
         </div>
@@ -403,8 +398,28 @@ const BookingsOverviewSection = () => {
     </section>
   );
 };
-// ProfileSection is now replaced with OwnerProfile component
 
+const handleMarkComplete = async (bookingId, fetchBookings) => {
+  try {
+    const response = await fetch(`/api/bookings/${bookingId}/complete`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (response.ok) {
+      alert(`Booking ${bookingId} marked as complete successfully!`);
+      fetchBookings();
+    } else {
+      alert(`Failed to mark booking ${bookingId} as complete.`);
+    }
+  } catch (error) { alert(`Error marking booking ${bookingId} as complete: ${error}`); }
+};
+
+const handleViewDetails = (bookingId, navigate) => {
+  navigate(`/facility-dashboard/bookings/${bookingId}`);
+};
 const FacilityDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [owner, setOwner] = useState(null);
@@ -479,11 +494,10 @@ const FacilityDashboard = () => {
             <Route path="" element={<DashboardSection stats={stats} />} />
             <Route path="manage-facilities" element={<FacilityManagement />} />
             <Route path="manage-courts" element={<ManageCourtsSection />} />
-            <Route path="time-slots" element={<TimeSlotsSection />} />
             <Route path="bookings-overview" element={<BookingsOverviewSection />} />
-            <Route path="profile" element={<OwnerProfile />} />
+            <Route path="bookings/:bookingId" element={<BookingDetails />} />
             <Route path="*" element={<Navigate to="" replace />} />
-          </Routes>
+           </Routes>
         </main>
       </div>
     </div>

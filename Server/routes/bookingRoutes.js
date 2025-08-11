@@ -13,5 +13,6 @@ bookingRouter.get('/owner', protectRoute, roleAuth('FacilityOwner'), bookingCont
 bookingRouter.put('/:id/cancel', protectRoute, bookingController.cancelBooking);
 // update booking (owners/admins would call via UI; authorization can be extended as needed)
 bookingRouter.put('/:id', protectRoute, bookingController.updateBooking);
+bookingRouter.put('/:id/complete', protectRoute, roleAuth(['Admin', 'FacilityOwner']), bookingController.updateBooking);
 
 export default bookingRouter; 

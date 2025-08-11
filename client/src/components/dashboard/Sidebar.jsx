@@ -14,7 +14,6 @@ const SIDEBAR_MENUS = {
     { path: '', label: 'Dashboard', icon: '📊' },
     { path: 'manage-facilities', label: 'Manage Facilities', icon: '🏟️' },
     { path: 'manage-courts', label: 'Manage Courts', icon: '🎾' },
-    { path: 'time-slots', label: 'Time Slots', icon: '⏰' },
     { path: 'bookings-overview', label: 'Bookings Overview', icon: '📅' },
     { path: 'profile', label: 'Profile', icon: '👤' },
   ],

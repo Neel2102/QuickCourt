@@ -195,11 +195,18 @@ export const getOwnerBookings = async (req, res) => {
 
 // Admin/Owner: update a booking (e.g., status)
 export const updateBooking = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const update = req.body;
-        const updated = await bookingModel.findByIdAndUpdate(id, update, { new: true });
-        if (!updated) return res.status(404).json({ success: false, message: 'Booking not found' });
+  try {
+    const { id } = req.params;
+    let update = req.body;
+
+    if (req.url.includes('/complete')) {
+      update = { ...update, status: 'Completed' };
+    }
+
+    const updated = await bookingModel.findByIdAndUpdate(id, update, {
+      new: true,
+    });
+    if (!updated) return res.status(404).json({ success: false, message: 'Booking not found' });
         res.json({ success: true, data: updated });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to update booking', error: error.message });
