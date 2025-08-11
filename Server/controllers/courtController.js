@@ -4,7 +4,8 @@ import venueModel from '../models/venueModel.js';
 // Create a new court (Owner only)
 export const createCourt = async (req, res) => {
     try {
-        const { venueId, name, sportType, pricePerHour, operatingHours } = req.body;
+        const { venueId: venueIdBody, venue: venueBody, name, sportType, pricePerHour, operatingHours } = req.body;
+        const venueId = venueIdBody || venueBody; // support both field names
         const ownerId = req.user._id;
 
         const venue = await venueModel.findById(venueId);
@@ -35,6 +36,19 @@ export const getCourtsByVenue = async (req, res) => {
         res.json({ success: true, data: courts });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to fetch courts', error: error.message });
+    }
+};
+
+// Owner: list all courts across owner's venues
+export const getOwnerCourts = async (req, res) => {
+    try {
+        const ownerId = req.user._id;
+        const venues = await venueModel.find({ owner: ownerId });
+        const venueIds = venues.map(v => v._id);
+        const courts = await courtModel.find({ venue: { $in: venueIds } });
+        res.json({ success: true, data: courts });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Failed to fetch owner courts', error: error.message });
     }
 };
 

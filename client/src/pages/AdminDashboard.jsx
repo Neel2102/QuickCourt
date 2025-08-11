@@ -3,6 +3,10 @@ import Sidebar from "../components/dashboard/Sidebar";
 import HeaderAdmin from "../components/dashboard/HeaderAdmin";
 import "../CSS/adminDashboard.css";
 import { useNavigate, Routes, Route, Navigate } from "react-router-dom";
+import AdminAnalytics from "./admin/Analytics";
+import UserManagement from "./admin/UserManagement";
+import Reports from "./admin/Reports";
+import AdminProfile from "./admin/AdminProfile";
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -150,9 +154,9 @@ const FacilityApprovalsSection = ({ pendingVenues, onApprove, onReject }) => {
     </section>
   );
 };
-const UserManagementSection = () => <section className="section-adminDashboard"><h3>User Management</h3><p>User management UI here.</p></section>;
-const ReportsSection = () => <section className="section-adminDashboard"><h3>Reports & Moderation</h3><p>Reports and moderation UI here.</p></section>;
-const ProfileSection = () => <section className="section-adminDashboard"><h3>Profile</h3><p>Profile UI here.</p></section>;
+const UserManagementSection = UserManagement;
+const ReportsSection = Reports;
+const ProfileSection = AdminProfile;
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -255,6 +259,7 @@ const AdminDashboard = () => {
                 onReject={handleRejectVenue}
               />
             } />
+            <Route path="analytics" element={<AdminAnalytics />} />
             <Route path="user-management" element={<UserManagementSection />} />
             <Route path="reports" element={<ReportsSection />} />
             <Route path="profile" element={<ProfileSection />} />

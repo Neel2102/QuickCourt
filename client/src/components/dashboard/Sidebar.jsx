@@ -20,6 +20,7 @@ const SIDEBAR_MENUS = {
   ],
   Admin: [
     { path: '', label: 'Dashboard', icon: '📊' },
+    { path: 'analytics', label: 'Analytics', icon: '📈' },
     { path: 'facility-approvals', label: 'Facility Approvals', icon: '✅' },
     { path: 'user-management', label: 'User Management', icon: '🧑‍💼' },
     { path: 'reports', label: 'Reports & Moderation', icon: '🚩' },

@@ -70,3 +70,45 @@ export const updateProfile = async (req, res) => {
     }
 };
 
+// New: get current user's profile
+export const getProfile = async (req, res) => {
+    try {
+        const user = await userModel.findById(req.user._id).select('-password');
+        if (!user) return res.status(404).json({ success: false, message: 'User not found' });
+        return res.json({ success: true, data: user });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Failed to fetch profile' });
+    }
+};
+
+// New: simple profile update (name, bio, optional profilePic null)
+export const updateProfileSimple = async (req, res) => {
+    try {
+        const { name, bio, profilePic = undefined } = req.body;
+        const update = {};
+        if (typeof name === 'string') update.name = name;
+        if (typeof bio === 'string') update.bio = bio;
+        if (profilePic === null) update.profilePic = null; // allow removal
+        const updated = await userModel.findByIdAndUpdate(req.user._id, update, { new: true }).select('-password');
+        return res.json({ success: true, data: updated });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Failed to update profile' });
+    }
+};
+
+// New: upload profile picture via multipart form
+export const uploadProfilePic = async (req, res) => {
+    try {
+        if (!req.file) return res.status(400).json({ success: false, message: 'No file uploaded' });
+        const upload = await cloudinary.uploader.upload(req.file.path);
+        const updated = await userModel.findByIdAndUpdate(
+            req.user._id,
+            { profilePic: upload.secure_url },
+            { new: true }
+        ).select('-password');
+        return res.json({ success: true, data: updated });
+    } catch (error) {
+        return res.status(500).json({ success: false, message: 'Failed to upload profile picture' });
+    }
+};
+

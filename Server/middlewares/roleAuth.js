@@ -3,24 +3,26 @@ import userModel from "../models/userModel.js";
 export const roleAuth = (requiredRole) => {
     return async (req, res, next) => {
         try {
-            const { userId } = req.body;
-            const user = await userModel.findById(userId);
+            // Prefer user from protectRoute
+            let user = req.user || null;
 
-            if (!user) {
-                return res.status(404).json({ success: false, message: 'User not found' });
+            // Fallback: if not available, use id from body (for legacy flows)
+            if (!user && req.body && req.body.userId) {
+                user = await userModel.findById(req.body.userId);
             }
 
-            let userRole = null;
+            if (!user) {
+                return res.status(401).json({ success: false, message: 'Not authenticated' });
+            }
+
+            let userRole = 'User';
             if (user.isAdmin) {
                 userRole = 'Admin';
             } else if (user.isFacilityOwner) {
                 userRole = 'FacilityOwner';
-            } else {
-                userRole = 'User';
             }
 
             if (userRole === requiredRole || user.isAdmin) {
-                // Admins can access all routes
                 next();
             } else {
                 return res.status(403).json({ success: false, message: 'Access denied: You do not have the required role.' });
