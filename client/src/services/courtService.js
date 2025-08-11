@@ -1,5 +1,5 @@
 // Base API URL - adjust this based on your backend configuration
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 // Get all courts (for users)
 export const getCourts = async () => {
