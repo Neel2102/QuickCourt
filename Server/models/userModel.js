@@ -13,6 +13,7 @@ const userSchema = new mongoose.Schema({
     bio:{type:String},
     isAdmin:{type:Boolean, default: false}, 
     isFacilityOwner:{type:Boolean, default: false}, 
+    isBanned: { type: Boolean, default: false },
 });
 
 

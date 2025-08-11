@@ -75,6 +75,15 @@ const users = [
         isAdmin: false,
         isFacilityOwner: false,
         bio: 'Cricket enthusiast'
+    },
+    {
+        name: 'Kavya Joshi',
+        email: 'kavyajoshi4290@gmail.com',
+        password: 'Kavya@320',
+        isAccountVerified: true,
+        isAdmin: false,
+        isFacilityOwner: true,
+        bio: 'Cricket enthusiast'
     }
 ];
 

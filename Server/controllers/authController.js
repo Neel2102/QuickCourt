@@ -65,6 +65,10 @@ export const login = async (req,res) => {
             return res.status(401).json({success:false, message: 'Invalid Email', statusCode: 401})
         }
 
+        if (user.isBanned) {
+            return res.status(403).json({ success: false, message: 'Your account has been banned. Please contact support.' });
+        }
+
         const isMatch = await bcrypt.compare(password, user.password);
 
         if(!isMatch){
