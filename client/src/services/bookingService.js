@@ -123,65 +123,65 @@ export const getOwnerBookings = async () => {
   }
 };
 
-// Get venue bookings
-export const getVenueBookings = async (venueId, date = null) => {
-  try {
-    const url = date 
-      ? `${API_BASE}/bookings/venue/${venueId}?date=${date}`
-      : `${API_BASE}/bookings/venue/${venueId}`;
-    
-    const response = await fetch(url, {
-      credentials: 'include'
-    });
-    const data = await response.json();
-    return data.success ? data.data : [];
-  } catch (error) {
-    console.error('Error fetching venue bookings:', error);
-    throw error;
-  }
-};
+// Get venue bookings - NOT IMPLEMENTED IN BACKEND YET
+// export const getVenueBookings = async (venueId, date = null) => {
+//   try {
+//     const url = date
+//       ? `${API_BASE}/bookings/venue/${venueId}?date=${date}`
+//       : `${API_BASE}/bookings/venue/${venueId}`;
+//
+//     const response = await fetch(url, {
+//       credentials: 'include'
+//     });
+//     const data = await response.json();
+//     return data.success ? data.data : [];
+//   } catch (error) {
+//     console.error('Error fetching venue bookings:', error);
+//     throw error;
+//   }
+// };
 
-// Get court bookings
-export const getCourtBookings = async (courtId, date = null) => {
-  try {
-    const url = date 
-      ? `${API_BASE}/bookings/court/${courtId}?date=${date}`
-      : `${API_BASE}/bookings/court/${courtId}`;
-    
-    const response = await fetch(url, {
-      credentials: 'include'
-    });
-    const data = await response.json();
-    return data.success ? data.data : [];
-  } catch (error) {
-    console.error('Error fetching court bookings:', error);
-    throw error;
-  }
-};
+// Get court bookings - NOT IMPLEMENTED IN BACKEND YET
+// export const getCourtBookings = async (courtId, date = null) => {
+//   try {
+//     const url = date
+//       ? `${API_BASE}/bookings/court/${courtId}?date=${date}`
+//       : `${API_BASE}/bookings/court/${courtId}`;
+//
+//     const response = await fetch(url, {
+//       credentials: 'include'
+//     });
+//     const data = await response.json();
+//     return data.success ? data.data : [];
+//   } catch (error) {
+//     console.error('Error fetching court bookings:', error);
+//     throw error;
+//   }
+// };
 
-// Check court availability
-export const checkCourtAvailability = async (courtId, date, startTime, endTime) => {
-  try {
-    const response = await fetch(`${API_BASE}/bookings/availability`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        courtId,
-        date,
-        startTime,
-        endTime
-      })
-    });
-    const data = await response.json();
-    return data.success ? data.data : null;
-  } catch (error) {
-    console.error('Error checking court availability:', error);
-    throw error;
-  }
-};
+// Check court availability - NOT IMPLEMENTED IN BACKEND YET
+// export const checkCourtAvailability = async (courtId, date, startTime, endTime) => {
+//   try {
+//     const response = await fetch(`${API_BASE}/bookings/availability`, {
+//       method: 'POST',
+//       credentials: 'include',
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify({
+//         courtId,
+//         date,
+//         startTime,
+//         endTime
+//       })
+//     });
+//     const data = await response.json();
+//     return data.success ? data.data : null;
+//   } catch (error) {
+//     console.error('Error checking court availability:', error);
+//     throw error;
+//   }
+// };
 
 // Get booking statistics
 export const getBookingStats = async (period = 'month', userId = null) => {

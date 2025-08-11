@@ -32,7 +32,7 @@ export const getCourtById = async (courtId) => {
 // Get courts by venue ID
 export const getCourtsByVenue = async (venueId) => {
   try {
-    const response = await fetch(`${API_BASE}/courts/venue/${venueId}`, {
+    const response = await fetch(`${API_BASE}/courts/${venueId}`, {
       credentials: 'include'
     });
     const data = await response.json();
@@ -53,6 +53,20 @@ export const getOwnerCourts = async () => {
     return data.success ? data.data : [];
   } catch (error) {
     console.error('Error fetching owner courts:', error);
+    throw error;
+  }
+};
+
+// Get courts by venue ID for owner (for facility owners)
+export const getOwnerCourtsByVenue = async (venueId) => {
+  try {
+    const response = await fetch(`${API_BASE}/courts/owner/${venueId}`, {
+      credentials: 'include'
+    });
+    const data = await response.json();
+    return data.success ? data.data : [];
+  } catch (error) {
+    console.error('Error fetching owner courts by venue:', error);
     throw error;
   }
 };

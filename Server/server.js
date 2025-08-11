@@ -20,7 +20,10 @@ dotenv.config({path: './.env', quiet: true});
 const port = process.env.PORT || 4000;
 
 app.use(cors({
-    origin: process.env.FRONT_URL || "http://localhost:5173",
+    origin: [
+        process.env.FRONT_URL || "http://localhost:5173",
+        "http://localhost:5174"
+    ],
     methods:["GET", "POST", "PUT", "DELETE"],
     credentials: true,
 })
@@ -43,6 +46,24 @@ app.use('/api/bookings', bookingRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/venues', venueRouter);
 app.use('/api/dashboard', dashboardRouter);
+
+// Global error handler - ensure we always return JSON
+app.use((err, req, res, next) => {
+  console.error('Global error handler:', err);
+  res.status(500).json({
+    success: false,
+    message: 'Internal server error',
+    error: err.message
+  });
+});
+
+// 404 handler for API routes
+app.use('/api', (req, res) => {
+  res.status(404).json({
+    success: false,
+    message: 'API endpoint not found'
+  });
+});
 
 app.listen(port, ()=>
    console.log(`Sever listening on port ${port}

@@ -5,7 +5,7 @@ import transporter from '../config/nodemailer.js';
 
 export const register = async (req,res) => {
 
-    const {name,email,password,role} = req.body;
+    const {name, email, password, role} = req.body;
 
     if(!name || !email || !password){
         return res.json({success: false, message: 'Missing Details'})
@@ -22,17 +22,22 @@ export const register = async (req,res) => {
         const hashedPassword = await bcrypt.hash(password, 10);
 
         // Set role-based flags
-        const userFields = {
-            name,
-            email,
-            password: hashedPassword
-        };
+        let isAdmin = false;
+        let isFacilityOwner = false;
 
-        if (role === 'VenueOwner') {
-            userFields.isFacilityOwner = true;
+        if (role === 'Admin') {
+            isAdmin = true;
+        } else if (role === 'FacilityOwner' || role === 'Venue Supplier') {
+            isFacilityOwner = true;
         }
 
-        const user = new userModel(userFields);
+        const user = new userModel({
+            name,
+            email,
+            password: hashedPassword,
+            isAdmin,
+            isFacilityOwner
+        });
 
         await user.save();
 

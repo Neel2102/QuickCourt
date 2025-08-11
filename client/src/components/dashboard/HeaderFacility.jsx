@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
 import "../../CSS/Dashboard/Header.css";
 
-const HeaderFacility = ({ onToggleSidebar, ownerName = 'Owner' }) => {
+const HeaderFacility = ({ onToggleSidebar, ownerName = 'Owner', ownerProfilePic = null }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -56,7 +56,23 @@ const HeaderFacility = ({ onToggleSidebar, ownerName = 'Owner' }) => {
       <div className="header-right">
         <div className="user-info">
           <div className="user-avatar">
-            🏟️
+            {ownerProfilePic ? (
+              <img
+                src={ownerProfilePic}
+                alt={ownerName}
+                className="user-avatar-img"
+                style={{
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  objectFit: 'cover'
+                }}
+              />
+            ) : (
+              <div className="user-avatar-placeholder">
+                {ownerName?.charAt(0)?.toUpperCase() || '🏟️'}
+              </div>
+            )}
           </div>
           <span className="user-name">{ownerName}</span>
         </div>

@@ -47,6 +47,9 @@ export const getOwnerVenues = async () => {
 export const createVenue = async (venueData) => {
   // venueData: { name, description, address: {street, city, state, postalCode}, sportTypes:[], amenities:[], images: File[]|base64[] }
   try {
+    console.log('=== FRONTEND CREATE VENUE DEBUG ===');
+    console.log('Venue data received:', venueData);
+
     const form = new FormData();
     form.append('name', venueData.name);
     form.append('description', venueData.description || '');
@@ -54,26 +57,50 @@ export const createVenue = async (venueData) => {
     form.append('sportTypes', JSON.stringify(venueData.sportTypes || []));
     form.append('amenities', JSON.stringify(venueData.amenities || []));
 
+    console.log('Form data being sent:');
+    console.log('- name:', venueData.name);
+    console.log('- description:', venueData.description);
+    console.log('- address:', JSON.stringify(venueData.address));
+    console.log('- sportTypes:', JSON.stringify(venueData.sportTypes));
+    console.log('- amenities:', JSON.stringify(venueData.amenities));
+
     // Photos: accepts File list or base64 strings
-    if (Array.isArray(venueData.images)) {
-      venueData.images.forEach((img) => {
+    const photos = venueData.photos || venueData.images || [];
+    console.log('Photos to upload:', photos);
+    if (Array.isArray(photos)) {
+      photos.forEach((img, index) => {
         if (img instanceof File) {
+          console.log(`Adding photo ${index}:`, img.name, img.size);
           form.append('photos', img);
         } else if (typeof img === 'string') {
           // Convert base64 to Blob
           const blob = dataURLToBlob(img);
+          console.log(`Adding base64 photo ${index}:`, blob.size);
           form.append('photos', blob, `photo_${Date.now()}.png`);
         }
       });
     }
 
+    console.log('Sending request to:', `${API_BASE}/venues`);
     const res = await fetch(`${API_BASE}/venues`, {
       method: 'POST',
       credentials: 'include',
       body: form,
     });
+
+    console.log('Response status:', res.status);
+    console.log('Response headers:', Object.fromEntries(res.headers.entries()));
+
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.log('Error response text:', errorText);
+      throw new Error(`HTTP ${res.status}: ${errorText}`);
+    }
+
     const data = await res.json();
-    if (!res.ok || !data.success) throw new Error(data.message || 'Failed to create venue');
+    console.log('Response data:', data);
+
+    if (!data.success) throw new Error(data.message || 'Failed to create venue');
     return data.venue;
   } catch (error) {
     console.error('Error creating venue:', error);

@@ -34,7 +34,7 @@ const SIDEBAR_SUBTITLES = {
   Admin: 'Admin Dashboard',
 };
 
-const Sidebar = ({ isOpen, onToggle, onNavClick, role = 'User', userName = 'User', userAvatar = '🏆' }) => {
+const Sidebar = ({ isOpen, onToggle, onNavClick, role = 'User', userName = 'User', userAvatar = '🏆', userProfilePic = null }) => {
   const location = useLocation();
   const menuItems = SIDEBAR_MENUS[role] || SIDEBAR_MENUS.User;
   const subtitle = SIDEBAR_SUBTITLES[role] || SIDEBAR_SUBTITLES.User;
@@ -90,7 +90,23 @@ const Sidebar = ({ isOpen, onToggle, onNavClick, role = 'User', userName = 'User
         <div className="sidebar-footer">
           <div className="user-profile">
             <div className="user-avatar">
-              {userAvatar}
+              {userProfilePic ? (
+                <img
+                  src={userProfilePic}
+                  alt={userName}
+                  className="user-avatar-img"
+                  style={{
+                    width: '40px',
+                    height: '40px',
+                    borderRadius: '50%',
+                    objectFit: 'cover'
+                  }}
+                />
+              ) : (
+                <div className="user-avatar-placeholder">
+                  {userName?.charAt(0)?.toUpperCase() || userAvatar}
+                </div>
+              )}
             </div>
             <div className="user-details">
               <p className="user-name">{userName}</p>

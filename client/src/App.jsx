@@ -11,6 +11,7 @@ import VenueDetailsPage from './pages/VenueDetailsPage'
 import { ToastContainer } from 'react-toastify'
 import PaymentSuccess from './pages/user/PaymentSuccess';
 
+import AboutPage from '../src/pages/AboutPage';
 
 const RequireRole = ({ role, children }) => {
   const userRole = localStorage.getItem('role');
@@ -30,6 +31,7 @@ const App = () => {
         <Route path='/register' element={<Register/>}/>
         <Route path='/reset-password' element={<ResetPassword/>}/>
         <Route path='/venues' element={<VenuesPage/>}/>
+        <Route path='/about' element={<AboutPage/>}/>
         <Route path='/venue/:id' element={<VenueDetailsPage/>}/>
         <Route path='/booking-success' element={<PaymentSuccess />} />
         <Route path='/user-dashboard/*' element={

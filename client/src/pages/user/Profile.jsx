@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getUserProfile, updateUserProfile } from '../../services/userService';
+import { getUserProfile, updateUserProfile, uploadProfilePicture } from '../../services/userService';
 import '../../CSS/Profile.css';
 
 const Profile = () => {
@@ -47,7 +47,7 @@ const Profile = () => {
     }));
   };
 
-  const handleAvatarChange = (e) => {
+  const handleAvatarChange = async (e) => {
     const file = e.target.files[0];
     if (file) {
       if (file.size > 5 * 1024 * 1024) { // 5MB limit
@@ -55,21 +55,32 @@ const Profile = () => {
         return;
       }
 
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setAvatarPreview(e.target.result);
+      try {
+        setLoading(true);
+        // Upload the file directly
+        const updatedUser = await uploadProfilePicture(file);
+
+        // Update local state
+        setUser(updatedUser);
         setFormData(prev => ({
           ...prev,
-          profilePic: e.target.result
+          profilePic: updatedUser.profilePic
         }));
-      };
-      reader.readAsDataURL(file);
+        setAvatarPreview(updatedUser.profilePic);
+
+        toast.success('Profile picture updated successfully!');
+      } catch (error) {
+        console.error('Error uploading profile picture:', error);
+        toast.error('Failed to upload profile picture');
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (!formData.name.trim()) {
       toast.error('Name is required');
       return;
@@ -77,7 +88,12 @@ const Profile = () => {
 
     try {
       setLoading(true);
-      await updateUserProfile(formData);
+      // Only update name and bio, not profile picture (handled separately)
+      const updateData = {
+        name: formData.name,
+        bio: formData.bio
+      };
+      await updateUserProfile(updateData);
       await fetchUserProfile(); // Refresh data
       setEditing(false);
       toast.success('Profile updated successfully!');

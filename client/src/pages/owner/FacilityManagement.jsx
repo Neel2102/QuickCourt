@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { getOwnerVenues, createVenue, updateVenue, deleteVenue } from '../../services/venueService';
+import '../../CSS/FacilityManagement.css';
 import { getOwnerCourts } from '../../services/courtService';
 import '../../CSS/FacilityManagement.css';
 
@@ -91,26 +92,17 @@ const FacilityManagement = () => {
   const handlePhotoUpload = (e) => {
     const files = Array.from(e.target.files);
     const validFiles = files.filter(file => file.type.startsWith('image/'));
-    
+
     if (validFiles.length !== files.length) {
       toast.error('Please select only image files');
       return;
     }
 
-    const readers = validFiles.map(file => {
-      return new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.readAsDataURL(file);
-      });
-    });
-
-    Promise.all(readers).then(photos => {
-      setFormData(prev => ({
-        ...prev,
-        photos: [...prev.photos, ...photos]
-      }));
-    });
+    // Store File objects for proper multipart upload
+    setFormData(prev => ({
+      ...prev,
+      photos: [...prev.photos, ...validFiles]
+    }));
   };
 
   const removePhoto = (index) => {
@@ -122,35 +114,81 @@ const FacilityManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
+    console.log('=== FORM SUBMIT TRIGGERED ===');
+    console.log('Form data:', formData);
+
+    // Validate required fields
     if (!formData.name.trim()) {
       toast.error('Facility name is required');
+      return;
+    }
+    if (!formData.description.trim()) {
+      toast.error('Description is required');
       return;
     }
     if (formData.sportTypes.length === 0) {
       toast.error('Please select at least one sport type');
       return;
     }
-    if (!formData.address.street || !formData.address.city) {
-      toast.error('Address information is required');
+    if (!formData.address.street.trim()) {
+      toast.error('Street address is required');
+      return;
+    }
+    if (!formData.address.city.trim()) {
+      toast.error('City is required');
+      return;
+    }
+    if (!formData.address.state.trim()) {
+      toast.error('State is required');
+      return;
+    }
+    if (!formData.address.postalCode.trim()) {
+      toast.error('Postal code is required');
       return;
     }
 
     try {
       setLoading(true);
+
+      // Test API connectivity first
+      console.log('Testing API connectivity...');
+      const testResponse = await fetch('http://localhost:4000/api/venues/test', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ test: 'data' })
+      });
+      console.log('Test response status:', testResponse.status);
+      console.log('Test response headers:', Object.fromEntries(testResponse.headers.entries()));
+
+      if (!testResponse.ok) {
+        const errorText = await testResponse.text();
+        console.log('Test response error text:', errorText);
+        throw new Error(`API test failed: ${testResponse.status} - ${errorText}`);
+      }
+
+      const testData = await testResponse.json();
+      console.log('Test response data:', testData);
+
       if (editingVenue) {
         await updateVenue(editingVenue._id, formData);
         toast.success('Facility updated successfully!');
       } else {
+        console.log('Attempting to create venue with data:', formData);
         await createVenue(formData);
         toast.success('Facility created successfully!');
       }
-      
+
       await fetchData();
       resetForm();
     } catch (error) {
       console.error('Error saving facility:', error);
-      toast.error('Failed to save facility');
+      console.error('Error details:', error.message);
+      console.error('Error stack:', error.stack);
+      toast.error(`Failed to save facility: ${error.message}`);
     } finally {
       setLoading(false);
     }
@@ -258,7 +296,7 @@ const FacilityManagement = () => {
               </div>
 
               <div className="form-group">
-                <label htmlFor="description">Description</label>
+                <label htmlFor="description">Description *</label>
                 <textarea
                   id="description"
                   name="description"
@@ -266,6 +304,7 @@ const FacilityManagement = () => {
                   onChange={handleInputChange}
                   placeholder="Describe your facility..."
                   rows="3"
+                  required
                 />
               </div>
             </div>
@@ -300,7 +339,7 @@ const FacilityManagement = () => {
               </div>
               <div className="form-row">
                 <div className="form-group">
-                  <label htmlFor="state">State</label>
+                  <label htmlFor="state">State *</label>
                   <input
                     type="text"
                     id="state"
@@ -308,10 +347,11 @@ const FacilityManagement = () => {
                     value={formData.address.state}
                     onChange={handleInputChange}
                     placeholder="Enter state"
+                    required
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="postalCode">Postal Code</label>
+                  <label htmlFor="postalCode">Postal Code *</label>
                   <input
                     type="text"
                     id="postalCode"
@@ -319,6 +359,7 @@ const FacilityManagement = () => {
                     value={formData.address.postalCode}
                     onChange={handleInputChange}
                     placeholder="Enter postal code"
+                    required
                   />
                 </div>
               </div>
@@ -377,7 +418,10 @@ const FacilityManagement = () => {
                 <div className="photo-preview">
                   {formData.photos.map((photo, index) => (
                     <div key={index} className="photo-item">
-                      <img src={photo} alt={`Preview ${index + 1}`} />
+                      <img
+                        src={photo instanceof File ? URL.createObjectURL(photo) : photo}
+                        alt={`Preview ${index + 1}`}
+                      />
                       <button
                         type="button"
                         className="remove-photo"

@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Sidebar from "../components/dashboard/Sidebar";
 import HeaderFacility from "../components/dashboard/HeaderFacility";
+import OwnerProfile from "./owner/OwnerProfile";
+import FacilityManagement from "./owner/FacilityManagement";
+import { getUserProfile } from "../services/userService";
 import "../CSS/facilityDashboard.css";
 import "../CSS/Dashboard.css";
 import { useNavigate, Routes, Route, Navigate } from "react-router-dom";
@@ -64,83 +67,7 @@ const DashboardSection = ({ stats }) => (
   </section>
 );
 
-const ManageFacilitiesSection = () => {
-  const [facilities, setFacilities] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [showAddForm, setShowAddForm] = useState(false);
-
-  useEffect(() => {
-    fetchFacilities();
-  }, []);
-
-  const fetchFacilities = async () => {
-    try {
-      const response = await fetch('/api/venues/owner', { credentials: 'include' });
-      const data = await response.json();
-      if (data.success) {
-        setFacilities(data.data || []);
-      }
-    } catch (error) {
-      console.error('Error fetching facilities:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if (loading) return <section className="section-facilityDashboard"><p>Loading facilities...</p></section>;
-
-  return (
-    <section className="section-facilityDashboard">
-      <div className="section-header">
-        <h3>Manage Facilities</h3>
-        <button
-          className="btn-facilityDashboard"
-          onClick={() => setShowAddForm(true)}
-        >
-          Add New Facility
-        </button>
-      </div>
-
-      {facilities.length === 0 ? (
-        <div className="empty-state">
-          <p>No facilities found. Add your first facility to get started!</p>
-        </div>
-      ) : (
-        <div className="facilities-grid">
-          {facilities.map(facility => (
-            <div key={facility._id} className="facility-card">
-              <div className="facility-image">
-                {facility.photos?.[0] ? (
-                  <img src={facility.photos[0]} alt={facility.name} />
-                ) : (
-                  <div className="placeholder">🏟️</div>
-                )}
-              </div>
-              <div className="facility-info">
-                <h4>{facility.name}</h4>
-                <p className="facility-location">{facility.address.city}, {facility.address.state}</p>
-                <div className="facility-sports">
-                  {facility.sportTypes.slice(0, 2).map(sport => (
-                    <span key={sport} className="sport-tag">{sport}</span>
-                  ))}
-                </div>
-                <div className="facility-status">
-                  <span className={`status ${facility.isApproved ? 'approved' : 'pending'}`}>
-                    {facility.isApproved ? '✓ Approved' : '⏳ Pending'}
-                  </span>
-                </div>
-              </div>
-              <div className="facility-actions">
-                <button className="edit-btn">Edit</button>
-                <button className="view-btn">View Details</button>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-    </section>
-  );
-};
+// ManageFacilitiesSection replaced with dedicated FacilityManagement component
 const ManageCourtsSection = () => {
   const [courts, setCourts] = useState([]);
   const [venues, setVenues] = useState([]);
@@ -476,7 +403,7 @@ const BookingsOverviewSection = () => {
     </section>
   );
 };
-const ProfileSection = () => <section className="section-facilityDashboard"><h3>Profile</h3><p>Profile UI here.</p></section>;
+// ProfileSection is now replaced with OwnerProfile component
 
 const FacilityDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -491,14 +418,24 @@ const FacilityDashboard = () => {
       setLoading(true);
       setError("");
       try {
-        const ownerName = localStorage.getItem("name") || "Owner";
-        setOwner({ name: ownerName });
+        // Fetch owner profile data
+        const ownerData = await getUserProfile();
+        if (ownerData) {
+          setOwner(ownerData);
+        } else {
+          // Fallback to localStorage
+          setOwner({ name: localStorage.getItem("name") || "Owner" });
+        }
+
+        // Fetch dashboard stats
         const res = await fetch("/api/dashboard/owner", { credentials: "include" });
         const data = await res.json();
         if (!data.success) throw new Error(data.message || "Failed to fetch stats");
         setStats(data.data);
       } catch (err) {
         setError(err.message || "Failed to load dashboard data");
+        // Fallback to localStorage for owner data
+        setOwner({ name: localStorage.getItem("name") || "Owner" });
       } finally {
         setLoading(false);
       }
@@ -524,6 +461,7 @@ const FacilityDashboard = () => {
     <div className="facility-dashboard">
       <HeaderFacility
         ownerName={owner?.name || "Owner"}
+        ownerProfilePic={owner?.profilePic}
         onToggleSidebar={toggleSidebar}
       />
       <div className="dashboard__main">
@@ -534,15 +472,16 @@ const FacilityDashboard = () => {
           role="FacilityOwner"
           userName={owner?.name || "Owner"}
           userAvatar={"🏟️"}
+          userProfilePic={owner?.profilePic}
         />
         <main className="dashboard__content">
           <Routes>
             <Route path="" element={<DashboardSection stats={stats} />} />
-            <Route path="manage-facilities" element={<ManageFacilitiesSection />} />
+            <Route path="manage-facilities" element={<FacilityManagement />} />
             <Route path="manage-courts" element={<ManageCourtsSection />} />
             <Route path="time-slots" element={<TimeSlotsSection />} />
             <Route path="bookings-overview" element={<BookingsOverviewSection />} />
-            <Route path="profile" element={<ProfileSection />} />
+            <Route path="profile" element={<OwnerProfile />} />
             <Route path="*" element={<Navigate to="" replace />} />
           </Routes>
         </main>

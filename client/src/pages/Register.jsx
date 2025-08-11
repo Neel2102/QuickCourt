@@ -139,7 +139,7 @@ const Register = () => {
               >
                 <option value="">Select Role</option>
                 <option value="User">User</option>
-                <option value="VenueOwner">Venue Owner</option>
+                <option value="Venue Supplier">Venue Supplier</option>
               </select>
             </div>
             {errors.role && <span className="error-message-login">{errors.role}</span>}

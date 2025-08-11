@@ -8,6 +8,7 @@ import Home from "./user/Home";
 import Venues from "./user/Venues";
 import MyBookings from "./user/MyBookings";
 import Profile from "./user/Profile";
+import { getUserProfile } from "../services/userService";
 
 const UserDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -22,16 +23,26 @@ const UserDashboard = () => {
       return;
     }
 
-    // Fetch basic user info for header
+    // Fetch user profile data
     const fetchUserInfo = async () => {
       try {
-        const userId = localStorage.getItem("userId");
-        if (userId) {
-          // You can fetch user info here if needed
-          setUser({ name: localStorage.getItem("userName") || "User" });
+        const userData = await getUserProfile();
+        if (userData) {
+          setUser(userData);
+        } else {
+          // Fallback to localStorage data
+          setUser({
+            name: localStorage.getItem("name") || "User",
+            email: localStorage.getItem("email") || ""
+          });
         }
       } catch (error) {
         console.error("Error fetching user info:", error);
+        // Fallback to localStorage data
+        setUser({
+          name: localStorage.getItem("name") || "User",
+          email: localStorage.getItem("email") || ""
+        });
       } finally {
         setLoading(false);
       }
@@ -53,6 +64,7 @@ const UserDashboard = () => {
     <div className="user-dashboard">
       <HeaderUser
         userName={user?.name || "User"}
+        userProfilePic={user?.profilePic}
         onToggleSidebar={toggleSidebar}
       />
       <div className="dashboard__main">
@@ -63,6 +75,7 @@ const UserDashboard = () => {
           role="User"
           userName={user?.name || "User"}
           userAvatar={"🏆"}
+          userProfilePic={user?.profilePic}
         />
         <main className="dashboard__content">
           <Routes>

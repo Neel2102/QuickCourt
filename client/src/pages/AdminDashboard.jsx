@@ -8,6 +8,7 @@ import AdminAnalytics from "./admin/Analytics";
 import UserManagement from "./admin/UserManagement";
 import Reports from "./admin/Reports";
 import AdminProfile from "./admin/AdminProfile";
+import { getUserProfile } from "../services/userService";
 import { Bar } from 'react-chartjs-2';
 import {
   Chart as ChartJS,
@@ -173,17 +174,29 @@ const AdminDashboard = () => {
       setLoading(true);
       setError("");
       try {
-        const adminName = localStorage.getItem("name") || "Admin";
-        setAdmin({ name: adminName });
+        // Fetch admin profile data
+        const adminData = await getUserProfile();
+        if (adminData) {
+          setAdmin(adminData);
+        } else {
+          // Fallback to localStorage
+          setAdmin({ name: localStorage.getItem("name") || "Admin" });
+        }
+
+        // Fetch dashboard stats
         const res = await fetch("/api/dashboard/admin", { credentials: "include" });
         const data = await res.json();
         if (!data.success) throw new Error(data.message || "Failed to fetch stats");
         setStats(data.data);
+
+        // Fetch pending venues
         const venuesRes = await fetch("/api/admin/venues/pending", { credentials: "include" });
         const venuesData = await venuesRes.json();
         setPendingVenues((venuesData.data || []).slice(0, 5));
       } catch (err) {
         setError(err.message || "Failed to load dashboard data");
+        // Fallback to localStorage for admin data
+        setAdmin({ name: localStorage.getItem("name") || "Admin" });
       } finally {
         setLoading(false);
       }
@@ -239,6 +252,7 @@ const AdminDashboard = () => {
     <div className="admin-dashboard">
       <HeaderAdmin
         adminName={admin?.name || "Admin"}
+        adminProfilePic={admin?.profilePic}
         onToggleSidebar={toggleSidebar}
       />
       <div className="dashboard__main">
@@ -249,6 +263,7 @@ const AdminDashboard = () => {
           role="Admin"
           userName={admin?.name || "Admin"}
           userAvatar={"🧑‍💼"}
+          userProfilePic={admin?.profilePic}
         />
         <main className="dashboard__content">
           <Routes>

@@ -29,28 +29,44 @@ export const getVenueDetails = async (req, res) => {
 
 export const createVenue = async (req, res) => {
     try {
+        console.log('=== CREATE VENUE DEBUG ===');
+        console.log('Request body:', req.body);
+        console.log('Request files:', req.files);
+        console.log('User:', req.user);
+
         let { name, description, address, sportTypes, amenities } = req.body;
         const ownerId = req.user._id;
+
+        console.log('Raw data:', { name, description, address, sportTypes, amenities });
 
         // Parse JSON-encoded fields when multipart/form-data is used
         try {
             if (typeof address === 'string') address = JSON.parse(address);
-        } catch (_) {}
+        } catch (e) {
+            console.log('Error parsing address:', e.message);
+        }
         try {
             if (typeof sportTypes === 'string') sportTypes = JSON.parse(sportTypes);
-        } catch (_) {}
+        } catch (e) {
+            console.log('Error parsing sportTypes:', e.message);
+        }
         try {
             if (typeof amenities === 'string') amenities = JSON.parse(amenities);
-        } catch (_) {}
+        } catch (e) {
+            console.log('Error parsing amenities:', e.message);
+        }
 
         // Normalize arrays
         if (!Array.isArray(sportTypes)) sportTypes = sportTypes ? [sportTypes] : [];
         if (!Array.isArray(amenities)) amenities = amenities ? [amenities] : [];
 
+        console.log('Parsed data:', { name, description, address, sportTypes, amenities });
+
         // Extract uploaded file URLs/paths (Cloudinary middleware sets .path)
         const photos = (req.files || []).map(file => file.path);
+        console.log('Photos:', photos);
 
-        const newVenue = new venueModel({
+        const venueData = {
             name,
             description,
             address,
@@ -58,11 +74,17 @@ export const createVenue = async (req, res) => {
             amenities,
             photos, // Store the Cloudinary URLs in the database
             owner: ownerId,
-        });
+        };
 
+        console.log('Final venue data:', venueData);
+
+        const newVenue = new venueModel(venueData);
         await newVenue.save();
+
+        console.log('Venue saved successfully:', newVenue._id);
         res.status(201).json({ success: true, message: 'Venue created successfully', venue: newVenue });
     } catch (error) {
+        console.error('Error creating venue:', error);
         res.status(500).json({ success: false, message: 'Failed to create venue', error: error.message });
     }
 };
