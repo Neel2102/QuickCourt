@@ -1,42 +1,23 @@
+import * as bookingService from '../services/bookingService.js';
 import bookingModel from '../models/bookingModel.js';
 
-// Create a new booking
 export const createBooking = async (req, res) => {
     try {
-        const { venueId, courtId, date, startTime, endTime, totalPrice } = req.body;
+        const { courtId, date, startTime, endTime } = req.body;
         const userId = req.user._id;
 
-        // Check for court availability
-        const existingBookings = await bookingModel.find({
-            court: courtId,
-            date: date,
-            startTime: startTime,
-            endTime: endTime,
-            status: 'Confirmed'
-        });
-
-        if (existingBookings.length > 0) {
-            return res.status(409).json({ success: false, message: 'This time slot is already booked.' });
+        const result = await bookingService.createNewBooking({ userId, courtId, date, startTime, endTime });
+        
+        if (result.success) {
+            res.status(201).json(result);
+        } else {
+            res.status(400).json(result);
         }
-
-        const newBooking = new bookingModel({
-            user: userId,
-            venue: venueId,
-            court: courtId,
-            date,
-            startTime,
-            endTime,
-            totalPrice,
-        });
-
-        await newBooking.save();
-        res.status(201).json({ success: true, message: 'Booking confirmed successfully', booking: newBooking });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to create booking', error: error.message });
     }
 };
 
-// Get all bookings for the logged-in user
 export const getMyBookings = async (req, res) => {
     try {
         const userId = req.user._id;
@@ -49,20 +30,18 @@ export const getMyBookings = async (req, res) => {
     }
 };
 
-// Cancel a booking
 export const cancelBooking = async (req, res) => {
     try {
         const { id } = req.params;
-        const booking = await bookingModel.findById(id);
+        const userId = req.user._id;
+        const result = await bookingService.cancelUserBooking(id, userId);
 
-        if (!booking || booking.user.toString() !== req.user._id.toString()) {
-            return res.status(403).json({ success: false, message: 'Unauthorized to cancel this booking' });
+        if (result.success) {
+            res.json(result);
+        } else {
+            res.status(400).json(result);
         }
-
-        booking.status = 'Cancelled';
-        await booking.save();
-        res.json({ success: true, message: 'Booking cancelled successfully' });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to cancel booking', error: error.message });
     }
-}; 
+};

@@ -1,21 +1,36 @@
-// This is a simulated payment service. In a real application, you would
-// integrate with a service like Stripe or PayPal.
+// This is a simulated payment service.
+// In a real application, this would interact with a payment gateway like Stripe or PayPal.
 
-export const simulatePayment = async (bookingId, amount) => {
+export const processPayment = async (bookingDetails) => {
     try {
-        // Simulate a successful payment
+        console.log(`Simulating payment for booking: ${bookingDetails.bookingId}`);
+        console.log(`Amount: $${bookingDetails.totalPrice}`);
+
+        // Simulate a delay for payment processing
+        await new Promise(resolve => setTimeout(resolve, 1500));
+
+        // Randomly succeed or fail the payment for demonstration
         const isSuccessful = Math.random() > 0.1; // 90% chance of success
 
         if (isSuccessful) {
-            console.log(`Payment simulation successful for booking ${bookingId} with amount ${amount}`);
-            // In a real scenario, you'd handle the webhook from the payment provider here.
-            return { success: true, message: 'Payment confirmed' };
+            console.log('Payment simulation successful.');
+            return {
+                success: true,
+                transactionId: `txn_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+                message: 'Payment was successful.',
+            };
         } else {
-            console.log(`Payment simulation failed for booking ${bookingId}`);
-            return { success: false, message: 'Payment failed' };
+            console.log('Payment simulation failed.');
+            return {
+                success: false,
+                message: 'Payment failed due to an error.',
+            };
         }
     } catch (error) {
-        console.error('Payment simulation error:', error);
-        return { success: false, message: 'An error occurred during payment simulation' };
+        console.error('Payment processing error:', error);
+        return {
+            success: false,
+            message: 'An unexpected error occurred during payment processing.',
+        };
     }
 };
