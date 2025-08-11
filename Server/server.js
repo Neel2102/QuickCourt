@@ -12,7 +12,6 @@ import bookingRouter from './routes/bookingRoutes.js';
 import adminRouter from './routes/adminRoutes.js';
 
 import dashboardRouter from './routes/dashboardRoutes.js';
-import venueRouter from './routes/venueRoutes.js';
 
 export const app = express();
 
@@ -39,10 +38,10 @@ app.get('/', (req,res)=> res.send("API is working"))
 app.get('/test', (req,res)=> res.json({message: "Server is running"}))
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
-app.use('/api/venues', venueRouter); // New venue routes
-app.use('/api/courts', courtRouter); // New court routes
-app.use('/api/bookings', bookingRouter); // New booking routes
-app.use('/api/admin', adminRouter); // New admin routes
+app.use('/api/venues', venueRouter); 
+app.use('/api/courts', courtRouter); 
+app.use('/api/bookings', bookingRouter); 
+app.use('/api/admin', adminRouter);
 app.use('/api/venues', venueRouter);
 app.use('/api/dashboard', dashboardRouter);
 
