@@ -1,6 +1,8 @@
 import jwt from "jsonwebtoken";
+import userModel from "../models/userModel.js";
 
-const userAuth = async (req,res,next)=>{
+
+export const userAuth = async (req,res,next)=>{
     const {token} = req.cookies;
     
     if(!token){
@@ -27,4 +29,31 @@ const userAuth = async (req,res,next)=>{
     
 }
 
-export default userAuth;
+
+
+
+export const protectRoute = async (req, res, next) => {
+  try {
+    const { token } = req.cookies;
+
+    if (!token) {
+      return res.json({ success: false, message: "Not Authorized. Login Again" });
+    }
+
+    const tokenDecode = jwt.verify(token, process.env.JWT_SECRET);
+
+    if (tokenDecode.id) {
+      const user = await userModel.findById(tokenDecode.id).select("-password");
+      if (!user) {
+        return res.json({ success: false, message: "User not found" });
+      }
+      req.user = user;
+      next();
+    } else {
+      return res.json({ success: false, message: "Not Authorized. Login Again" });
+    }
+  } catch (error) {
+    console.log("JWT Error:", error.message);
+    return res.json({ success: false, message: "Authentication failed" });
+  }
+};

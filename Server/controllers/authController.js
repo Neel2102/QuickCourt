@@ -2,7 +2,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import userModel from '../models/userModel.js';
 import transporter from '../config/nodemailer.js';
-import userAuth from '../middlewares/userAuth.js';
 
 export const register = async (req,res) => {
 
@@ -81,7 +80,17 @@ export const login = async (req,res) => {
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
         });
         
-        return res.status(200).json({success: true, message: 'Logged in Successfully', user: {name: user.name, id: user._id}, token, statusCode: 200});
+        return res.status(200).json({
+            success: true, 
+            message: 'Logged in Successfully', 
+            user: {
+                name: user.name, 
+                id: user._id,
+                isAccountVerified: user.isAccountVerified
+            }, 
+            token, 
+            statusCode: 200
+        });
         
     } catch (error) {
         return res.status(500).json({success: false, message: error.message, statusCode: 500});
@@ -192,6 +201,8 @@ export const isAuthenticated = async (req, res) => {
 }
 
 //ResetPassword
+
+
 
 export const sendResetOtp = async (req, res) => {
     

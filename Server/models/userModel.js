@@ -9,7 +9,12 @@ const userSchema = new mongoose.Schema({
     isAccountVerified: {type: Boolean, default: false},
     resetOtp: {type: String, default: ''},
     resetOtpExpireAt: {type: Number, default: 0},
-})
+    profilePic:{type:String,default:""},
+    bio:{type:String},
+    isAdmin:{type:Boolean, default: false}, 
+    isFacilityOwner:{type:Boolean, default: false}, 
+});
+
 
 const userModel= mongoose.models.user || mongoose.model('user', userSchema);
 
