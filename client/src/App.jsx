@@ -18,6 +18,7 @@ const RequireRole = ({ role, children }) => {
 const App = () => {
   return (
     <>
+    <ToastContainer />
       <Routes>
         <Route path='/' element={<Home/>}/>
         <Route path='/login' element={<Login/>}/>

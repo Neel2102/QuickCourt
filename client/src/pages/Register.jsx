@@ -4,6 +4,7 @@ import { User, Mail, Lock, Eye, EyeOff, UserCircle } from "lucide-react";
 import "../CSS/Login.css";
 import InfinityGlowBackground from "./InfinityGlow";
 import Navbar from "../components/Navbar";
+import { toast } from 'react-toastify';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -62,14 +63,14 @@ const Register = () => {
       const data = await res.json();
       setIsLoading(false);
       if (res.ok) {
-        alert(data.message || "Registered Successfully. Please sign in.");
+        toast.success("Registration successful!");
         navigate("/login");
       } else {
-        alert(data.message || "An error occurred.");
+        toast.error(data.message || "En Error Occured During Registration !")
       }
     } catch (err) {
       setIsLoading(false);
-      alert("Failed to connect to server.");
+      toast.error("Failed to connect to the server!");
       console.error("API error:", err);
     }
   };
