@@ -1,10 +1,12 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { User, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import "../CSS/Login.css";
 import InfinityGlowBackground from "./InfinityGlow";
 import Navbar from "../components/Navbar";
 import { toast } from 'react-toastify';
+import { useAuth } from '../contexts/AuthContext';
+import { getLoginRedirectPath } from '../utils/authUtils';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,6 +18,44 @@ const Login = () => {
   const [otpError, setOtpError] = useState("");
   const [userEmail, setUserEmail] = useState("");
   const navigate = useNavigate();
+  const location = useLocation();
+  const { login, isAuthenticated, user, loading } = useAuth();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!loading && isAuthenticated && user) {
+      const from = location.state?.from?.pathname;
+      const destination = getLoginRedirectPath(from, user.role);
+      navigate(destination, { replace: true });
+    }
+  }, [isAuthenticated, user, loading, navigate, location]);
+
+  // Show loading while checking authentication
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            border: '4px solid rgba(255, 255, 255, 0.3)',
+            borderTop: '4px solid white',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 1rem'
+          }}></div>
+          <p>Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
 
   const [formData, setFormData] = useState({
     email: "",
@@ -56,68 +96,48 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({
-          email: formData.email,
-          password: formData.password,
-        }),
-      });
-      const data = await res.json();
-      setIsLoading(false);
-      if (res.ok) {
-        if (data.user && data.user.isAccountVerified) {
-          localStorage.setItem("userId", data.user.id);
-          localStorage.setItem("name", data.user.name);
+      const result = await login(formData.email, formData.password);
 
-          const role = data.user.role || (data.user.isAdmin ? "Admin" : (data.user.isFacilityOwner ? "FacilityOwner" : "User"));
-          localStorage.setItem("role", role);
-
+      if (result.success) {
+        if (result.user && result.user.isAccountVerified) {
+          
           toast.success("Login successful! Welcome back.");
 
-          if (role === "Admin") {
-            navigate("/admin-dashboard");
-            return;
-          }
-          if (role === "FacilityOwner") {
-            navigate("/facility-dashboard");
-            return;
-          }
-          navigate("/user-dashboard");
+          // Navigate to appropriate dashboard or return location
+          const from = location.state?.from?.pathname;
+          const destination = getLoginRedirectPath(from, result.user.role);
+          navigate(destination, { replace: true });
           return;
         } else {
+          // Handle email verification flow
           try {
-            const otpResponse = await fetch(
-              "/api/auth/send-verify-otp",
-              {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                credentials: "include",
-                body: JSON.stringify({}),
-              }
-            );
-            const otpData = await otpResponse.json();
-            if (otpData.success) {
+            const otpResponse = await fetch("/api/auth/send-verify-otp", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              credentials: "include",
+              body: JSON.stringify({ email: formData.email }),
+            });
+
+            if (otpResponse.ok) {
               setUserEmail(formData.email);
               setShowEmailVerify(true);
-              toast.success(`OTP sent to your email: ${formData.email}`);
+              toast.info("Please verify your email to continue.");
             } else {
-              toast.success(otpData.message || "Failed to send OTP");
+              toast.error("Failed to send verification email.");
             }
-          } catch (otpError) {
-            console.error("OTP Error:", otpError);
-            toast.error("Login successful but failed to send OTP. Please try again.");
+          } catch (error) {
+            console.error("OTP send error:", error);
+            toast.error("Failed to send verification email.");
           }
         }
       } else {
-        toast.error(data.message || "An error occurred.");
+        toast.error(result.message || "Login failed. Please try again.");
       }
     } catch (err) {
+      console.error("Login error:", err);
+      toast.error("Failed to connect to server. Please try again.");
+    } finally {
       setIsLoading(false);
-      toast.error("Failed to connect to server.");
-      console.error("API error:", err);
     }
   };
 

@@ -58,11 +58,11 @@ const Home = () => {
   };
 
   const handleVenueClick = (venueId) => {
-    navigate(`/venue/${venueId}`);
+    navigate(`/user-dashboard/venue/${venueId}`);
   };
 
   const handleBookNow = (venueId) => {
-    navigate(`/venue/${venueId}`);
+    navigate(`/user-dashboard/venue/${venueId}`);
   };
 
   if (loading) {
@@ -80,6 +80,7 @@ const Home = () => {
         <div className="banner-content-header">
           <h1>Welcome to QuickCourt</h1>
           <p>Book your favorite sports facilities and join the game!</p>
+<<<<<<< Updated upstream
           <div className="banner-buttons-header">
             <button 
               className="btn-header cta-button-header"
@@ -94,6 +95,14 @@ const Home = () => {
               🚨 File Report
             </button>
           </div>
+=======
+          <button
+            className="btn-header cta-button-header"
+            onClick={() => navigate('/user-dashboard/venues')}
+          >
+            Explore Venues
+          </button>
+>>>>>>> Stashed changes
         </div>
       </section>
 
@@ -188,9 +197,9 @@ const Home = () => {
 
         {filteredVenues.length > 6 && (
           <div className="view-more-header">
-            <button 
+            <button
               className="btn-header view-more-btn-header"
-              onClick={() => navigate('/venues')}
+              onClick={() => navigate('/user-dashboard/venues')}
             >
               View All Venues
             </button>

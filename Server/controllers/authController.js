@@ -126,16 +126,39 @@ export const login = async (req,res) => {
 
 export const logout = async (req,res) => {
     try {
+        // Clear the main authentication token cookie
         res.clearCookie('token', {
             httpOnly: true,
             secure: process.env.NODE_ENV === 'production',
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-        })
+            path: '/'
+        });
 
-        return res.json({success: true, message: "Logged Out"})
+        // Clear any refresh token if exists
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+            path: '/'
+        });
+
+        // Clear user role cookie if exists
+        res.clearCookie('userRole', {
+            httpOnly: false,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+            path: '/'
+        });
+
+        return res.json({
+            success: true,
+            message: "Logged Out Successfully",
+            clearStorage: true // Signal frontend to clear localStorage/sessionStorage
+        });
 
     } catch (error) {
-        return res.json({success: false, message: error.message});
+        console.error('Logout error:', error);
+        return res.status(500).json({success: false, message: error.message});
     }
 }
 

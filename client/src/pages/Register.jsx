@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { User, Mail, Lock, Eye, EyeOff, UserCircle } from "lucide-react";
 import "../CSS/Login.css";
 import InfinityGlowBackground from "./InfinityGlow";
 import Navbar from "../components/Navbar";
 import { toast } from 'react-toastify';
+import { useAuth } from '../contexts/AuthContext';
+import { getDashboardRoute } from '../utils/authUtils';
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,6 +14,42 @@ const Register = () => {
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { isAuthenticated, user, loading } = useAuth();
+
+  // Redirect if already authenticated
+  useEffect(() => {
+    if (!loading && isAuthenticated && user) {
+      const dashboardRoute = getDashboardRoute(user.role);
+      navigate(dashboardRoute, { replace: true });
+    }
+  }, [isAuthenticated, user, loading, navigate]);
+
+  // Show loading while checking authentication
+  if (loading) {
+    return (
+      <div style={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh',
+        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        color: 'white'
+      }}>
+        <div style={{ textAlign: 'center' }}>
+          <div style={{
+            width: '50px',
+            height: '50px',
+            border: '4px solid rgba(255, 255, 255, 0.3)',
+            borderTop: '4px solid white',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 1rem'
+          }}></div>
+          <p>Checking authentication...</p>
+        </div>
+      </div>
+    );
+  }
 
   const [formData, setFormData] = useState({
     name: "",

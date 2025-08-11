@@ -121,7 +121,7 @@ const Venues = () => {
   };
 
   const handleVenueClick = (venueId) => {
-    navigate(`/venue/${venueId}`);
+    navigate(`/user-dashboard/venue/${venueId}`);
   };
 
   const handleBookNow = async (venueId) => {
@@ -146,7 +146,7 @@ const Venues = () => {
         setShowBookingModal(true);
       } else {
         // Multiple courts - show court selection or navigate to venue details
-        navigate(`/venue/${venueId}`);
+        navigate(`/user-dashboard/venue/${venueId}`);
       }
     } catch (error) {
       console.error('Error handling book now:', error);
@@ -306,9 +306,9 @@ const Venues = () => {
 
       {/* Quick Actions */}
       <div className="quick-actions-venues">
-        <button 
+        <button
           className="primary-btn-venues"
-          onClick={() => navigate('/venues')}
+          onClick={() => navigate('/user-dashboard/venues')}
         >
           View All Venues
         </button>

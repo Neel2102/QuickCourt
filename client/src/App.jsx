@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Home from './pages/LandingPage'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -9,46 +9,82 @@ import AdminDashboard from './pages/AdminDashboard'
 import VenuesPage from './pages/VenuesPage'
 import VenueDetailsPage from './pages/VenueDetailsPage'
 import { ToastContainer } from 'react-toastify'
-import PaymentSuccess from './pages/user/PaymentSuccess';
-
-import AboutPage from '../src/pages/AboutPage';
-
-const RequireRole = ({ role, children }) => {
-  const userRole = localStorage.getItem('role');
-  if (userRole !== role) {
-    return <Navigate to="/login" replace />;
-  }
-  return children;
-};
+import PaymentSuccess from './pages/user/PaymentSuccess'
+import AboutPage from './pages/AboutPage'
+import Unauthorized from './pages/Unauthorized'
+import ProtectedRoute from './components/auth/ProtectedRoute'
+import AuthGuard from './components/auth/AuthGuard'
+import 'react-toastify/dist/ReactToastify.css'
 
 const App = () => {
   return (
     <>
-    <ToastContainer />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/register' element={<Register/>}/>
-        <Route path='/reset-password' element={<ResetPassword/>}/>
+        {/* Public Routes with Auth Guard */}
+        <Route path='/' element={
+          <AuthGuard redirectIfAuthenticated={true}>
+            <Home/>
+          </AuthGuard>
+        }/>
+        <Route path='/login' element={
+          <AuthGuard redirectIfAuthenticated={true}>
+            <Login/>
+          </AuthGuard>
+        }/>
+        <Route path='/register' element={
+          <AuthGuard redirectIfAuthenticated={true}>
+            <Register/>
+          </AuthGuard>
+        }/>
+        <Route path='/reset-password' element={
+          <AuthGuard redirectIfAuthenticated={true}>
+            <ResetPassword/>
+          </AuthGuard>
+        }/>
+
+        {/* Public Routes without Auth Guard */}
         <Route path='/venues' element={<VenuesPage/>}/>
         <Route path='/about' element={<AboutPage/>}/>
-        <Route path='/venue/:id' element={<VenueDetailsPage/>}/>
-        <Route path='/booking-success' element={<PaymentSuccess />} />
-        <Route path='/payment-success' element={<PaymentSuccess />} />
+        <Route path='/unauthorized' element={<Unauthorized/>}/>
+
+        {/* Payment Routes - Protected */}
+        <Route path='/booking-success' element={
+          <ProtectedRoute>
+            <PaymentSuccess />
+          </ProtectedRoute>
+        } />
+        <Route path='/payment-success' element={
+          <ProtectedRoute>
+            <PaymentSuccess />
+          </ProtectedRoute>
+        } />
+
+        {/* Dashboard Routes - Role Protected */}
         <Route path='/user-dashboard/*' element={
-          <RequireRole role="User">
+          <ProtectedRoute requiredRole="User">
             <UserDashboard/>
-          </RequireRole>
+          </ProtectedRoute>
         }/>
         <Route path='/facility-dashboard/*' element={
-          <RequireRole role="FacilityOwner">
+          <ProtectedRoute requiredRole="FacilityOwner">
             <FacilityDashboard/>
-          </RequireRole>
+          </ProtectedRoute>
         }/>
         <Route path='/admin-dashboard/*' element={
-          <RequireRole role="Admin">
+          <ProtectedRoute requiredRole="Admin">
             <AdminDashboard/>
-          </RequireRole>
+          </ProtectedRoute>
         }/>
       </Routes>
     </>

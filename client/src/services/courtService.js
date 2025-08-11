@@ -32,7 +32,7 @@ export const getCourtById = async (courtId) => {
 // Get courts by venue ID
 export const getCourtsByVenue = async (venueId) => {
   try {
-    const response = await fetch(`${API_BASE}/courts/${venueId}`, {
+    const response = await fetch(`${API_BASE}/courts/venue/${venueId}`, {
       credentials: 'include'
     });
     const data = await response.json();

@@ -1,9 +1,13 @@
-import React, { useState } from "react";
+
+
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import "../CSS/ResetPassword.css"
 import Navbar from "../components/Navbar";
 import InfinityGlowBackground from "./InfinityGlow";
+import { useAuth } from '../contexts/AuthContext';
+import { getDashboardRoute } from '../utils/authUtils';
 
 const ResetPassword = () => {
     const [step, setStep] = useState(1); // 1: email, 2: OTP, 3: new password
@@ -12,6 +16,15 @@ const ResetPassword = () => {
     const [errors, setErrors] = useState({});
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
+    const { isAuthenticated, user, loading } = useAuth();
+
+    // Redirect authenticated users to their dashboard
+    useEffect(() => {
+        if (!loading && isAuthenticated && user) {
+            const dashboardRoute = getDashboardRoute(user.role);
+            navigate(dashboardRoute, { replace: true });
+        }
+    }, [isAuthenticated, user, loading, navigate]);
 
     const [formData, setFormData] = useState({
         email: '',

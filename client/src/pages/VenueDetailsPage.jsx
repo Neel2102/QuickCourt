@@ -44,7 +44,7 @@ const VenueDetailsPage = () => {
 
   const fetchCourts = async () => {
     try {
-      const response = await fetch(`${API_BASE}/courts/${id}`, {
+      const response = await fetch(`${API_BASE}/courts/venue/${id}`, {
         credentials: 'include'
       });
       const data = await response.json();
@@ -94,7 +94,7 @@ const VenueDetailsPage = () => {
       <div className="venue-details-page">
         <div className="error-container">
           <p className="error-message">{error || 'Venue not found'}</p>
-          <button onClick={() => navigate('/venues')} className="back-button">
+          <button onClick={() => navigate('/user-dashboard/venues')} className="back-button">
             Back to Venues
           </button>
         </div>
@@ -106,7 +106,7 @@ const VenueDetailsPage = () => {
     <div className="venue-details-page">
       {/* Header */}
       <div className="venue-header">
-        <button onClick={() => navigate('/venues')} className="back-button">
+        <button onClick={() => navigate('/user-dashboard/venues')} className="back-button">
           ← Back to Venues
         </button>
         <div className="venue-title-section">

@@ -10,20 +10,18 @@ import MyBookings from "./user/MyBookings";
 import Profile from "./user/Profile";
 import UserReviews from "./user/UserReviews";
 import { getUserProfile } from "../services/userService";
+import VenueDetailsPage from "./VenueDetailsPage.jsx";
+import { useAuth } from "../contexts/AuthContext";
+import LogoutButton from "../components/auth/LogoutButton";
 
 const UserDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
+  const { user: authUser, isAuthenticated } = useAuth();
 
   useEffect(() => {
-    const role = localStorage.getItem("role");
-    if (role !== "User") {
-      navigate("/login");
-      return;
-    }
-
     // Fetch user profile data
     const fetchUserInfo = async () => {
       try {
@@ -31,26 +29,30 @@ const UserDashboard = () => {
         if (userData) {
           setUser(userData);
         } else {
-          // Fallback to localStorage data
+          // Fallback to auth user data
           setUser({
-            name: localStorage.getItem("name") || "User",
-            email: localStorage.getItem("email") || ""
+            name: authUser?.name || "User",
+            email: authUser?.email || ""
           });
         }
       } catch (error) {
         console.error("Error fetching user info:", error);
-        // Fallback to localStorage data
+        // Fallback to auth user data
         setUser({
-          name: localStorage.getItem("name") || "User",
-          email: localStorage.getItem("email") || ""
+          name: authUser?.name || "User",
+          email: authUser?.email || ""
         });
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUserInfo();
-  }, [navigate]);
+    if (isAuthenticated && authUser) {
+      fetchUserInfo();
+    } else {
+      setLoading(false);
+    }
+  }, [isAuthenticated, authUser]);
 
   const toggleSidebar = () => setSidebarOpen((open) => !open);
   const handleNavClick = () => {
@@ -85,6 +87,7 @@ const UserDashboard = () => {
             <Route path="my-bookings" element={<MyBookings />} />
             <Route path="my-reviews" element={<UserReviews />} />
             <Route path="profile" element={<Profile />} />
+            <Route path='venue/:id' element={<VenueDetailsPage/>}/>
             <Route path="*" element={<Navigate to="" replace />} />
           </Routes>
         </main>

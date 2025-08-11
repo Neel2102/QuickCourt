@@ -3,15 +3,18 @@ import { useNavigate } from 'react-router-dom';
 import "../CSS/LandingPage.css";
 import Navbar from '../components/Navbar';
 import bgVideo from '../assets/Screen Recording 2025-08-07 175941.mp4';
+import { useAuth } from '../contexts/AuthContext';
+import { getDashboardRoute } from '../utils/authUtils';
 
 const LandingPage = () => {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { isAuthenticated, user, loading } = useAuth();
 
   useEffect(() => {
     setIsVisible(true);
-    
+
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
@@ -19,6 +22,14 @@ const LandingPage = () => {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
+
+  // Redirect authenticated users to their dashboard
+  useEffect(() => {
+    if (!loading && isAuthenticated && user) {
+      const dashboardRoute = getDashboardRoute(user.role);
+      navigate(dashboardRoute, { replace: true });
+    }
+  }, [isAuthenticated, user, loading, navigate]);
 
   const features = [
     {
@@ -101,7 +112,7 @@ const LandingPage = () => {
               and stay active with QuickCourt - your local sports community.
             </p>
             <div className="hero-actions">
-              <button className="cta-primary" onClick={() => navigate('/venues')}>Find Venues</button>
+              <button className="cta-primary" onClick={() => navigate('/user-dashboard/venues')}>Find Venues</button>
               <button className="cta-secondary">Join Match</button>
             </div>
           </div>

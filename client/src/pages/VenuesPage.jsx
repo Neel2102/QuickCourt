@@ -74,7 +74,7 @@ const VenuesPage = () => {
   };
 
   const handleVenueClick = (venueId) => {
-    navigate(`/venue/${venueId}`);
+    navigate(`/user-dashboard/venue/${venueId}`);
   };
 
   const clearFilters = () => {

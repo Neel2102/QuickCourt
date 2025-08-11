@@ -1,11 +1,13 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Menu } from 'lucide-react';
+import { useAuth } from '../../contexts/AuthContext';
 import "../../CSS/Dashboard/Header.css";
 
 const HeaderUser = ({ onToggleSidebar, userName = 'User', userProfilePic = null }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { logout } = useAuth();
 
   const getPageTitle = () => {
     const path = location.pathname.split('/').pop();
@@ -22,15 +24,9 @@ const HeaderUser = ({ onToggleSidebar, userName = 'User', userProfilePic = null 
   };
 
   const handleLogout = async () => {
-    try {
-      await fetch('http://localhost:4000/api/auth/logout', {
-        method: 'POST',
-        credentials: 'include'
-      });
-    } catch (error) {
-      console.error('Logout error:', error);
-    } finally {
-      navigate('/login');
+    const confirmed = window.confirm('Are you sure you want to logout?');
+    if (confirmed) {
+      await logout(); // This will handle navigation and cleanup
     }
   };
 
