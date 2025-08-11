@@ -4,6 +4,7 @@ import { User, Mail, Lock, Eye, EyeOff, ArrowLeft } from "lucide-react";
 import "../CSS/Login.css";
 import InfinityGlowBackground from "./InfinityGlow";
 import Navbar from "../components/Navbar";
+import { toast } from 'react-toastify';
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -52,6 +53,8 @@ const Login = () => {
     e.preventDefault();
     if (!validateForm()) return;
     setIsLoading(true);
+
+
     try {
       const res = await fetch("http://localhost:4000/api/auth/login", {
         method: "POST",
@@ -66,7 +69,8 @@ const Login = () => {
       setIsLoading(false);
       if (res.ok) {
         if (data.user && data.user.isAccountVerified) {
-          alert("Login successful! Welcome back.");
+        toast.success("Login successful!");
+       
           navigate("/dashboard");
         } else {
           try {
@@ -83,21 +87,21 @@ const Login = () => {
             if (otpData.success) {
               setUserEmail(formData.email);
               setShowEmailVerify(true);
-              alert(`OTP sent to your email: ${formData.email}`);
+              toast.success(`OTP sent to your email: ${formData.email}`);
             } else {
-              alert(otpData.message || "Failed to send OTP");
+              toast.success(otpData.message || "Failed to send OTP");
             }
           } catch (otpError) {
             console.error("OTP Error:", otpError);
-            alert("Login successful but failed to send OTP. Please try again.");
+            toast.error("Login successful but failed to send OTP. Please try again.");
           }
         }
       } else {
-        alert(data.message || "An error occurred.");
+        toast.error(data.message || "An error occurred.");
       }
     } catch (err) {
       setIsLoading(false);
-      alert("Failed to connect to server.");
+      toast.error("Failed to connect to server.");
       console.error("API error:", err);
     }
   };
@@ -143,13 +147,17 @@ const Login = () => {
       );
       const data = await response.json();
       if (data.success) {
-        alert("Email verified successfully!");
+        toast.success("Email Verified successfully!");
         navigate("/dashboard");
       } else {
+        toast.error(data.message || "Error while Verifying Email")
         setOtpError(data.message || "Invalid OTP. Please try again.");
-      }
+      
+    }
     } catch (err) {
       setOtpError("Failed to verify OTP. Please try again.");
+      toast.error(data.message || "Failed to verify OTP. Please try again");
+
       console.error("Verification error:", err);
     } finally {
       setIsLoading(false);
@@ -171,13 +179,13 @@ const Login = () => {
       );
       const data = await response.json();
       if (data.success) {
-        alert(`New OTP sent to your email: ${userEmail}`);
+        toast.success(data.message || "OTP resent successfully!");
         setOtp(["", "", "", "", "", ""]);
       } else {
         setOtpError(data.message || "Failed to send OTP");
       }
     } catch (err) {
-      setOtpError("Failed to send OTP. Please try again.");
+      toast.error(data.message || "Failed to resend OTP. Please try again");
       console.error("Resend error:", err);
     } finally {
       setIsLoading(false);
