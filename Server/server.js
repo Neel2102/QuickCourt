@@ -11,6 +11,9 @@ import courtRouter from './routes/courtRoutes.js';
 import bookingRouter from './routes/bookingRoutes.js';
 import adminRouter from './routes/adminRoutes.js';
 
+import dashboardRouter from './routes/dashboardRoutes.js';
+import venueRouter from './routes/venueRoutes.js';
+
 export const app = express();
 
 dotenv.config({path: './.env', quiet: true});
@@ -40,6 +43,8 @@ app.use('/api/venues', venueRouter); // New venue routes
 app.use('/api/courts', courtRouter); // New court routes
 app.use('/api/bookings', bookingRouter); // New booking routes
 app.use('/api/admin', adminRouter); // New admin routes
+app.use('/api/venues', venueRouter);
+app.use('/api/dashboard', dashboardRouter);
 
 app.listen(port, ()=>
    console.log(`Sever listening on port ${port}
