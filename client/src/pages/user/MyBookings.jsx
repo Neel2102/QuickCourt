@@ -97,12 +97,29 @@ const MyBookings = () => {
     switch (status) {
       case 'Confirmed':
         return 'status-confirmed';
+      case 'Pending':
+        return 'status-pending';
       case 'Completed':
         return 'status-completed';
       case 'Cancelled':
         return 'status-cancelled';
       default:
         return 'status-default';
+    }
+  };
+
+  const getStatusText = (status) => {
+    switch (status) {
+      case 'Confirmed':
+        return '✅ Confirmed';
+      case 'Pending':
+        return '⏳ Payment Pending';
+      case 'Completed':
+        return '🏆 Completed';
+      case 'Cancelled':
+        return '❌ Cancelled';
+      default:
+        return status;
     }
   };
 
@@ -191,7 +208,7 @@ const MyBookings = () => {
                 <div className="booking-header">
                   <h3>{booking.venue?.name}</h3>
                   <span className={`status-badge ${getStatusColor(booking.status)}`}>
-                    {booking.status}
+                    {getStatusText(booking.status)}
                   </span>
                 </div>
 

@@ -3,11 +3,11 @@ import { protectRoute } from '../middlewares/userAuth.js';
 import { roleAuth } from '../middlewares/roleAuth.js';
 import * as bookingController from '../controllers/bookingController.js';
 
-
 const bookingRouter = express.Router();
 
 bookingRouter.post('/', protectRoute, bookingController.createBooking);
 bookingRouter.post('/confirm-payment', protectRoute, bookingController.confirmPayment);
+bookingRouter.post('/webhook', express.raw({ type: 'application/json' }), bookingController.handleStripeWebhook);
 bookingRouter.get('/mybookings', protectRoute, bookingController.getMyBookings);
 bookingRouter.get('/owner', protectRoute, roleAuth('FacilityOwner'), bookingController.getOwnerBookings);
 bookingRouter.put('/:id/cancel', protectRoute, bookingController.cancelBooking);

@@ -360,3 +360,125 @@
     height: 120px;
   }
 }
+
+/* Recent Bookings Section */
+.recent-bookings {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  margin-top: 2rem;
+}
+
+.recent-bookings h3 {
+  color: #374151;
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 0.5rem;
+}
+
+.bookings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.booking-item {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.booking-item:hover {
+  border-color: #43b97f;
+  box-shadow: 0 2px 8px rgba(67, 185, 127, 0.1);
+}
+
+.booking-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.booking-header h4 {
+  margin: 0;
+  color: #374151;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.booking-status {
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.booking-status.confirmed {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.booking-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.booking-details p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+}
+
+.booking-details strong {
+  color: #374151;
+}
+
+.view-all-bookings {
+  text-align: center;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.view-all-btn {
+  background: #43b97f;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 1.5rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.view-all-btn:hover {
+  background: #2e7d5a;
+  transform: translateY(-1px);
+}
+
+/* Responsive adjustments for recent bookings */
+@media (max-width: 768px) {
+  .recent-bookings {
+    padding: 1.5rem;
+  }
+  
+  .booking-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .booking-status {
+    align-self: flex-start;
+  }
+}

@@ -3,7 +3,10 @@ import courtModel from '../models/courtModel.js';
 import venueModel from '../models/venueModel.js';
 import userModel from '../models/userModel.js';
 import { createPaymentIntent, verifyPaymentIntent } from '../services/paymentService.js';
-import { sendBookingConfirmationEmail } from '../services/emailService.js';
+import { sendBookingConfirmationEmail, sendBookingCancellationEmail } from '../services/emailService.js';
+import Stripe from 'stripe';
+
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 export const createBooking = async (req, res) => {
     try {
@@ -93,23 +96,26 @@ export const confirmPayment = async (req, res) => {
             bookingId,
             { status: 'Confirmed' },
             { new: true }
-        ).populate('court');
+        ).populate('court venue user');
 
         if (!booking) {
             return res.status(404).json({ success: false, message: 'Booking not found.' });
         }
         
-        // Optionally send a confirmation email here
-        const user = await userModel.findById(booking.user);
-        const venue = await venueModel.findById(booking.venue);
-        sendBookingConfirmationEmail(user.email, {
-            venueName: venue.name,
-            courtName: booking.court.name,
-            date: booking.date,
-            startTime: booking.startTime,
-            endTime: booking.endTime,
-            totalPrice: booking.totalPrice,
-        });
+        // Send confirmation email
+        try {
+            await sendBookingConfirmationEmail(booking.user.email, {
+                venueName: booking.venue.name,
+                courtName: booking.court.name,
+                date: booking.date,
+                startTime: booking.startTime,
+                endTime: booking.endTime,
+                totalPrice: booking.totalPrice,
+            });
+        } catch (emailError) {
+            console.error('Failed to send confirmation email:', emailError);
+            // Don't fail the request if email fails
+        }
 
         res.json({ success: true, message: 'Booking confirmed and paid.', booking });
     } catch (error) {
@@ -133,7 +139,7 @@ export const cancelBooking = async (req, res) => {
     try {
         const { id } = req.params;
         const userId = req.user._id;
-        const booking = await bookingModel.findById(id);
+        const booking = await bookingModel.findById(id).populate('venue court user');
 
         if (!booking) {
             return res.status(404).json({ success: false, message: 'Booking not found.' });
@@ -145,6 +151,21 @@ export const cancelBooking = async (req, res) => {
         }
 
         const updatedBooking = await bookingModel.findByIdAndUpdate(id, { status: 'Cancelled' }, { new: true });
+
+        // Send cancellation email
+        try {
+            await sendBookingCancellationEmail(booking.user.email, {
+                venueName: booking.venue.name,
+                courtName: booking.court.name,
+                date: booking.date,
+                startTime: booking.startTime,
+                endTime: booking.endTime,
+                totalPrice: booking.totalPrice,
+            });
+        } catch (emailError) {
+            console.error('Failed to send cancellation email:', emailError);
+            // Don't fail the request if email fails
+        }
 
         res.json({ success: true, message: 'Booking cancelled successfully.', data: updatedBooking });
     } catch (error) {
@@ -182,5 +203,93 @@ export const updateBooking = async (req, res) => {
         res.json({ success: true, data: updated });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to update booking', error: error.message });
+    }
+};
+
+export const handleStripeWebhook = async (req, res) => {
+    const sig = req.headers['stripe-signature'];
+    const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
+
+    let event;
+
+    try {
+        event = stripe.webhooks.constructEvent(req.body, sig, endpointSecret);
+    } catch (err) {
+        console.error('Webhook signature verification failed:', err.message);
+        return res.status(400).send(`Webhook Error: ${err.message}`);
+    }
+
+    // Handle the event
+    switch (event.type) {
+        case 'payment_intent.succeeded':
+            await handlePaymentSuccess(event.data.object);
+            break;
+        case 'payment_intent.payment_failed':
+            await handlePaymentFailure(event.data.object);
+            break;
+        default:
+            console.log(`Unhandled event type ${event.type}`);
+    }
+
+    res.json({ received: true });
+};
+
+const handlePaymentSuccess = async (paymentIntent) => {
+    try {
+        const bookingId = paymentIntent.metadata.bookingId;
+        if (!bookingId) {
+            console.error('No booking ID in payment intent metadata');
+            return;
+        }
+
+        const booking = await bookingModel.findByIdAndUpdate(
+            bookingId,
+            { status: 'Confirmed' },
+            { new: true }
+        ).populate('court venue user');
+
+        if (!booking) {
+            console.error('Booking not found for payment success:', bookingId);
+            return;
+        }
+
+        // Send confirmation email
+        try {
+            await sendBookingConfirmationEmail(booking.user.email, {
+                venueName: booking.venue.name,
+                courtName: booking.court.name,
+                date: booking.date,
+                startTime: booking.startTime,
+                endTime: booking.endTime,
+                totalPrice: booking.totalPrice,
+            });
+        } catch (emailError) {
+            console.error('Failed to send confirmation email:', emailError);
+        }
+
+        console.log('Payment confirmed and booking updated:', bookingId);
+    } catch (error) {
+        console.error('Error handling payment success:', error);
+    }
+};
+
+const handlePaymentFailure = async (paymentIntent) => {
+    try {
+        const bookingId = paymentIntent.metadata.bookingId;
+        if (!bookingId) {
+            console.error('No booking ID in payment intent metadata');
+            return;
+        }
+
+        // Update booking status to failed or keep as pending
+        await bookingModel.findByIdAndUpdate(
+            bookingId,
+            { status: 'Pending' }, // Keep as pending for retry
+            { new: true }
+        );
+
+        console.log('Payment failed for booking:', bookingId);
+    } catch (error) {
+        console.error('Error handling payment failure:', error);
     }
 };

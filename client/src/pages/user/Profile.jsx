@@ -7,6 +7,7 @@ const Profile = () => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
+  const [recentBookings, setRecentBookings] = useState([]);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -17,6 +18,7 @@ const Profile = () => {
 
   useEffect(() => {
     fetchUserProfile();
+    fetchRecentBookings();
   }, []);
 
   const fetchUserProfile = async () => {
@@ -36,6 +38,20 @@ const Profile = () => {
       toast.error('Failed to load profile');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const fetchRecentBookings = async () => {
+    try {
+      const data = await getMyBookings();
+      // Get only the 3 most recent confirmed bookings
+      const confirmedBookings = data
+        .filter(booking => booking.status === 'Confirmed')
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .slice(0, 3);
+      setRecentBookings(confirmedBookings);
+    } catch (error) {
+      console.error('Error fetching recent bookings:', error);
     }
   };
 
@@ -285,6 +301,37 @@ const Profile = () => {
                 <div className="stat-number">{user?.cancelledBookings || 0}</div>
                 <div className="stat-label">Cancelled</div>
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Recent Bookings */}
+        {!editing && recentBookings.length > 0 && (
+          <div className="recent-bookings">
+            <h3>Recent Bookings</h3>
+            <div className="bookings-list">
+              {recentBookings.map(booking => (
+                <div key={booking._id} className="booking-item">
+                  <div className="booking-header">
+                    <h4>{booking.venue?.name}</h4>
+                    <span className="booking-status confirmed">Confirmed</span>
+                  </div>
+                  <div className="booking-details">
+                    <p><strong>Court:</strong> {booking.court?.name} ({booking.court?.sportType})</p>
+                    <p><strong>Date:</strong> {formatDate(booking.date)}</p>
+                    <p><strong>Time:</strong> {formatTime(booking.startTime)} - {formatTime(booking.endTime)}</p>
+                    <p><strong>Amount:</strong> ₹{booking.totalPrice}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+            <div className="view-all-bookings">
+              <button 
+                className="view-all-btn"
+                onClick={() => window.location.href = '/user-dashboard/my-bookings'}
+              >
+                View All Bookings
+              </button>
             </div>
           </div>
         )}

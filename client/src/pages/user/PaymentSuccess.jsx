@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loading from '../../components/common/Loading';
+import '../../CSS/PaymentSuccess.css';
 
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [status, setStatus] = useState('verifying'); // 'verifying', 'success', 'failure'
   const [message, setMessage] = useState('Verifying your payment...');
+  const [bookingDetails, setBookingDetails] = useState(null);
 
   useEffect(() => {
     const paymentIntentId = searchParams.get('payment_intent');
@@ -32,6 +34,7 @@ const PaymentSuccess = () => {
         if (data.success) {
           setStatus('success');
           setMessage('Payment successful! Your booking is confirmed.');
+          setBookingDetails(data.booking);
           toast.success('Your booking is confirmed!', { autoClose: 5000 });
         } else {
           setStatus('failure');
@@ -50,23 +53,93 @@ const PaymentSuccess = () => {
   }, [searchParams]);
 
   if (status === 'verifying') {
-    return <Loading text={message} />;
+    return (
+      <div className="payment-verifying">
+        <Loading text={message} />
+      </div>
+    );
   }
 
   return (
     <div className="payment-result-container">
       {status === 'success' ? (
-        <>
-          <h1 className="text-green-600">✅ Success</h1>
-          <p>{message}</p>
-          <button onClick={() => navigate('/user-dashboard/my-bookings')}>View My Bookings</button>
-        </>
+        <div className="success-content">
+          <div className="success-icon">✅</div>
+          <h1 className="success-title">Payment Successful!</h1>
+          <p className="success-message">{message}</p>
+          
+          {bookingDetails && (
+            <div className="booking-summary">
+              <h3>Booking Details</h3>
+              <div className="booking-info">
+                <div className="info-row">
+                  <span>Venue:</span>
+                  <span>{bookingDetails.venue?.name || 'N/A'}</span>
+                </div>
+                <div className="info-row">
+                  <span>Court:</span>
+                  <span>{bookingDetails.court?.name || 'N/A'}</span>
+                </div>
+                <div className="info-row">
+                  <span>Date:</span>
+                  <span>{new Date(bookingDetails.date).toLocaleDateString()}</span>
+                </div>
+                <div className="info-row">
+                  <span>Time:</span>
+                  <span>{bookingDetails.startTime} - {bookingDetails.endTime}</span>
+                </div>
+                <div className="info-row">
+                  <span>Amount:</span>
+                  <span>₹{bookingDetails.totalPrice}</span>
+                </div>
+              </div>
+            </div>
+          )}
+          
+          <div className="action-buttons">
+            <button 
+              className="primary-btn"
+              onClick={() => navigate('/user-dashboard/my-bookings')}
+            >
+              View My Bookings
+            </button>
+            <button 
+              className="secondary-btn"
+              onClick={() => navigate('/venues')}
+            >
+              Book Another Court
+            </button>
+          </div>
+          
+          <div className="email-notice">
+            <p>📧 A confirmation email has been sent to your registered email address.</p>
+          </div>
+        </div>
       ) : (
-        <>
-          <h1 className="text-red-600">❌ Payment Failed</h1>
-          <p>{message}</p>
-          <button onClick={() => navigate('/venues')}>Try Booking Again</button>
-        </>
+        <div className="failure-content">
+          <div className="failure-icon">❌</div>
+          <h1 className="failure-title">Payment Failed</h1>
+          <p className="failure-message">{message}</p>
+          
+          <div className="action-buttons">
+            <button 
+              className="primary-btn"
+              onClick={() => navigate('/venues')}
+            >
+              Try Booking Again
+            </button>
+            <button 
+              className="secondary-btn"
+              onClick={() => navigate('/user-dashboard')}
+            >
+              Go to Dashboard
+            </button>
+          </div>
+          
+          <div className="support-notice">
+            <p>If you continue to experience issues, please contact our support team.</p>
+          </div>
+        </div>
       )}
     </div>
   );
