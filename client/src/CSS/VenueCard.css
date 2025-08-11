@@ -1,0 +1,275 @@
+.venue-card-venuecard {
+  width: 100%;
+  max-width: 350px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 1rem;
+  box-shadow: 
+    inset 0 20px 25px -5px rgba(255, 255, 255, 0.1),
+    0 10px 10px -6px rgba(0, 0, 0, 0.1),
+    0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fade-in-venuecard 1s ease-in-out;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  overflow: hidden;
+}
+
+.venue-card-venuecard:hover {
+  transform: translateY(-5px);
+  box-shadow: 
+    inset 0 20px 25px -5px rgba(255, 255, 255, 0.15),
+    0 15px 20px -6px rgba(0, 0, 0, 0.15),
+    0 8px 10px -1px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+@keyframes fade-in-venuecard {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.venue-image-venuecard {
+  width: 100%;
+  height: 200px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem 0.75rem 0 0;
+  background: linear-gradient(135deg, var(--background-secondary), var(--primary-color));
+}
+
+.venue-img-venuecard {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.venue-card-venuecard:hover .venue-img-venuecard {
+  transform: scale(1.05);
+}
+
+.placeholder-venuecard {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  background: linear-gradient(135deg, var(--background-secondary), var(--primary-color));
+  color: var(--text-light);
+}
+
+.venue-content-venuecard {
+  padding: 1.5rem;
+}
+
+.venue-header-venuecard {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  gap: 0.5rem;
+}
+
+.venue-name-venuecard {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+  line-height: 1.3;
+  flex: 1;
+}
+
+.venue-rating-venuecard {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  white-space: nowrap;
+}
+
+.venue-location-venuecard {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.venue-sports-venuecard {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.sport-tag-venuecard {
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
+  background: rgba(255, 255, 255, 0.2);
+  color: var(--text-primary);
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.sport-tag-venuecard:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.venue-footer-venuecard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.venue-price-venuecard {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.currency-venuecard {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.per-hour-venuecard {
+  font-size: 0.75rem;
+  color: var(--text-light);
+  font-weight: 400;
+}
+
+.btn-venuecard {
+  padding: 0.75rem 1.5rem;
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--text-primary);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+  white-space: nowrap;
+}
+
+.btn-venuecard:hover {
+  background: rgba(255, 255, 255, 0.35);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-venuecard:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .venue-card-venuecard {
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  
+  .venue-image-venuecard {
+    height: 180px;
+  }
+  
+  .venue-content-venuecard {
+    padding: 1.25rem;
+  }
+  
+  .venue-name-venuecard {
+    font-size: 1.125rem;
+  }
+  
+  .venue-footer-venuecard {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  
+  .btn-venuecard {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .venue-card-venuecard {
+    border-radius: 0.75rem;
+  }
+  
+  .venue-image-venuecard {
+    height: 160px;
+    border-radius: 0.5rem 0.5rem 0 0;
+  }
+  
+  .venue-content-venuecard {
+    padding: 1rem;
+  }
+  
+  .venue-header-venuecard {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  
+  .venue-rating-venuecard {
+    align-self: flex-end;
+  }
+  
+  .venue-sports-venuecard {
+    margin-bottom: 1rem;
+  }
+  
+  .sport-tag-venuecard {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.6rem;
+  }
+}
+
+/* Grid layout for multiple cards */
+.venue-cards-container-venuecard {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+  padding: 1rem;
+}
+
+@media (max-width: 768px) {
+  .venue-cards-container-venuecard {
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .venue-cards-container-venuecard {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+}

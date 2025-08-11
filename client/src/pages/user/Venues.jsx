@@ -176,22 +176,22 @@ const Venues = () => {
 
   if (loading) {
     return (
-      <div className="venues-container">
-        <div className="loading">Loading venues...</div>
+      <div className="venues-container-venues">
+        <div className="loading-venues">Loading venues...</div>
       </div>
     );
   }
 
   return (
-    <div className="venues-container">
-      <div className="page-header">
+    <div className="venues-container-venues">
+      <div className="page-header-venues">
         <h1>Sports Venues</h1>
         <p>Discover and book sports facilities in your area</p>
       </div>
 
       {/* Search and Filters */}
-      <div className="search-filters-section">
-        <div className="search-container">
+      <div className="search-filters-section-venues">
+        <div className="search-container-venues">
           <SearchBar
             value={searchTerm}
             onChange={handleSearch}
@@ -206,13 +206,13 @@ const Venues = () => {
       </div>
 
       {/* Results Summary */}
-      <div className="results-summary">
-        <span className="results-count">
+      <div className="results-summary-venues">
+        <span className="results-count-venues">
           {filteredVenues.length} venue(s) found
         </span>
         {Object.values(filters).some(f => f !== 'all' && f !== '') && (
           <button 
-            className="clear-filters-btn"
+            className="clear-filters-btn-venues"
             onClick={() => {
               setFilters({
                 sportType: 'all',
@@ -229,10 +229,10 @@ const Venues = () => {
       </div>
 
       {/* Venues Grid */}
-      <div className="venues-section">
+      <div className="venues-section-venues">
         {currentVenues.length === 0 ? (
-          <div className="no-venues">
-            <div className="no-venues-icon">🔍</div>
+          <div className="no-venues-venues">
+            <div className="no-venues-icon-venues">🔍</div>
             <h3>No venues found</h3>
             <p>
               {searchTerm || Object.values(filters).some(f => f !== 'all' && f !== '')
@@ -242,7 +242,7 @@ const Venues = () => {
             </p>
             {(searchTerm || Object.values(filters).some(f => f !== 'all' && f !== '')) && (
               <button 
-                className="clear-search-btn"
+                className="clear-search-btn-venues"
                 onClick={() => {
                   setFilters({
                     sportType: 'all',
@@ -259,7 +259,7 @@ const Venues = () => {
           </div>
         ) : (
           <>
-            <div className="venues-grid">
+            <div className="venues-grid-venues">
               {currentVenues.map(venue => (
                 <VenueCard
                   key={venue._id}
@@ -272,9 +272,9 @@ const Venues = () => {
 
             {/* Pagination */}
             {totalPages > 1 && (
-              <div className="pagination">
+              <div className="pagination-venues">
                 <button
-                  className="pagination-btn"
+                  className="pagination-btn-venues"
                   onClick={() => paginate(currentPage - 1)}
                   disabled={currentPage === 1}
                 >
@@ -284,7 +284,7 @@ const Venues = () => {
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(number => (
                   <button
                     key={number}
-                    className={`pagination-btn ${currentPage === number ? 'active' : ''}`}
+                    className={`pagination-btn-venues ${currentPage === number ? 'active-venues' : ''}`}
                     onClick={() => paginate(number)}
                   >
                     {number}
@@ -292,7 +292,7 @@ const Venues = () => {
                 ))}
                 
                 <button
-                  className="pagination-btn"
+                  className="pagination-btn-venues"
                   onClick={() => paginate(currentPage + 1)}
                   disabled={currentPage === totalPages}
                 >
@@ -305,15 +305,15 @@ const Venues = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="quick-actions">
+      <div className="quick-actions-venues">
         <button 
-          className="primary-btn"
+          className="primary-btn-venues"
           onClick={() => navigate('/venues')}
         >
           View All Venues
         </button>
         <button 
-          className="secondary-btn"
+          className="secondary-btn-venues"
           onClick={() => {
             setSearchTerm('');
             setFilters({

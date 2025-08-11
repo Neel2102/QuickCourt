@@ -96,15 +96,15 @@ const MyBookings = () => {
   const getStatusColor = (status) => {
     switch (status) {
       case 'Confirmed':
-        return 'status-confirmed';
+        return 'status-confirmed-mybookings';
       case 'Pending':
-        return 'status-pending';
+        return 'status-pending-mybookings';
       case 'Completed':
-        return 'status-completed';
+        return 'status-completed-mybookings';
       case 'Cancelled':
-        return 'status-cancelled';
+        return 'status-cancelled-mybookings';
       default:
-        return 'status-default';
+        return 'status-default-mybookings';
     }
   };
 
@@ -132,27 +132,27 @@ const MyBookings = () => {
 
   if (loading) {
     return (
-      <div className="my-bookings-container">
-        <div className="loading">Loading your bookings...</div>
+      <div className="container-mybookings">
+        <div className="loading-mybookings">Loading your bookings...</div>
       </div>
     );
   }
 
   return (
-    <div className="my-bookings-container">
-      <div className="page-header">
+    <div className="container-mybookings">
+      <div className="header-mybookings">
         <h1>My Bookings</h1>
         <p>Manage and track all your court bookings</p>
       </div>
 
       {/* Filters */}
-      <div className="filters-section">
-        <div className="filter-group">
+      <div className="filters-section-mybookings">
+        <div className="filter-group-mybookings">
           <label>Status:</label>
           <select 
             value={statusFilter} 
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="filter-select"
+            className="filter-select-mybookings"
           >
             {statuses.map(status => (
               <option key={status} value={status}>
@@ -162,12 +162,12 @@ const MyBookings = () => {
           </select>
         </div>
 
-        <div className="filter-group">
+        <div className="filter-group-mybookings">
           <label>Date:</label>
           <select 
             value={dateFilter} 
             onChange={(e) => setDateFilter(e.target.value)}
-            className="filter-select"
+            className="filter-select-mybookings"
           >
             <option value="all">All Dates</option>
             <option value="today">Today</option>
@@ -177,16 +177,16 @@ const MyBookings = () => {
           </select>
         </div>
 
-        <div className="filter-summary">
+        <div className="filter-summary-mybookings">
           <span>{filteredBookings.length} booking(s) found</span>
         </div>
       </div>
 
       {/* Bookings List */}
-      <div className="bookings-section">
+      <div className="bookings-section-mybookings">
         {filteredBookings.length === 0 ? (
-          <div className="no-bookings">
-            <div className="no-bookings-icon">📅</div>
+          <div className="no-bookings-mybookings">
+            <div className="no-bookings-icon-mybookings">📅</div>
             <h3>No bookings found</h3>
             <p>
               {statusFilter !== 'all' || dateFilter !== 'all' 
@@ -194,7 +194,7 @@ const MyBookings = () => {
                 : 'Start by booking your first court! '
               }
               <button 
-                className="book-now-link"
+                className="book-now-link-mybookings"
                 onClick={() => navigate('/venues')}
               >
                 Book Now
@@ -202,52 +202,52 @@ const MyBookings = () => {
             </p>
           </div>
         ) : (
-          <div className="bookings-grid">
+          <div className="bookings-grid-mybookings">
             {filteredBookings.map(booking => (
-              <div key={booking._id} className="booking-card">
-                <div className="booking-header">
+              <div key={booking._id} className="booking-card-mybookings">
+                <div className="booking-header-mybookings">
                   <h3>{booking.venue?.name}</h3>
-                  <span className={`status-badge ${getStatusColor(booking.status)}`}>
+                  <span className={`status-badge-mybookings ${getStatusColor(booking.status)}`}>
                     {getStatusText(booking.status)}
                   </span>
                 </div>
 
-                <div className="booking-details">
-                  <div className="detail-row">
-                    <span className="detail-label">Sport:</span>
-                    <span className="detail-value">{booking.court?.sportType}</span>
+                <div className="booking-details-mybookings">
+                  <div className="detail-row-mybookings">
+                    <span className="detail-label-mybookings">Sport:</span>
+                    <span className="detail-value-mybookings">{booking.court?.sportType}</span>
                   </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Court:</span>
-                    <span className="detail-value">{booking.court?.name}</span>
+                  <div className="detail-row-mybookings">
+                    <span className="detail-label-mybookings">Court:</span>
+                    <span className="detail-value-mybookings">{booking.court?.name}</span>
                   </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Date:</span>
-                    <span className="detail-value">{formatDate(booking.date)}</span>
+                  <div className="detail-row-mybookings">
+                    <span className="detail-label-mybookings">Date:</span>
+                    <span className="detail-value-mybookings">{formatDate(booking.date)}</span>
                   </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Time:</span>
-                    <span className="detail-value">
+                  <div className="detail-row-mybookings">
+                    <span className="detail-label-mybookings">Time:</span>
+                    <span className="detail-value-mybookings">
                       {formatTime(booking.startTime)} - {formatTime(booking.endTime)}
                     </span>
                   </div>
-                  <div className="detail-row">
-                    <span className="detail-label">Price:</span>
-                    <span className="detail-value">₹{booking.totalPrice}</span>
+                  <div className="detail-row-mybookings">
+                    <span className="detail-label-mybookings">Price:</span>
+                    <span className="detail-value-mybookings">₹{booking.totalPrice}</span>
                   </div>
                 </div>
 
-                <div className="booking-actions">
+                <div className="booking-actions-mybookings">
                   {canCancel(booking) && (
                     <button
-                      className="cancel-btn"
+                      className="cancel-btn-mybookings"
                       onClick={() => handleCancelBooking(booking._id)}
                     >
                       Cancel Booking
                     </button>
                   )}
                   <button
-                    className="view-venue-btn"
+                    className="view-venue-btn-mybookings"
                     onClick={() => navigate(`/venue/${booking.venue?._id}`)}
                   >
                     View Venue
@@ -260,15 +260,15 @@ const MyBookings = () => {
       </div>
 
       {/* Quick Actions */}
-      <div className="quick-actions">
+      <div className="quick-actions-mybookings">
         <button 
-          className="primary-btn"
+          className="primary-btn-mybookings"
           onClick={() => navigate('/venues')}
         >
           Book New Court
         </button>
         <button 
-          className="secondary-btn"
+          className="secondary-btn-mybookings"
           onClick={() => {
             setStatusFilter('all');
             setDateFilter('all');
@@ -281,4 +281,4 @@ const MyBookings = () => {
   );
 };
 
-export default MyBookings; 
+export default MyBookings;
