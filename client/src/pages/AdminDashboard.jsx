@@ -56,24 +56,100 @@ const DashboardSection = ({ stats, chartData, chartOptions }) => (
   </>
 );
 
-const FacilityApprovalsSection = ({ pendingVenues }) => (
-  <section className="section-adminDashboard">
-    <h3>Facility Approval Queue</h3>
-    <div className="approval-list">
-      {pendingVenues.length === 0 ? (
-        <p>No pending facilities.</p>
-      ) : (
-        pendingVenues.map((venue) => (
-          <div className="approval-card" key={venue._id}>
-            <div><b>{venue.name}</b> ({venue.sportTypes?.join(', ')})</div>
-            <div>Owner: {venue.owner?.fullName || 'N/A'} ({venue.owner?.email || ''})</div>
-            <div>Location: {venue.address?.city || ''}</div>
+const FacilityApprovalsSection = ({ pendingVenues, onApprove, onReject }) => {
+  const [loading, setLoading] = useState({});
+
+  const handleApprove = async (venueId) => {
+    setLoading(prev => ({ ...prev, [venueId]: true }));
+    try {
+      const response = await fetch(`/api/admin/venues/${venueId}/approve`, {
+        method: 'PUT',
+        credentials: 'include'
+      });
+      const data = await response.json();
+      if (data.success) {
+        onApprove(venueId);
+      }
+    } catch (error) {
+      console.error('Error approving venue:', error);
+    } finally {
+      setLoading(prev => ({ ...prev, [venueId]: false }));
+    }
+  };
+
+  const handleReject = async (venueId) => {
+    setLoading(prev => ({ ...prev, [venueId]: true }));
+    try {
+      const response = await fetch(`/api/admin/venues/${venueId}/reject`, {
+        method: 'PUT',
+        credentials: 'include'
+      });
+      const data = await response.json();
+      if (data.success) {
+        onReject(venueId);
+      }
+    } catch (error) {
+      console.error('Error rejecting venue:', error);
+    } finally {
+      setLoading(prev => ({ ...prev, [venueId]: false }));
+    }
+  };
+
+  return (
+    <section className="section-adminDashboard">
+      <h3>Facility Approval Queue</h3>
+      <div className="approval-list">
+        {pendingVenues.length === 0 ? (
+          <div className="empty-state">
+            <p>No pending facilities for approval.</p>
           </div>
-        ))
-      )}
-    </div>
-  </section>
-);
+        ) : (
+          pendingVenues.map((venue) => (
+            <div className="approval-card" key={venue._id}>
+              <div className="venue-image">
+                {venue.photos?.[0] ? (
+                  <img src={venue.photos[0]} alt={venue.name} />
+                ) : (
+                  <div className="placeholder">🏟️</div>
+                )}
+              </div>
+
+              <div className="venue-details">
+                <h4>{venue.name}</h4>
+                <p className="venue-description">{venue.description}</p>
+                <div className="venue-meta">
+                  <p><strong>Owner:</strong> {venue.owner?.name || 'N/A'} ({venue.owner?.email || ''})</p>
+                  <p><strong>Location:</strong> {venue.address?.street}, {venue.address?.city}, {venue.address?.state}</p>
+                  <p><strong>Sports:</strong> {venue.sportTypes?.join(', ')}</p>
+                  {venue.amenities && venue.amenities.length > 0 && (
+                    <p><strong>Amenities:</strong> {venue.amenities.join(', ')}</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="approval-actions">
+                <button
+                  className="approve-btn"
+                  onClick={() => handleApprove(venue._id)}
+                  disabled={loading[venue._id]}
+                >
+                  {loading[venue._id] ? 'Approving...' : 'Approve'}
+                </button>
+                <button
+                  className="reject-btn"
+                  onClick={() => handleReject(venue._id)}
+                  disabled={loading[venue._id]}
+                >
+                  {loading[venue._id] ? 'Rejecting...' : 'Reject'}
+                </button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </section>
+  );
+};
 const UserManagementSection = () => <section className="section-adminDashboard"><h3>User Management</h3><p>User management UI here.</p></section>;
 const ReportsSection = () => <section className="section-adminDashboard"><h3>Reports & Moderation</h3><p>Reports and moderation UI here.</p></section>;
 const ProfileSection = () => <section className="section-adminDashboard"><h3>Profile</h3><p>Profile UI here.</p></section>;
@@ -116,6 +192,14 @@ const AdminDashboard = () => {
   };
   const handleApproveFacilities = () => navigate("/admin-dashboard/facility-approvals");
 
+  const handleApproveVenue = (venueId) => {
+    setPendingVenues(prev => prev.filter(venue => venue._id !== venueId));
+  };
+
+  const handleRejectVenue = (venueId) => {
+    setPendingVenues(prev => prev.filter(venue => venue._id !== venueId));
+  };
+
   useEffect(() => {
     const role = localStorage.getItem("role");
     if (role !== "Admin") navigate("/login");
@@ -148,7 +232,10 @@ const AdminDashboard = () => {
 
   return (
     <div className="admin-dashboard">
-      <HeaderAdmin adminName={admin?.name || "Admin"} onApproveFacilities={handleApproveFacilities} />
+      <HeaderAdmin
+        adminName={admin?.name || "Admin"}
+        onToggleSidebar={toggleSidebar}
+      />
       <div className="dashboard__main">
         <Sidebar
           isOpen={sidebarOpen}
@@ -161,7 +248,13 @@ const AdminDashboard = () => {
         <main className="dashboard__content">
           <Routes>
             <Route path="" element={<DashboardSection stats={stats} chartData={chartData} chartOptions={chartOptions} />} />
-            <Route path="facility-approvals" element={<FacilityApprovalsSection pendingVenues={pendingVenues} />} />
+            <Route path="facility-approvals" element={
+              <FacilityApprovalsSection
+                pendingVenues={pendingVenues}
+                onApprove={handleApproveVenue}
+                onReject={handleRejectVenue}
+              />
+            } />
             <Route path="user-management" element={<UserManagementSection />} />
             <Route path="reports" element={<ReportsSection />} />
             <Route path="profile" element={<ProfileSection />} />

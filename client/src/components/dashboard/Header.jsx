@@ -1,9 +1,9 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { Menu } from 'lucide-react';
-import "../../CSS/Dashboard/Header.css";
+import { assets } from '../../assets/assets';
+import '../../CSS/Header.css';
 
-const Header = ({ onToggleSidebar }) => {
+const Header = ({ userName = 'User' }) => {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -19,7 +19,7 @@ const Header = ({ onToggleSidebar }) => {
       case 'profile':
         return 'Profile Settings';
       default:
-        return 'QuickCourt Dashboard';
+        return 'Dashboard';
     }
   };
 
@@ -37,33 +37,27 @@ const Header = ({ onToggleSidebar }) => {
   };
 
   return (
-    <header className="dashboard-header">
-      <div className="header-left">
-        <button 
-          className="mobile-menu-btn"
-          onClick={onToggleSidebar}
-          aria-label="Toggle menu"
-        >
-          <Menu size={20} />
-        </button>
-        <h1 className="header-title">
-          {getPageTitle()}
+    <>
+      <div className="header">
+        <img src={assets.header_img} alt="" className="profile-pic"/>
+        <h1 className="heading">
+          Hey {userName}
+          <img src={assets.hand_wave} alt="" className="wave-icon"/>
         </h1>
-      </div>
-      
-      <div className="header-right">
-        <div className="user-info">
-          <div className="user-avatar">
-            🏆
-          </div>
-          <span className="user-name">User</span>
-        </div>
-        <button onClick={handleLogout} className="logout-btn">
+
+        <h2 className="title">
+          {getPageTitle()}
+        </h2>
+        <p className="description">
+          Navigate through your dashboard and manage your activities efficiently!
+        </p>
+
+        <button className="get-started-button" onClick={handleLogout}>
           Logout
         </button>
       </div>
-    </header>
+    </>
   );
 };
 
-export default Header; 
+export default Header;

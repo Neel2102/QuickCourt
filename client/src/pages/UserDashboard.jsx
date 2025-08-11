@@ -123,7 +123,10 @@ const UserDashboard = () => {
 
   return (
     <div className="user-dashboard">
-      <HeaderUser userName={user?.name || "User"} onBookCourt={handleBookCourt} />
+      <HeaderUser
+        userName={user?.name || "User"}
+        onToggleSidebar={toggleSidebar}
+      />
       <div className="dashboard__main">
         <Sidebar
           isOpen={sidebarOpen}
