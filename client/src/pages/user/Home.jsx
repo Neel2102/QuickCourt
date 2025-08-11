@@ -65,21 +65,21 @@ const Home = () => {
 
   if (loading) {
     return (
-      <div className="home-container">
-        <div className="loading">Loading venues...</div>
+      <div className="home-container-header">
+        <div className="loading-header">Loading venues...</div>
       </div>
     );
   }
 
   return (
-    <div className="home-container">
+    <div className="home-container-header">
       {/* Welcome Banner */}
-      <section className="welcome-banner">
-        <div className="banner-content">
+      <section className="welcome-banner-header">
+        <div className="banner-content-header">
           <h1>Welcome to QuickCourt</h1>
           <p>Book your favorite sports facilities and join the game!</p>
           <button 
-            className="cta-button"
+            className="btn-header cta-button-header"
             onClick={() => navigate('/venues')}
           >
             Explore Venues
@@ -88,18 +88,18 @@ const Home = () => {
       </section>
 
       {/* Search and Filters */}
-      <section className="search-section">
-        <div className="search-container">
+      <section className="search-section-header">
+        <div className="search-container-header">
           <SearchBar
             value={searchTerm}
             onChange={setSearchTerm}
             placeholder="Search venues by name or location..."
           />
-          <div className="sport-filters">
+          <div className="sport-filters-header">
             {sports.map(sport => (
               <button
                 key={sport}
-                className={`sport-filter ${selectedSport === sport ? 'active' : ''}`}
+                className={`sport-filter-header ${selectedSport === sport ? 'active' : ''}`}
                 onClick={() => setSelectedSport(sport)}
               >
                 {sport === 'all' ? 'All Sports' : sport}
@@ -110,39 +110,76 @@ const Home = () => {
       </section>
 
       {/* Popular Venues */}
-      <section className="venues-section">
-        <div className="section-header">
+      <section className="venues-section-header">
+        <div className="section-header-header">
           <h2>Popular Venues</h2>
           <p>Discover the best sports facilities in your area</p>
         </div>
         
         {filteredVenues.length === 0 ? (
-          <div className="no-venues">
+          <div className="no-venues-header">
             <p>No venues found matching your criteria.</p>
-            <button onClick={() => {
-              setSearchTerm('');
-              setSelectedSport('all');
-            }}>
+            <button 
+              className="btn-header"
+              onClick={() => {
+                setSearchTerm('');
+                setSelectedSport('all');
+              }}
+            >
               Clear Filters
             </button>
           </div>
         ) : (
-          <div className="venues-grid">
+          <div className="venues-grid-header">
             {filteredVenues.slice(0, 6).map(venue => (
-              <VenueCard
-                key={venue._id}
-                venue={venue}
-                onVenueClick={() => handleVenueClick(venue._id)}
-                onBookNow={() => handleBookNow(venue._id)}
-              />
+              <div key={venue._id} className="venue-card-header">
+                <div className="venue-image-header">
+                  {venue.image ? (
+                    <img src={venue.image} alt={venue.name} />
+                  ) : (
+                    <div className="placeholder-header">🏟️</div>
+                  )}
+                </div>
+                <div className="venue-content-header">
+                  <div className="venue-header-header">
+                    <h3 className="venue-name-header">{venue.name}</h3>
+                    <div className="venue-rating-header">
+                      ⭐ {venue.rating || '4.5'}
+                    </div>
+                  </div>
+                  <div className="venue-location-header">
+                    📍 {venue.address?.city || 'Location'}
+                  </div>
+                  <div className="venue-sports-header">
+                    {venue.sportTypes?.map(sport => (
+                      <span key={sport} className={`sport-tag-header ${sport.toLowerCase()}`}>
+                        {sport}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="venue-footer-header">
+                    <div className="venue-price-header">
+                      <span className="currency-header">₹</span>
+                      {venue.pricePerHour || 'N/A'}
+                      <span className="per-hour-header">/hour</span>
+                    </div>
+                    <button 
+                      className="btn-header view-venue-btn-header"
+                      onClick={() => handleVenueClick(venue._id)}
+                    >
+                      View Venue
+                    </button>
+                  </div>
+                </div>
+              </div>
             ))}
           </div>
         )}
 
         {filteredVenues.length > 6 && (
-          <div className="view-more">
+          <div className="view-more-header">
             <button 
-              className="view-more-btn"
+              className="btn-header view-more-btn-header"
               onClick={() => navigate('/venues')}
             >
               View All Venues
@@ -152,17 +189,17 @@ const Home = () => {
       </section>
 
       {/* Quick Stats */}
-      <section className="stats-section">
-        <div className="stats-grid">
-          <div className="stat-card">
+      <section className="stats-section-header">
+        <div className="stats-grid-header">
+          <div className="stat-card-header">
             <h3>{venues.length}</h3>
             <p>Available Venues</p>
           </div>
-          <div className="stat-card">
+          <div className="stat-card-header">
             <h3>{sports.length - 1}</h3>
             <p>Sports Types</p>
           </div>
-          <div className="stat-card">
+          <div className="stat-card-header">
             <h3>24/7</h3>
             <p>Booking Available</p>
           </div>
@@ -172,4 +209,4 @@ const Home = () => {
   );
 };
 
-export default Home; 
+export default Home;

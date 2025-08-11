@@ -44,7 +44,7 @@
 }
 .user-dashboard .dashboard__content {
   flex: 1;
-  padding-left: 280px; /* width of sidebar */
+  /* padding-left: 280px; width of sidebar */
   min-height: 100vh;
 }
 @media (max-width: 1024px) {
