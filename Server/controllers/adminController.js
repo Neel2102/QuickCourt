@@ -53,6 +53,22 @@ export const approveVenue = async (req, res) => {
     }
 };
 
+// Reject a venue registration
+export const rejectVenue = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const venue = await venueModel.findByIdAndDelete(id);
+
+        if (!venue) {
+            return res.status(404).json({ success: false, message: 'Venue not found' });
+        }
+
+        res.json({ success: true, message: 'Venue rejected and removed successfully' });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Failed to reject venue', error: error.message });
+    }
+};
+
 // Get all users and facility owners
 export const getAllUsers = async (req, res) => {
     try {

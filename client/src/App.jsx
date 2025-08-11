@@ -6,6 +6,8 @@ import ResetPassword from './pages/ResetPassword'
 import UserDashboard from './pages/UserDashboard'
 import FacilityDashboard from './pages/FacilityDashboard'
 import AdminDashboard from './pages/AdminDashboard'
+import VenuesPage from './pages/VenuesPage'
+import VenueDetailsPage from './pages/VenueDetailsPage'
 import { ToastContainer } from 'react-toastify'
 
 const RequireRole = ({ role, children }) => {
@@ -25,6 +27,8 @@ const App = () => {
         <Route path='/login' element={<Login/>}/>
         <Route path='/register' element={<Register/>}/>
         <Route path='/reset-password' element={<ResetPassword/>}/>
+        <Route path='/venues' element={<VenuesPage/>}/>
+        <Route path='/venue/:id' element={<VenueDetailsPage/>}/>
         <Route path='/user-dashboard/*' element={
           <RequireRole role="User">
             <UserDashboard/>

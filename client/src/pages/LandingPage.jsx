@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "../CSS/LandingPage.css";
 import Navbar from '../components/Navbar';
 import bgVideo from '../assets/Screen Recording 2025-08-07 175941.mp4';
 
 const LandingPage = () => {
+  const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
@@ -99,7 +101,7 @@ const LandingPage = () => {
               and stay active with QuickCourt - your local sports community.
             </p>
             <div className="hero-actions">
-              <button className="cta-primary">Find Venues</button>
+              <button className="cta-primary" onClick={() => navigate('/venues')}>Find Venues</button>
               <button className="cta-secondary">Join Match</button>
             </div>
           </div>

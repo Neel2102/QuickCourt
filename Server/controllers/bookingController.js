@@ -45,3 +45,26 @@ export const cancelBooking = async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to cancel booking', error: error.message });
     }
 };
+
+// Get bookings for facility owner's venues
+export const getOwnerBookings = async (req, res) => {
+    try {
+        const ownerId = req.user._id;
+
+        // First get all venues owned by this user
+        const venueModel = (await import('../models/venueModel.js')).default;
+        const venues = await venueModel.find({ owner: ownerId });
+        const venueIds = venues.map(venue => venue._id);
+
+        // Then get all bookings for these venues
+        const bookings = await bookingModel.find({ venue: { $in: venueIds } })
+            .populate('user', 'name email')
+            .populate('venue', 'name')
+            .populate('court', 'name sportType')
+            .sort({ date: -1, startTime: -1 });
+
+        res.json({ success: true, data: bookings });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Failed to fetch owner bookings', error: error.message });
+    }
+};

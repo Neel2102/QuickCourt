@@ -11,6 +11,7 @@ venueRoutes.get('/', venueController.getAllVenues);
 venueRoutes.get('/:id', venueController.getVenueDetails);
 
 // Facility Owner routes (requires owner role)
+venueRoutes.get('/owner', protectRoute, roleAuth('FacilityOwner'), venueController.getOwnerVenues);
 venueRoutes.post(
     '/',
     protectRoute,
