@@ -18,7 +18,6 @@ venueRoutes.post(
     uploadMiddleware.array('photos', 5),
     venueController.createVenue
 );
-venueRoutes.post('/', protectRoute, roleAuth('FacilityOwner'), venueController.createVenue);
 venueRoutes.put('/:id', protectRoute, roleAuth('FacilityOwner'), venueController.updateVenue);
 venueRoutes.delete('/:id', protectRoute, roleAuth('FacilityOwner'), venueController.deleteVenue);
 

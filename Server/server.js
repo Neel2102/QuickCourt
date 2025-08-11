@@ -34,11 +34,10 @@ connection();
 
 // app.use(errorMiddleware)
 
-app.get('/', (req,res)=> res.send("API is working"))
-app.get('/test', (req,res)=> res.json({message: "Server is running"}))
-app.use('/api/auth', authRouter)
-app.use('/api/user', userRouter)
-app.use('/api/venues', venueRouter); 
+app.get('/', (req,res)=> res.send("API is working"));
+app.get('/test', (req,res)=> res.json({message: "Server is running"}));
+app.use('/api/auth', authRouter);
+app.use('/api/user', userRouter);
 app.use('/api/courts', courtRouter); 
 app.use('/api/bookings', bookingRouter); 
 app.use('/api/admin', adminRouter);
