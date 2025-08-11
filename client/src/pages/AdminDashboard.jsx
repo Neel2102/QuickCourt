@@ -24,34 +24,34 @@ ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
 const DashboardSection = ({ stats, chartData, chartOptions }) => (
   <>
-    <section className="section-adminDashboard">
+    <section className="section-mybookings">
       <h2>Global Stats</h2>
-      <div className="kpi-cards">
-        <div className="kpi-card">
+      <div className="kpi-cards-mybookings">
+        <div className="kpi-card-mybookings">
           <h4>Total Users</h4>
           <div>{stats?.totalUsers ?? 0}</div>
         </div>
-        <div className="kpi-card">
+        <div className="kpi-card-mybookings">
           <h4>Facility Owners</h4>
           <div>{stats?.totalFacilityOwners ?? 0}</div>
         </div>
-        <div className="kpi-card">
+        <div className="kpi-card-mybookings">
           <h4>Total Bookings</h4>
           <div>{stats?.totalBookings ?? 0}</div>
         </div>
-        <div className="kpi-card">
+        <div className="kpi-card-mybookings">
           <h4>Active Courts</h4>
           <div>{stats?.totalActiveCourts ?? 0}</div>
         </div>
       </div>
     </section>
-    <section className="section-adminDashboard">
+    <section className="section-mybookings">
       <h3>Booking Activity Over Time</h3>
       <div style={{ minHeight: 200 }}>
         <Bar data={chartData} options={chartOptions} />
       </div>
     </section>
-    <section className="section-adminDashboard">
+    <section className="section-mybookings">
       <h3>Most Active Sports</h3>
       <ul>
         <li>Badminton</li>
@@ -102,28 +102,28 @@ const FacilityApprovalsSection = ({ pendingVenues, onApprove, onReject }) => {
   };
 
   return (
-    <section className="section-adminDashboard">
+    <section className="section-mybookings">
       <h3>Facility Approval Queue</h3>
-      <div className="approval-list">
+      <div className="approval-list-mybookings">
         {pendingVenues.length === 0 ? (
-          <div className="empty-state">
+          <div className="empty-state-mybookings">
             <p>No pending facilities for approval.</p>
           </div>
         ) : (
           pendingVenues.map((venue) => (
-            <div className="approval-card" key={venue._id}>
-              <div className="venue-image">
+            <div className="approval-card-mybookings" key={venue._id}>
+              <div className="venue-image-mybookings">
                 {venue.photos?.[0] ? (
                   <img src={venue.photos[0]} alt={venue.name} />
                 ) : (
-                  <div className="placeholder">🏟️</div>
+                  <div className="placeholder-mybookings">🏟️</div>
                 )}
               </div>
 
-              <div className="venue-details">
+              <div className="venue-details-mybookings">
                 <h4>{venue.name}</h4>
-                <p className="venue-description">{venue.description}</p>
-                <div className="venue-meta">
+                <p className="venue-description-mybookings">{venue.description}</p>
+                <div className="venue-meta-mybookings">
                   <p><strong>Owner:</strong> {venue.owner?.name || 'N/A'} ({venue.owner?.email || ''})</p>
                   <p><strong>Location:</strong> {venue.address?.street}, {venue.address?.city}, {venue.address?.state}</p>
                   <p><strong>Sports:</strong> {venue.sportTypes?.join(', ')}</p>
@@ -133,16 +133,16 @@ const FacilityApprovalsSection = ({ pendingVenues, onApprove, onReject }) => {
                 </div>
               </div>
 
-              <div className="approval-actions">
+              <div className="approval-actions-mybookings">
                 <button
-                  className="approve-btn"
+                  className="approve-btn-mybookings"
                   onClick={() => handleApprove(venue._id)}
                   disabled={loading[venue._id]}
                 >
                   {loading[venue._id] ? 'Approving...' : 'Approve'}
                 </button>
                 <button
-                  className="reject-btn"
+                  className="reject-btn-mybookings"
                   onClick={() => handleReject(venue._id)}
                   disabled={loading[venue._id]}
                 >
@@ -229,7 +229,7 @@ const AdminDashboard = () => {
       {
         label: "Bookings",
         data: [12, 19, 8, 15, 22],
-        backgroundColor: "#ff7043",
+        backgroundColor: "#4b4b4b",
       },
     ],
   };
@@ -245,17 +245,17 @@ const AdminDashboard = () => {
     },
   };
 
-  if (loading) return <div className="section-adminDashboard">Loading...</div>;
-  if (error) return <div className="section-adminDashboard" style={{ color: 'red' }}>{error}</div>;
+  if (loading) return <div className="section-mybookings">Loading...</div>;
+  if (error) return <div className="section-mybookings" style={{ color: 'var(--error-color)' }}>{error}</div>;
 
   return (
-    <div className="admin-dashboard">
+    <div className="admin-dashboard-mybookings">
       <HeaderAdmin
         adminName={admin?.name || "Admin"}
         adminProfilePic={admin?.profilePic}
         onToggleSidebar={toggleSidebar}
       />
-      <div className="dashboard__main">
+      <div className="dashboard__main-mybookings">
         <Sidebar
           isOpen={sidebarOpen}
           onToggle={toggleSidebar}
@@ -265,7 +265,7 @@ const AdminDashboard = () => {
           userAvatar={"🧑‍💼"}
           userProfilePic={admin?.profilePic}
         />
-        <main className="dashboard__content">
+        <main className="dashboard__content-mybookings">
           <Routes>
             <Route path="" element={<DashboardSection stats={stats} chartData={chartData} chartOptions={chartOptions} />} />
             <Route path="facility-approvals" element={

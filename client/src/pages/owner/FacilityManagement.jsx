@@ -3,7 +3,6 @@ import { toast } from 'react-toastify';
 import { getOwnerVenues, createVenue, updateVenue, deleteVenue } from '../../services/venueService';
 import '../../CSS/FacilityManagement.css';
 import { getOwnerCourts } from '../../services/courtService';
-import '../../CSS/FacilityManagement.css';
 
 const FacilityManagement = () => {
   const [venues, setVenues] = useState([]);
@@ -248,19 +247,19 @@ const FacilityManagement = () => {
 
   if (loading) {
     return (
-      <div className="facility-management-container">
-        <div className="loading">Loading facilities...</div>
+      <div className="facility-management-container-facilitymanagement">
+        <div className="loading-facilitymanagement">Loading facilities...</div>
       </div>
     );
   }
 
   return (
-    <div className="facility-management-container">
-      <div className="page-header">
+    <div className="facility-management-container-facilitymanagement">
+      <div className="page-header-facilitymanagement">
         <h1>Facility Management</h1>
         <p>Manage your sports facilities and venues</p>
         <button 
-          className="add-facility-btn"
+          className="btn-facilitymanagement add-facility-btn-facilitymanagement"
           onClick={() => setShowForm(true)}
         >
           + Add New Facility
@@ -269,20 +268,20 @@ const FacilityManagement = () => {
 
       {/* Add/Edit Form */}
       {showForm && (
-        <div className="facility-form-section">
-          <div className="form-header">
+        <div className="facility-form-section-facilitymanagement">
+          <div className="form-header-facilitymanagement">
             <h2>{editingVenue ? 'Edit Facility' : 'Add New Facility'}</h2>
             <button 
-              className="close-btn"
+              className="close-btn-facilitymanagement"
               onClick={resetForm}
             >
               ✕
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="facility-form">
-            <div className="form-row">
-              <div className="form-group">
+          <form onSubmit={handleSubmit} className="facility-form-facilitymanagement">
+            <div className="form-row-facilitymanagement">
+              <div className="form-group-facilitymanagement">
                 <label htmlFor="name">Facility Name *</label>
                 <input
                   type="text"
@@ -295,7 +294,7 @@ const FacilityManagement = () => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group-facilitymanagement">
                 <label htmlFor="description">Description *</label>
                 <textarea
                   id="description"
@@ -309,10 +308,10 @@ const FacilityManagement = () => {
               </div>
             </div>
 
-            <div className="form-section">
+            <div className="form-section-facilitymanagement">
               <h3>Address Information</h3>
-              <div className="form-row">
-                <div className="form-group">
+              <div className="form-row-facilitymanagement">
+                <div className="form-group-facilitymanagement">
                   <label htmlFor="street">Street Address *</label>
                   <input
                     type="text"
@@ -324,7 +323,7 @@ const FacilityManagement = () => {
                     required
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group-facilitymanagement">
                   <label htmlFor="city">City *</label>
                   <input
                     type="text"
@@ -337,8 +336,8 @@ const FacilityManagement = () => {
                   />
                 </div>
               </div>
-              <div className="form-row">
-                <div className="form-group">
+              <div className="form-row-facilitymanagement">
+                <div className="form-group-facilitymanagement">
                   <label htmlFor="state">State *</label>
                   <input
                     type="text"
@@ -350,7 +349,7 @@ const FacilityManagement = () => {
                     required
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group-facilitymanagement">
                   <label htmlFor="postalCode">Postal Code *</label>
                   <input
                     type="text"
@@ -365,13 +364,13 @@ const FacilityManagement = () => {
               </div>
             </div>
 
-            <div className="form-section">
+            <div className="form-section-facilitymanagement">
               <h3>Sports & Amenities</h3>
-              <div className="form-group">
+              <div className="form-group-facilitymanagement">
                 <label>Sport Types *</label>
-                <div className="checkbox-grid">
+                <div className="checkbox-grid-facilitymanagement">
                   {sportOptions.map(sport => (
-                    <label key={sport} className="checkbox-item">
+                    <label key={sport} className="checkbox-item-facilitymanagement">
                       <input
                         type="checkbox"
                         checked={formData.sportTypes.includes(sport)}
@@ -383,11 +382,11 @@ const FacilityManagement = () => {
                 </div>
               </div>
 
-              <div className="form-group">
+              <div className="form-group-facilitymanagement">
                 <label>Amenities</label>
-                <div className="checkbox-grid">
+                <div className="checkbox-grid-facilitymanagement">
                   {amenityOptions.map(amenity => (
-                    <label key={amenity} className="checkbox-item">
+                    <label key={amenity} className="checkbox-item-facilitymanagement">
                       <input
                         type="checkbox"
                         checked={formData.amenities.includes(amenity)}
@@ -400,9 +399,9 @@ const FacilityManagement = () => {
               </div>
             </div>
 
-            <div className="form-section">
+            <div className="form-section-facilitymanagement">
               <h3>Photos</h3>
-              <div className="form-group">
+              <div className="form-group-facilitymanagement">
                 <label htmlFor="photos">Upload Photos</label>
                 <input
                   type="file"
@@ -415,16 +414,16 @@ const FacilityManagement = () => {
               </div>
 
               {formData.photos.length > 0 && (
-                <div className="photo-preview">
+                <div className="photo-preview-facilitymanagement">
                   {formData.photos.map((photo, index) => (
-                    <div key={index} className="photo-item">
+                    <div key={index} className="photo-item-facilitymanagement">
                       <img
                         src={photo instanceof File ? URL.createObjectURL(photo) : photo}
                         alt={`Preview ${index + 1}`}
                       />
                       <button
                         type="button"
-                        className="remove-photo"
+                        className="remove-photo-facilitymanagement"
                         onClick={() => removePhoto(index)}
                       >
                         ✕
@@ -435,17 +434,17 @@ const FacilityManagement = () => {
               )}
             </div>
 
-            <div className="form-actions">
+            <div className="form-actions-facilitymanagement">
               <button 
                 type="submit" 
-                className="submit-btn"
+                className="btn-facilitymanagement submit-btn-facilitymanagement"
                 disabled={loading}
               >
                 {loading ? 'Saving...' : (editingVenue ? 'Update Facility' : 'Create Facility')}
               </button>
               <button 
                 type="button" 
-                className="cancel-btn"
+                className="btn-facilitymanagement cancel-btn-facilitymanagement"
                 onClick={resetForm}
               >
                 Cancel
@@ -456,80 +455,80 @@ const FacilityManagement = () => {
       )}
 
       {/* Facilities List */}
-      <div className="facilities-section">
+      <div className="facilities-section-facilitymanagement">
         <h2>Your Facilities</h2>
         
         {venues.length === 0 ? (
-          <div className="no-facilities">
-            <div className="no-facilities-icon">🏟️</div>
+          <div className="no-facilities-facilitymanagement">
+            <div className="no-facilities-icon-facilitymanagement">🏟️</div>
             <h3>No facilities yet</h3>
             <p>Start by adding your first sports facility!</p>
             <button 
-              className="add-first-btn"
+              className="btn-facilitymanagement add-first-btn-facilitymanagement"
               onClick={() => setShowForm(true)}
             >
               Add Your First Facility
             </button>
           </div>
         ) : (
-          <div className="facilities-grid">
+          <div className="facilities-grid-facilitymanagement">
             {venues.map(venue => {
               const stats = getVenueStats(venue._id);
               return (
-                <div key={venue._id} className="facility-card">
-                  <div className="facility-header">
+                <div key={venue._id} className="facility-card-facilitymanagement">
+                  <div className="facility-header-facilitymanagement">
                     <h3>{venue.name}</h3>
-                    <span className={`status-badge ${venue.isApproved ? 'approved' : 'pending'}`}>
+                    <span className={`status-badge-facilitymanagement ${venue.isApproved ? 'approved-facilitymanagement' : 'pending-facilitymanagement'}`}>
                       {venue.isApproved ? 'Approved' : 'Pending Approval'}
                     </span>
                   </div>
 
-                  <div className="facility-photos">
+                  <div className="facility-photos-facilitymanagement">
                     {venue.photos && venue.photos.length > 0 ? (
                       <img 
                         src={venue.photos[0]} 
                         alt={venue.name}
-                        className="facility-photo"
+                        className="facility-photo-facilitymanagement"
                       />
                     ) : (
-                      <div className="no-photo">📷</div>
+                      <div className="no-photo-facilitymanagement">📷</div>
                     )}
                   </div>
 
-                  <div className="facility-info">
-                    <p className="facility-description">{venue.description}</p>
-                    <p className="facility-location">
+                  <div className="facility-info-facilitymanagement">
+                    <p className="facility-description-facilitymanagement">{venue.description}</p>
+                    <p className="facility-location-facilitymanagement">
                       📍 {venue.address.street}, {venue.address.city}
                     </p>
-                    <p className="facility-sports">
+                    <p className="facility-sports-facilitymanagement">
                       🏃 {venue.sportTypes.join(', ')}
                     </p>
                   </div>
 
-                  <div className="facility-stats">
-                    <div className="stat">
-                      <span className="stat-number">{stats.totalCourts}</span>
-                      <span className="stat-label">Courts</span>
+                  <div className="facility-stats-facilitymanagement">
+                    <div className="stat-facilitymanagement">
+                      <span className="stat-number-facilitymanagement">{stats.totalCourts}</span>
+                      <span className="stat-label-facilitymanagement">Courts</span>
                     </div>
-                    <div className="stat">
-                      <span className="stat-number">{stats.totalBookings}</span>
-                      <span className="stat-label">Bookings</span>
+                    <div className="stat-facilitymanagement">
+                      <span className="stat-number-facilitymanagement">{stats.totalBookings}</span>
+                      <span className="stat-label-facilitymanagement">Bookings</span>
                     </div>
-                    <div className="stat">
-                      <span className="stat-number">⭐ {venue.rating || 0}</span>
-                      <span className="stat-label">Rating</span>
+                    <div className="stat-facilitymanagement">
+                      <span className="stat-number-facilitymanagement">⭐ {venue.rating || 0}</span>
+                      <span className="stat-label-facilitymanagement">Rating</span>
                     </div>
                   </div>
 
-                  <div className="facility-actions">
+                  <div className="facility-actions-facilitymanagement">
                     <button 
-                      className="edit-btn"
+                      className="btn-facilitymanagement edit-btn-facilitymanagement"
                       onClick={() => handleEdit(venue)}
                     >
                       Edit
                     </button>
                     <button 
-                      className="delete-btn"
+                      className="btn-facilitymanagement delete-btn-facilitymanagement"
                       onClick={() => handleDelete(venue._id)}
                     >
                       Delete
@@ -545,4 +544,4 @@ const FacilityManagement = () => {
   );
 };
 
-export default FacilityManagement; 
+export default FacilityManagement;
