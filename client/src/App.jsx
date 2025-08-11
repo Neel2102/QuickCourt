@@ -9,6 +9,8 @@ import AdminDashboard from './pages/AdminDashboard'
 import VenuesPage from './pages/VenuesPage'
 import VenueDetailsPage from './pages/VenueDetailsPage'
 import { ToastContainer } from 'react-toastify'
+import PaymentSuccess from './pages/user/PaymentSuccess';
+
 
 const RequireRole = ({ role, children }) => {
   const userRole = localStorage.getItem('role');
@@ -29,6 +31,7 @@ const App = () => {
         <Route path='/reset-password' element={<ResetPassword/>}/>
         <Route path='/venues' element={<VenuesPage/>}/>
         <Route path='/venue/:id' element={<VenueDetailsPage/>}/>
+        <Route path='/booking-success' element={<PaymentSuccess />} />
         <Route path='/user-dashboard/*' element={
           <RequireRole role="User">
             <UserDashboard/>
