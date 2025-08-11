@@ -191,6 +191,7 @@
 .auth-subtitle-login {
   color: var(--text-secondary);
   font-size: 1rem;
+  margin-bottom: 15px;
 }
 
 .auth-header-1-login .auth-subtitle-login {
@@ -392,6 +393,10 @@
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-header-login{
+  place-items: center;
 }
 
 .auth-header-1-login ~ * .switch-button-login {
