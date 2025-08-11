@@ -86,3 +86,14 @@ export const deleteVenue = async (req, res) => {
         res.status(500).json({ success: false, message: 'Failed to delete venue', error: error.message });
     }
 };
+
+// Get venues owned by the current user (Owner only)
+export const getOwnerVenues = async (req, res) => {
+    try {
+        const ownerId = req.user._id;
+        const venues = await venueModel.find({ owner: ownerId });
+        res.json({ success: true, data: venues });
+    } catch (error) {
+        res.status(500).json({ success: false, message: 'Failed to fetch owner venues', error: error.message });
+    }
+};
