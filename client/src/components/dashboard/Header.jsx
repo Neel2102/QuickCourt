@@ -56,7 +56,7 @@ const Header = ({ onToggleSidebar }) => {
           <div className="user-avatar">
             🏆
           </div>
-          <span className="user-name">Facility Owner</span>
+          <span className="user-name">User</span>
         </div>
         <button onClick={handleLogout} className="logout-btn">
           Logout

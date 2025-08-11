@@ -4,8 +4,8 @@ import cloudinary from "../config/cloudinary.js";
 
 export const getUserData = async(req,res) => {
     try {
-        
-        const {userId} = req.body;
+        // Accept userId from query for GET requests
+        const userId = req.query.userId;
 
         const user = await userModel.findById(userId);
 
@@ -47,7 +47,7 @@ export const updateProfile = async (req, res) => {
         if (!profilePic) {
             updatedUser = await userModel.findByIdAndUpdate(
                 userId,
-                { fullName, bio },
+                { name, bio },
                 { new: true }
             );
         } else {

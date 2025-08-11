@@ -53,7 +53,7 @@ const Login = () => {
     if (!validateForm()) return;
     setIsLoading(true);
     try {
-      const res = await fetch("http://localhost:4000/api/auth/login", {
+      const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
@@ -66,12 +66,32 @@ const Login = () => {
       setIsLoading(false);
       if (res.ok) {
         if (data.user && data.user.isAccountVerified) {
-          alert("Login successful! Welcome back.");
-          navigate("/dashboard");
+          // Store user info in localStorage
+          localStorage.setItem("userId", data.user.id);
+          localStorage.setItem("name", data.user.name);
+          let role = "User";
+          if (data.user.isAdmin) {
+            role = "Admin";
+            localStorage.setItem("role", "Admin");
+            alert("Login successful! Welcome back.");
+            navigate("/admin-dashboard");
+            return;
+          } else if (data.user.isFacilityOwner) {
+            role = "FacilityOwner";
+            localStorage.setItem("role", "FacilityOwner");
+            alert("Login successful! Welcome back.");
+            navigate("/facility-dashboard");
+            return;
+          } else {
+            localStorage.setItem("role", "User");
+            alert("Login successful! Welcome back.");
+            navigate("/user-dashboard");
+            return;
+          }
         } else {
           try {
             const otpResponse = await fetch(
-              "http://localhost:4000/api/auth/send-verify-otp",
+              "/api/auth/send-verify-otp",
               {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -133,7 +153,7 @@ const Login = () => {
     setOtpError("");
     try {
       const response = await fetch(
-        "http://localhost:4000/api/auth/verify-email",
+        "/api/auth/verify-email",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -161,7 +181,7 @@ const Login = () => {
     setOtpError("");
     try {
       const response = await fetch(
-        "http://localhost:4000/api/auth/send-verify-otp",
+        "/api/auth/send-verify-otp",
         {
           method: "POST",
           headers: { "Content-Type": "application/json" },
