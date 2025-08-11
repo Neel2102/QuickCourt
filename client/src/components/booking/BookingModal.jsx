@@ -6,6 +6,9 @@ import CheckoutForm from './PaymentElement.jsx';
 import Button from '../common/Button.jsx';
 import { toast } from 'react-toastify';
 
+// Base API URL
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY);
 
 const BookingModal = ({ court, venue, onClose }) => {
@@ -129,8 +132,17 @@ const BookingModal = ({ court, venue, onClose }) => {
     }
     setLoading(true);
     setError('');
+
+    console.log('Submitting booking with data:', {
+      courtId: court._id,
+      date: selectedDate,
+      startTime: selectedStartTime,
+      endTime: selectedEndTime,
+      API_BASE
+    });
+
     try {
-      const response = await fetch('/api/bookings', {
+      const response = await fetch(`${API_BASE}/bookings`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -141,15 +153,25 @@ const BookingModal = ({ court, venue, onClose }) => {
           endTime: selectedEndTime,
         }),
       });
+
+      console.log('Response status:', response.status);
+      console.log('Response headers:', response.headers);
+
       const data = await response.json();
-      if (data.success && data.clientSecret) {
+      console.log('Response data:', data);
+
+      if (response.ok && data.success && data.clientSecret) {
         setClientSecret(data.clientSecret);
         setBookingId(data.booking._id);
+        console.log('Booking created successfully, client secret received');
       } else {
-        setError(data.message || 'Failed to create booking');
+        const errorMessage = data.message || `Failed to create booking (Status: ${response.status})`;
+        setError(errorMessage);
+        console.error('Booking creation failed:', errorMessage, data);
       }
     } catch (err) {
-      setError('Failed to create booking. Please try again.');
+      const errorMessage = 'Failed to create booking. Please try again.';
+      setError(errorMessage);
       console.error('Booking error:', err);
     } finally {
       setLoading(false);
@@ -273,17 +295,6 @@ const BookingModal = ({ court, venue, onClose }) => {
                   </div>
                 </div>
               )}
-
-              {/* Debug information - remove in production */}
-              <div className="debug-info" style={{background: '#f0f0f0', padding: '10px', margin: '10px 0', fontSize: '12px', borderRadius: '4px'}}>
-                <strong>Debug Info:</strong><br/>
-                Date: {selectedDate || 'Not selected'}<br/>
-                Start Time: {selectedStartTime || 'Not selected'}<br/>
-                End Time: {selectedEndTime || 'Not selected'}<br/>
-                Price Per Hour: ₹{court?.pricePerHour || 'N/A'}<br/>
-                Total Price: ₹{totalPrice}<br/>
-                Button Disabled: {loading || !selectedDate || !selectedStartTime || !selectedEndTime || totalPrice <= 0 ? 'Yes' : 'No'}
-              </div>
 
               {/* Validation message */}
               {(!selectedDate || !selectedStartTime || !selectedEndTime || totalPrice <= 0) && (

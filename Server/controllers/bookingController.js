@@ -13,6 +13,16 @@ export const createBooking = async (req, res) => {
         const { courtId, date, startTime, endTime } = req.body;
         const userId = req.user._id;
 
+        console.log('Creating booking with data:', { courtId, date, startTime, endTime, userId });
+
+        // Validate input data
+        if (!courtId || !date || !startTime || !endTime) {
+            return res.status(400).json({
+                success: false,
+                message: 'Missing required fields: courtId, date, startTime, endTime'
+            });
+        }
+
         // 1. Check for court availability
         const conflictingBookings = await bookingModel.find({
             court: courtId,
@@ -24,6 +34,9 @@ export const createBooking = async (req, res) => {
             }],
             status: 'Confirmed'
         });
+
+        console.log('Found conflicting bookings:', conflictingBookings.length);
+
         if (conflictingBookings.length > 0) {
             return res.status(409).json({ success: false, message: 'This time slot is already booked.' });
         }
@@ -33,10 +46,24 @@ export const createBooking = async (req, res) => {
         if (!court) {
             return res.status(404).json({ success: false, message: 'Court not found.' });
         }
-        const start = new Date(`1970/01/01T${startTime}:00Z`);
-        const end = new Date(`1970/01/01T${endTime}:00Z`);
+
+        console.log('Found court:', { id: court._id, name: court.name, pricePerHour: court.pricePerHour });
+
+        // Fix date parsing for time calculation
+        const start = new Date(`1970-01-01T${startTime}:00`);
+        const end = new Date(`1970-01-01T${endTime}:00`);
         const durationHours = (end - start) / (1000 * 60 * 60);
         const totalPrice = durationHours * court.pricePerHour;
+
+        console.log('Price calculation:', { start, end, durationHours, pricePerHour: court.pricePerHour, totalPrice });
+
+        // Validate price calculation
+        if (durationHours <= 0) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid time range. End time must be after start time.'
+            });
+        }
 
         // 3. Create a temporary booking record (pending payment)
         const newBooking = new bookingModel({
@@ -49,15 +76,22 @@ export const createBooking = async (req, res) => {
             totalPrice,
             status: 'Pending',
         });
+
+        console.log('Creating booking record:', newBooking);
         await newBooking.save();
+        console.log('Booking saved with ID:', newBooking._id);
 
         // 4. Create Stripe Payment Intent
+        console.log('Creating payment intent for amount:', totalPrice);
         const paymentIntentResult = await createPaymentIntent({
             amount: totalPrice,
             bookingId: newBooking._id,
         });
 
+        console.log('Payment intent result:', paymentIntentResult);
+
         if (!paymentIntentResult.success) {
+            console.log('Payment intent failed, deleting booking');
             // Delete the temporary booking if payment intent fails
             await bookingModel.findByIdAndDelete(newBooking._id);
             return res.status(500).json({ success: false, message: paymentIntentResult.message });
@@ -69,6 +103,8 @@ export const createBooking = async (req, res) => {
             { paymentIntentId: paymentIntentResult.paymentIntentId },
             { new: true }
         );
+
+        console.log('Booking creation successful, returning response');
 
         return res.status(201).json({
             success: true,

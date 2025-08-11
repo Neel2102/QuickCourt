@@ -4,6 +4,9 @@ import { toast } from 'react-toastify';
 import Loading from '../../components/common/Loading';
 import '../../CSS/PaymentSuccess.css';
 
+// Base API URL
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+
 const PaymentSuccess = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -23,7 +26,7 @@ const PaymentSuccess = () => {
 
     const confirmPayment = async () => {
       try {
-        const response = await fetch('/api/bookings/confirm-payment', {
+        const response = await fetch(`${API_BASE}/bookings/confirm-payment`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',

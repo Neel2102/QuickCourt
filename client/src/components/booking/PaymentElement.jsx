@@ -19,7 +19,7 @@ const CheckoutForm = ({ bookingId, totalPrice, onPaymentSuccess, onPaymentFailur
       elements,
       confirmParams: {
         // Include bookingId in return URL for server-side confirmation page
-        return_url: `${window.location.origin}/payment-success?bookingId=${encodeURIComponent(bookingId)}`,
+        return_url: `${window.location.origin}/booking-success?bookingId=${encodeURIComponent(bookingId)}`,
       },
     });
 
@@ -65,6 +65,19 @@ const CheckoutForm = ({ bookingId, totalPrice, onPaymentSuccess, onPaymentFailur
       <div className="mt-4 text-xs text-gray-500">
         <p>🔒 Your payment is secured by Stripe</p>
         <p>You will be redirected to complete your payment</p>
+      </div>
+
+      {/* Test Card Information */}
+      <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <h4 className="text-sm font-semibold text-blue-800 mb-2">💳 Test Card Numbers</h4>
+        <div className="text-xs text-blue-700 space-y-1">
+          <p><strong>Visa:</strong> 4242 4242 4242 4242</p>
+          <p><strong>Mastercard:</strong> 5555 5555 5555 4444</p>
+          <p><strong>American Express:</strong> 3782 822463 10005</p>
+          <p><strong>Expiry:</strong> Any future date (e.g., 12/34)</p>
+          <p><strong>CVC:</strong> Any 3-4 digits (e.g., 123)</p>
+          <p><strong>ZIP:</strong> Any 5 digits (e.g., 12345)</p>
+        </div>
       </div>
     </form>
   );
