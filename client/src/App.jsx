@@ -6,6 +6,7 @@ import ResetPassword from './pages/ResetPassword'
 import UserDashboard from './pages/UserDashboard'
 import FacilityDashboard from './pages/FacilityDashboard'
 import AdminDashboard from './pages/AdminDashboard'
+import { ToastContainer } from 'react-toastify'
 
 const RequireRole = ({ role, children }) => {
   const userRole = localStorage.getItem('role');
