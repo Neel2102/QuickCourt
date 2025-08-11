@@ -8,7 +8,7 @@ const SIDEBAR_MENUS = {
     { path: '', label: 'Home', icon: '🏠' },
     { path: 'venues', label: 'Venues', icon: '🏟️' },
     { path: 'my-bookings', label: 'My Bookings', icon: '📅' },
-    { path: 'my-reports', label: 'My Reports', icon: '🚩' },
+    { path: 'my-reviews', label: 'My Reviews', icon: '⭐' },
     { path: 'profile', label: 'Profile', icon: '👤' },
   ],
   FacilityOwner: [

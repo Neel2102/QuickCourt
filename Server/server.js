@@ -10,7 +10,7 @@ import venueRouter from './routes/venueRoutes.js';
 import courtRouter from './routes/courtRoutes.js';
 import bookingRouter from './routes/bookingRoutes.js';
 import adminRouter from './routes/adminRoutes.js';
-import reportRouter from './routes/reportRoutes.js';
+import reviewRouter from './routes/reviewRoutes.js';
 
 import dashboardRouter from './routes/dashboardRoutes.js';
 
@@ -42,11 +42,11 @@ app.get('/', (req,res)=> res.send("API is working"));
 app.get('/test', (req,res)=> res.json({message: "Server is running"}));
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
-app.use('/api/courts', courtRouter); 
-app.use('/api/bookings', bookingRouter); 
+app.use('/api/courts', courtRouter);
+app.use('/api/bookings', bookingRouter);
 app.use('/api/admin', adminRouter);
 app.use('/api/venues', venueRouter);
-app.use('/api/reports', reportRouter);
+app.use('/api/reviews', reviewRouter);
 app.use('/api/dashboard', dashboardRouter);
 
 // Global error handler - ensure we always return JSON

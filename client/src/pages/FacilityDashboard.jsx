@@ -23,7 +23,7 @@ import {
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const DashboardSection = ({ stats }) => (
-  <section className="section-facilityDashboard">
+  <section className="section-facilitydashboard">
     <h2>KPIs</h2>
     <div className="kpi-cards">
       <div className="kpi-card">
@@ -151,10 +151,10 @@ const ManageCourtsSection = () => {
     }
   };
 
-  if (loading) return <section className="section-facilityDashboard"><p>Loading courts...</p></section>;
+  if (loading) return <section className="section-facilitydashboard"><p>Loading courts...</p></section>;
 
   return (
-    <section className="section-facilityDashboard">
+    <section className="section-facilitydashboard">
       <div className="section-header">
         <h3>Manage Courts</h3>
         <div className="venue-selector">
@@ -171,7 +171,7 @@ const ManageCourtsSection = () => {
         </div>
         {selectedVenue && (
           <button
-            className="btn-facilityDashboard"
+            className="btn-facilitydashboard"
             onClick={() => setShowAddForm(true)}
           >
             Add Court
@@ -180,28 +180,28 @@ const ManageCourtsSection = () => {
       </div>
 
       {!selectedVenue ? (
-        <div className="empty-state">
+        <div className="empty-state-facilitydashboard">
           <p>Please select a venue to manage its courts.</p>
         </div>
       ) : courts.length === 0 ? (
-        <div className="empty-state">
+        <div className="empty-state-facilitydashboard">
           <p>No courts found for this venue. Add your first court!</p>
         </div>
       ) : (
-        <div className="courts-grid">
+        <div className="courts-grid-facilitydashboard">
           {courts.map(court => (
-            <div key={court._id} className="court-card">
-              <div className="court-header">
+            <div key={court._id} className="court-card-facilitydashboard">
+              <div className="court-header-facilitydashboard">
                 <h4>{court.name}</h4>
-                <span className="sport-type">{court.sportType}</span>
+                <span className="sport-type-facilitydashboard">{court.sportType}</span>
               </div>
-              <div className="court-details">
-                <p className="price">₹{court.pricePerHour}/hour</p>
-                <p className="hours">{court.operatingHours.start} - {court.operatingHours.end}</p>
+              <div className="court-details-facilitydashboard">
+                <p className="price-facilitydashboard">₹{court.pricePerHour}/hour</p>
+                <p className="hours-facilitydashboard">{court.operatingHours.start} - {court.operatingHours.end}</p>
               </div>
-              <div className="court-actions">
-                <button className="edit-btn">Edit</button>
-                <button className="delete-btn">Delete</button>
+              <div className="court-actions-facilitydashboard">
+                <button className="edit-btn-facilitydashboard">Edit</button>
+                <button className="delete-btn-facilitydashboard">Delete</button>
               </div>
             </div>
           ))}
@@ -209,14 +209,14 @@ const ManageCourtsSection = () => {
       )}
 
       {showAddForm && (
-        <div className="modal-overlay">
-          <div className="modal">
-            <div className="modal-header">
+        <div className="modal-overlay-facilitydashboard">
+          <div className="modal-facilitydashboard">
+            <div className="modal-header-facilitydashboard">
               <h3>Add New Court</h3>
               <button onClick={() => setShowAddForm(false)}>×</button>
             </div>
-            <form onSubmit={handleAddCourt} className="court-form">
-              <div className="form-group">
+            <form onSubmit={handleAddCourt} className="court-form-facilitydashboard">
+              <div className="form-group-facilitydashboard">
                 <label>Court Name</label>
                 <input
                   type="text"
@@ -225,7 +225,7 @@ const ManageCourtsSection = () => {
                   required
                 />
               </div>
-              <div className="form-group">
+              <div className="form-group-facilitydashboard">
                 <label>Sport Type</label>
                 <select
                   value={newCourt.sportType}
@@ -240,7 +240,7 @@ const ManageCourtsSection = () => {
                   <option value="Cricket">Cricket</option>
                 </select>
               </div>
-              <div className="form-group">
+              <div className="form-group-facilitydashboard">
                 <label>Price per Hour (₹)</label>
                 <input
                   type="number"
@@ -249,8 +249,8 @@ const ManageCourtsSection = () => {
                   required
                 />
               </div>
-              <div className="form-row">
-                <div className="form-group">
+              <div className="form-row-facilitydashboard">
+                <div className="form-group-facilitydashboard">
                   <label>Opening Time</label>
                   <input
                     type="time"
@@ -262,7 +262,7 @@ const ManageCourtsSection = () => {
                     required
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group-facilitydashboard">
                   <label>Closing Time</label>
                   <input
                     type="time"
@@ -275,9 +275,9 @@ const ManageCourtsSection = () => {
                   />
                 </div>
               </div>
-              <div className="form-actions">
+              <div className="form-actions-facilitydashboard">
                 <button type="button" onClick={() => setShowAddForm(false)}>Cancel</button>
-                <button type="submit" className="btn-facilityDashboard">Add Court</button>
+                <button type="submit" className="btn-facilitydashboard">Add Court</button>
               </div>
             </form>
           </div>
@@ -286,7 +286,8 @@ const ManageCourtsSection = () => {
     </section>
   );
 };
-//const TimeSlotsSection = () => <section className="section-facilityDashboard"><h3>Time Slots</h3><p>Time slot management UI here.</p></section>;
+
+//const TimeSlotsSection = () => <section className="section-facilitydashboard"><h3>Time Slots</h3><p>Time slot management UI here.</p></section>;
 const BookingsOverviewSection = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -334,13 +335,13 @@ const BookingsOverviewSection = () => {
 
   const filteredBookings = getFilteredBookings();
 
-  if (loading) return <section className="section-facilityDashboard"><p>Loading bookings...</p></section>;
+  if (loading) return <section className="section-facilitydashboard"><p>Loading bookings...</p></section>;
 
   return (
-    <section className="section-facilityDashboard">
+    <section className="section-facilitydashboard">
       <div className="section-header">
         <h3>Bookings Overview</h3>
-        <div className="booking-filters">
+        <div className="booking-filters-facilitydashboard">
           <button
             className={filter === 'all' ? 'active' : ''}
             onClick={() => setFilter('all')}
@@ -369,21 +370,21 @@ const BookingsOverviewSection = () => {
       </div>
 
       {filteredBookings.length === 0 ? (
-        <div className="empty-state">
+        <div className="empty-state-facilitydashboard">
           <p>No bookings found for the selected filter.</p>
         </div>
       ) : (
-        <div className="bookings-list">
+        <div className="bookings-list-facilitydashboard">
           {filteredBookings.map(booking => (
-            <div key={booking._id} className="booking-item">
-              <div className="booking-info">
-                <div className="booking-header">
+            <div key={booking._id} className="booking-item-facilitydashboard">
+              <div className="booking-info-facilitydashboard">
+                <div className="booking-header-facilitydashboard">
                   <h4>{booking.court?.name} - {booking.venue?.name}</h4>
-                  <span className={`booking-status ${booking.status.toLowerCase()}`}>
+                  <span className={`booking-status-facilitydashboard ${booking.status.toLowerCase()}`}>
                     {booking.status}
                   </span>
                 </div>
-                <div className="booking-details">
+                <div className="booking-details-facilitydashboard">
                   <p><strong>Customer:</strong> {booking.user?.name}</p>
                   <p><strong>Date:</strong> {new Date(booking.date).toLocaleDateString()}</p>
                   <p><strong>Time:</strong> {booking.startTime} - {booking.endTime}</p>
@@ -391,7 +392,22 @@ const BookingsOverviewSection = () => {
                   <p><strong>Amount:</strong> ₹{booking.totalPrice}</p>
                 </div>
               </div>
-             
+              <div className="booking-actions-facilitydashboard">
+                {booking.status === 'Confirmed' && (
+                  <button 
+                    className="complete-btn-facilitydashboard"
+                    onClick={() => handleMarkComplete(booking._id, fetchBookings)}
+                  >
+                    Mark Complete
+                  </button>
+                )}
+                <button 
+                  className="view-btn-facilitydashboard"
+                  onClick={() => handleViewDetails(booking._id, navigate)}
+                >
+                  View Details
+                </button>
+              </div>
             </div>
           ))}
         </div>
@@ -421,6 +437,7 @@ const handleMarkComplete = async (bookingId, fetchBookings) => {
 const handleViewDetails = (bookingId, navigate) => {
   navigate(`/facility-dashboard/bookings/${bookingId}`);
 };
+
 const FacilityDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [owner, setOwner] = useState(null);
@@ -470,8 +487,8 @@ const FacilityDashboard = () => {
     if (role !== "FacilityOwner") navigate("/login");
   }, [navigate]);
 
-  if (loading) return <div className="section-facilityDashboard">Loading...</div>;
-  if (error) return <div className="section-facilityDashboard" style={{ color: 'red' }}>{error}</div>;
+  if (loading) return <div className="section-facilitydashboard">Loading...</div>;
+  if (error) return <div className="section-facilitydashboard" style={{ color: 'red' }}>{error}</div>;
 
   return (
     <div className="facility-dashboard">

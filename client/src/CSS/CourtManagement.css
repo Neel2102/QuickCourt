@@ -1,75 +1,97 @@
-/* Court Management Page Styles */
-.court-management-container {
+
+.container-courts {
   max-width: 1400px;
   margin: 0 auto;
   padding: 2rem;
 }
 
-.page-header {
+.header-courts {
   text-align: center;
   margin-bottom: 3rem;
   padding: 2rem;
-  background: linear-gradient(135deg, #43b97f 0%, #2e7d5a 100%);
+  background: linear-gradient(135deg, var(--accent-color) 0%, var(--primary-dark) 100%);
   border-radius: 15px;
-  color: white;
+  color: var(--primary-light);
 }
 
-.page-header h1 {
+.header-courts h1 {
   margin: 0 0 0.5rem 0;
   font-size: 2.5rem;
   font-weight: 600;
 }
 
-.page-header p {
+.header-courts p {
   margin: 0;
   font-size: 1.1rem;
   opacity: 0.9;
 }
 
-.add-court-btn {
-  background: white;
-  color: #43b97f;
+.btn-courts {
   border: none;
-  border-radius: 25px;
-  padding: 0.75rem 2rem;
+  border-radius: 8px;
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s;
+  padding: 0.75rem 1.5rem;
+}
+
+.btn-add-courts {
+  background: var(--primary-light);
+  color: var(--accent-color);
+  border-radius: 25px;
+  padding: 0.75rem 2rem;
   margin-top: 1rem;
 }
 
-.add-court-btn:hover {
-  background: #f3f4f6;
+.btn-add-courts:hover {
+  background: var(--background-secondary);
   transform: translateY(-2px);
 }
 
-.court-form-section {
-  background: white;
+.form-section-courts {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  box-shadow: inset 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 10px 10px -6px rgb(0 0 0 / 0.1);
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fade-in-courts 1s ease-in-out;
   margin-bottom: 2rem;
 }
 
-.form-header {
+@keyframes fade-in-courts {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.form-header-courts {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--border-color);
 }
 
-.form-header h2 {
+.form-header-courts h2 {
   margin: 0;
-  color: #1f2937;
+  color: var(--text-primary);
   font-size: 1.8rem;
 }
 
-.close-btn {
-  background: #f3f4f6;
-  color: #6b7280;
+.btn-close-courts {
+  background: var(--background-secondary);
+  color: var(--text-secondary);
   border: none;
   border-radius: 50%;
   width: 40px;
@@ -82,394 +104,352 @@
   justify-content: center;
 }
 
-.close-btn:hover {
-  background: #e5e7eb;
-  color: #374151;
+.btn-close-courts:hover {
+  background: var(--primary-color);
+  color: var(--text-primary);
 }
 
-.court-form {
+.form-courts {
   display: flex;
   flex-direction: column;
   gap: 1.5rem;
 }
 
-.form-row {
+.form-row-courts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
 }
 
-.form-group {
+.form-group-courts {
   display: flex;
   flex-direction: column;
 }
 
-.form-group label {
+.form-group-courts label {
   margin-bottom: 0.5rem;
-  color: #374151;
+  color: var(--text-primary);
   font-weight: 500;
   font-size: 0.9rem;
 }
 
-.form-group input,
-.form-group select {
+.form-group-courts input,
+.form-group-courts select {
   padding: 0.75rem;
-  border: 2px solid #e5e7eb;
+  border: 2px solid var(--border-color);
   border-radius: 8px;
   font-size: 1rem;
   transition: border-color 0.2s;
-  background: white;
+  background: var(--background-primary);
+  color: var(--text-primary);
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.form-group-courts input:focus,
+.form-group-courts select:focus {
   outline: none;
-  border-color: #43b97f;
-  box-shadow: 0 0 0 3px rgba(67, 185, 127, 0.1);
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(75, 75, 75, 0.1);
 }
 
-.form-section {
-  border: 1px solid #e5e7eb;
+.form-section-inner-courts {
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 1.5rem;
-  background: #f9fafb;
+  background: var(--background-secondary);
 }
 
-.form-section h3 {
+.form-section-inner-courts h3 {
   margin: 0 0 1rem 0;
-  color: #1f2937;
+  color: var(--text-primary);
   font-size: 1.2rem;
 }
 
-.form-actions {
+.form-actions-courts {
   display: flex;
   gap: 1rem;
   justify-content: flex-end;
   padding-top: 1.5rem;
-  border-top: 1px solid #e5e7eb;
+  border-top: 1px solid var(--border-color);
 }
 
-.submit-btn {
-  background: #43b97f;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+.btn-submit-courts {
+  background: var(--accent-color);
+  color: var(--primary-light);
 }
 
-.submit-btn:hover {
-  background: #2e7d5a;
+.btn-submit-courts:hover {
+  background: var(--primary-dark);
   transform: translateY(-1px);
 }
 
-.submit-btn:disabled {
-  background: #9ca3af;
+.btn-submit-courts:disabled {
+  background: var(--text-light);
   cursor: not-allowed;
   transform: none;
 }
 
-.cancel-btn {
-  background: #f3f4f6;
-  color: #374151;
-  border: 2px solid #d1d5db;
-  border-radius: 8px;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+.btn-cancel-courts {
+  background: var(--background-secondary);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
 }
 
-.cancel-btn:hover {
-  background: #e5e7eb;
-  border-color: #9ca3af;
+.btn-cancel-courts:hover {
+  background: var(--primary-color);
+  border-color: var(--text-light);
 }
 
-.courts-section {
-  background: white;
+.courts-section-courts {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  box-shadow: inset 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 10px 10px -6px rgb(0 0 0 / 0.1);
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fade-in-courts 1s ease-in-out;
   margin-bottom: 2rem;
 }
 
-.courts-section h2 {
+.courts-section-courts h2 {
   margin: 0 0 2rem 0;
-  color: #1f2937;
+  color: var(--text-primary);
   font-size: 1.8rem;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--border-color);
   padding-bottom: 0.5rem;
 }
 
-.no-courts {
+.no-courts-courts {
   text-align: center;
   padding: 3rem 2rem;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
-.no-courts-icon {
+.no-courts-icon-courts {
   font-size: 4rem;
   margin-bottom: 1rem;
 }
 
-.no-courts h3 {
+.no-courts-courts h3 {
   margin: 0 0 0.5rem 0;
-  color: #374151;
+  color: var(--text-primary);
   font-size: 1.5rem;
 }
 
-.no-courts p {
+.no-courts-courts p {
   margin: 0 0 1.5rem 0;
   font-size: 1rem;
 }
 
-.add-first-btn {
-  background: #43b97f;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  padding: 0.75rem 2rem;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
+.btn-add-first-courts {
+  background: var(--accent-color);
+  color: var(--primary-light);
 }
 
-.add-first-btn:hover {
-  background: #2e7d5a;
+.btn-add-first-courts:hover {
+  background: var(--primary-dark);
   transform: translateY(-1px);
 }
 
-.courts-grid {
+.courts-grid-courts {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
   gap: 1.5rem;
 }
 
-.court-card {
-  background: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
+.card-courts {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  box-shadow: inset 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 10px 10px -6px rgb(0 0 0 / 0.1);
   padding: 1.5rem;
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fade-in-courts 1s ease-in-out;
   transition: all 0.2s;
 }
 
-.court-card:hover {
-  border-color: #43b97f;
-  box-shadow: 0 4px 12px rgba(67, 185, 127, 0.1);
+.card-courts:hover {
+  border-color: var(--border-focus);
+  box-shadow: inset 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 14px 14px -8px rgb(75 75 75 / 0.1);
   transform: translateY(-2px);
 }
 
-.court-header {
+.card-header-courts {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   margin-bottom: 1rem;
 }
 
-.court-header h3 {
+.card-header-courts h3 {
   margin: 0;
-  color: #1f2937;
+  color: var(--text-primary);
   font-size: 1.3rem;
 }
 
-.sport-badge {
+.badge-courts {
   padding: 0.25rem 0.75rem;
   border-radius: 15px;
   font-size: 0.7rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  background: var(--secondary-color);
+  color: var(--text-primary);
 }
 
-.sport-badge.tennis {
-  background: #dbeafe;
-  color: #1e40af;
-}
-
-.sport-badge.badminton {
-  background: #fef3c7;
-  color: #92400e;
-}
-
-.sport-badge.football {
-  background: #d1fae5;
-  color: #065f46;
-}
-
-.sport-badge.cricket {
-  background: #f3e8ff;
-  color: #7c3aed;
-}
-
-.sport-badge.basketball {
-  background: #fecaca;
-  color: #dc2626;
-}
-
-.sport-badge.volleyball {
-  background: #c7d2fe;
-  color: #4338ca;
-}
-
-.court-info {
+.card-info-courts {
   margin-bottom: 1.5rem;
 }
 
-.court-info p {
+.card-info-courts p {
   margin: 0.5rem 0;
-  color: #6b7280;
+  color: var(--text-secondary);
   font-size: 0.9rem;
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.court-venue {
-  color: #374151 !important;
+.venue-info-courts {
+  color: var(--text-primary) !important;
   font-weight: 500;
 }
 
-.court-price {
-  color: #059669 !important;
+.price-info-courts {
+  color: var(--accent-color) !important;
   font-weight: 600;
 }
 
-.court-hours {
-  color: #7c3aed !important;
+.hours-info-courts {
+  color: var(--text-secondary) !important;
 }
 
-.court-stats {
+.card-stats-courts {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin-bottom: 1.5rem;
 }
 
-.stat {
+.stat-item-courts {
   text-align: center;
   padding: 1rem;
-  background: white;
+  background: rgba(255, 255, 255, 0.2);
   border-radius: 8px;
-  border: 1px solid #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(5px);
 }
 
-.stat-number {
+.stat-number-courts {
   display: block;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #43b97f;
+  color: var(--accent-color);
   margin-bottom: 0.25rem;
 }
 
-.stat-label {
-  color: #6b7280;
+.stat-label-courts {
+  color: var(--text-secondary);
   font-size: 0.8rem;
   font-weight: 500;
 }
 
-.court-actions {
+.card-actions-courts {
   display: flex;
   gap: 1rem;
 }
 
-.edit-btn {
-  background: #3b82f6;
-  color: white;
-  border: none;
-  border-radius: 6px;
+.btn-edit-courts {
+  background: var(--secondary-color);
+  color: var(--text-primary);
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s;
   flex: 1;
 }
 
-.edit-btn:hover {
-  background: #2563eb;
+.btn-edit-courts:hover {
+  background: var(--primary-color);
 }
 
-.delete-btn {
-  background: #ef4444;
-  color: white;
-  border: none;
-  border-radius: 6px;
+.btn-delete-courts {
+  background: var(--error-color);
+  color: var(--primary-light);
   padding: 0.5rem 1rem;
   font-size: 0.8rem;
-  cursor: pointer;
-  transition: all 0.2s;
   flex: 1;
 }
 
-.delete-btn:hover {
-  background: #dc2626;
+.btn-delete-courts:hover {
+  background: var(--text-secondary);
 }
 
-.stats-section {
-  background: white;
+.stats-section-courts {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  box-shadow: inset 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 10px 10px -6px rgb(0 0 0 / 0.1);
   padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fade-in-courts 1s ease-in-out;
 }
 
-.stats-section h3 {
+.stats-section-courts h3 {
   margin: 0 0 1.5rem 0;
-  color: #1f2937;
+  color: var(--text-primary);
   font-size: 1.5rem;
-  border-bottom: 2px solid #e5e7eb;
+  border-bottom: 2px solid var(--border-color);
   padding-bottom: 0.5rem;
 }
 
-.stats-grid {
+.stats-grid-courts {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 1.5rem;
 }
 
-.stat-card {
-  background: #f9fafb;
+.stat-card-courts {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  box-shadow: inset 0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 10px 10px -6px rgb(0 0 0 / 0.1);
   padding: 1.5rem;
-  border-radius: 12px;
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  animation: fade-in-courts 1s ease-in-out;
   text-align: center;
-  border: 1px solid #e5e7eb;
   transition: transform 0.2s;
 }
 
-.stat-card:hover {
+.stat-card-courts:hover {
   transform: translateY(-2px);
 }
 
-.stat-number {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #43b97f;
-  margin-bottom: 0.5rem;
-}
-
-.stat-label {
-  color: #6b7280;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.loading {
+.loading-courts {
   text-align: center;
   padding: 2rem;
-  color: #6b7280;
+  color: var(--text-secondary);
 }
 
-.loading::after {
+.loading-courts::after {
   content: '';
   display: inline-block;
   width: 20px;
   height: 20px;
-  border: 3px solid #e5e7eb;
+  border: 3px solid var(--border-color);
   border-radius: 50%;
-  border-top-color: #43b97f;
+  border-top-color: var(--accent-color);
   animation: spin 1s ease-in-out infinite;
   margin-left: 0.5rem;
 }
@@ -480,55 +460,55 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .court-management-container {
+  .container-courts {
     padding: 1rem;
   }
   
-  .page-header h1 {
+  .header-courts h1 {
     font-size: 2rem;
   }
   
-  .form-row {
+  .form-row-courts {
     grid-template-columns: 1fr;
   }
   
-  .courts-grid {
+  .courts-grid-courts {
     grid-template-columns: 1fr;
   }
   
-  .form-actions {
+  .form-actions-courts {
     flex-direction: column;
   }
   
-  .court-actions {
+  .card-actions-courts {
     flex-direction: column;
   }
   
-  .stats-grid {
+  .stats-grid-courts {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   }
 }
 
 @media (max-width: 480px) {
-  .page-header {
+  .header-courts {
     padding: 1.5rem;
   }
   
-  .page-header h1 {
+  .header-courts h1 {
     font-size: 1.75rem;
   }
   
-  .court-form-section,
-  .courts-section,
-  .stats-section {
+  .form-section-courts,
+  .courts-section-courts,
+  .stats-section-courts {
     padding: 1.5rem;
   }
   
-  .court-card {
+  .card-courts {
     padding: 1rem;
   }
   
-  .court-stats {
+  .card-stats-courts {
     grid-template-columns: 1fr;
   }
-} 
+}

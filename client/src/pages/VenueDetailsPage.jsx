@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import BookingModal from '../components/booking/BookingModal';
-import ReportForm from '../components/ReportForm';
+import ReviewSection from '../components/reviews/ReviewSection';
 import '../CSS/VenueDetailsPage.css';
+
+// Base API URL
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
 
 const VenueDetailsPage = () => {
   const { id } = useParams();
@@ -23,7 +26,7 @@ const VenueDetailsPage = () => {
 
   const fetchVenueDetails = async () => {
     try {
-      const response = await fetch(`/api/venues/${id}`, {
+      const response = await fetch(`${API_BASE}/venues/${id}`, {
         credentials: 'include'
       });
       const data = await response.json();
@@ -41,7 +44,7 @@ const VenueDetailsPage = () => {
 
   const fetchCourts = async () => {
     try {
-      const response = await fetch(`/api/courts/${id}`, {
+      const response = await fetch(`${API_BASE}/courts/${id}`, {
         credentials: 'include'
       });
       const data = await response.json();
@@ -229,6 +232,14 @@ const VenueDetailsPage = () => {
           )}
         </div>
       </div>
+
+      {/* Reviews Section */}
+      {venue && (
+        <ReviewSection
+          venueId={venue._id}
+          venueName={venue.name}
+        />
+      )}
 
       {/* Booking Modal */}
       {showBookingModal && selectedCourt && (

@@ -45,47 +45,47 @@ const Reports = () => {
     }
   };
 
-  if (loading) return <div className="admin-panel-container"><div className="loading">Loading reports...</div></div>;
+  if (loading) return <div className="admin-panel-container-reports"><div className="loading-reports">Loading reports...</div></div>;
 
   return (
-    <div className="admin-panel-container">
-      <div className="page-header">
+    <div className="admin-panel-container-reports">
+      <div className="page-header-reports">
         <h1>Reports & Moderation</h1>
         <p>Review and take action on submitted reports</p>
       </div>
 
-      <div className="filters-section">
-        <div className="filter-row">
-          <select className="filter-select" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
+      <div className="filters-section-reports">
+        <div className="filter-row-reports">
+          <select className="filter-select-reports" value={typeFilter} onChange={(e) => setTypeFilter(e.target.value)}>
             {types.map(t => <option key={t} value={t}>{t}</option>)}
           </select>
-          <select className="filter-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+          <select className="filter-select-reports" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
             {statuses.map(s => <option key={s} value={s}>{s}</option>)}
           </select>
-          <input className="search-input" placeholder="Search reason or notes..." value={search} onChange={(e) => setSearch(e.target.value)} />
+          <input className="search-input-reports" placeholder="Search reason or notes..." value={search} onChange={(e) => setSearch(e.target.value)} />
         </div>
-        <div className="filter-summary"><span>{filtered.length} report(s)</span></div>
+        <div className="filter-summary-reports"><span>{filtered.length} report(s)</span></div>
       </div>
 
-      <div className="admin-table">
-        <div className="table-header">
+      <div className="admin-table-reports">
+        <div className="table-header-reports">
           <div>Type</div>
           <div>Reason</div>
           <div>Status</div>
           <div>Created</div>
           <div>Actions</div>
         </div>
-        <div className="table-body">
+        <div className="table-body-reports">
           {filtered.map(r => (
-            <div className="table-row" key={r._id}>
+            <div className="table-row-reports" key={r._id}>
               <div>{r.targetType}</div>
-              <div className="truncate" title={r.reason}>{r.reason || '-'}</div>
-              <div><span className={`tag ${r.status}`}>{r.status}</span></div>
+              <div className="truncate-reports" title={r.reason}>{r.reason || '-'}</div>
+              <div><span className={`tag-reports ${r.status}`}>{r.status}</span></div>
               <div>{new Date(r.createdAt).toLocaleString()}</div>
-              <div className="row-actions">
-                {r.status !== 'open' && <button className="small-btn" onClick={() => setStatus(r._id, 'open')}>Reopen</button>}
-                {r.status !== 'in_review' && <button className="small-btn" onClick={() => setStatus(r._id, 'in_review')}>In Review</button>}
-                {r.status !== 'resolved' && <button className="small-btn complete" onClick={() => setStatus(r._id, 'resolved')}>Resolve</button>}
+              <div className="row-actions-reports">
+                {r.status !== 'open' && <button className="btn-report" onClick={() => setStatus(r._id, 'open')}>Reopen</button>}
+                {r.status !== 'in_review' && <button className="btn-report" onClick={() => setStatus(r._id, 'in_review')}>In Review</button>}
+                {r.status !== 'resolved' && <button className="btn-report complete" onClick={() => setStatus(r._id, 'resolved')}>Resolve</button>}
               </div>
             </div>
           ))}
@@ -95,4 +95,4 @@ const Reports = () => {
   );
 };
 
-export default Reports; 
+export default Reports;

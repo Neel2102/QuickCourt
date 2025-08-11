@@ -1,4 +1,77 @@
 /* Facility Owner Dashboard Styles */
+.section-facilitydashboard{
+  padding:1rem;
+}
+
+/* Court card styles for facility dashboard */
+.court-card-facilitydashboard {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  transition: all 0.2s ease-in-out;
+  margin-bottom: 1rem;
+}
+
+.court-card-facilitydashboard:hover {
+  border-color: #43b97f;
+  box-shadow: 0 4px 12px rgba(67, 185, 127, 0.15);
+  transform: translateY(-2px);
+}
+
+.court-header-facilitydashboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.court-header-facilitydashboard h4 {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.sport-type-facilitydashboard {
+  background: #d1fae5;
+  color: #065f46;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.court-details-facilitydashboard {
+  margin-bottom: 1rem;
+  color: #4b5563;
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.court-actions-facilitydashboard {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.court-actions-facilitydashboard button {
+  background: transparent;
+  border: none;
+  color: #2563eb;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.court-actions-facilitydashboard button:hover {
+  background-color: #e0f2fe;
+  color: #1e40af;
+}
+
 .header-facilityDashboard {
   background: #f5f7fa;
   padding: 1.5rem 2rem;
@@ -32,7 +105,6 @@
 }
 .section-facilityDashboard {
   background: #fff;
-  margin: 2rem 0;
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);

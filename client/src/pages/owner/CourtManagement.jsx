@@ -170,19 +170,19 @@ const CourtManagement = () => {
 
   if (loading) {
     return (
-      <div className="court-management-container">
-        <div className="loading">Loading courts...</div>
+      <div className="container-courts">
+        <div className="loading-courts">Loading courts...</div>
       </div>
     );
   }
 
   return (
-    <div className="court-management-container">
-      <div className="page-header">
+    <div className="container-courts">
+      <div className="header-courts">
         <h1>Court Management</h1>
         <p>Manage individual courts within your venues</p>
         <button 
-          className="add-court-btn"
+          className="btn-courts btn-add-courts"
           onClick={() => setShowForm(true)}
         >
           + Add New Court
@@ -191,20 +191,20 @@ const CourtManagement = () => {
 
       {/* Add/Edit Form */}
       {showForm && (
-        <div className="court-form-section">
-          <div className="form-header">
+        <div className="form-section-courts">
+          <div className="form-header-courts">
             <h2>{editingCourt ? 'Edit Court' : 'Add New Court'}</h2>
             <button 
-              className="close-btn"
+              className="btn-close-courts"
               onClick={resetForm}
             >
               ✕
             </button>
           </div>
 
-          <form onSubmit={handleSubmit} className="court-form">
-            <div className="form-row">
-              <div className="form-group">
+          <form onSubmit={handleSubmit} className="form-courts">
+            <div className="form-row-courts">
+              <div className="form-group-courts">
                 <label htmlFor="name">Court Name *</label>
                 <input
                   type="text"
@@ -217,7 +217,7 @@ const CourtManagement = () => {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="form-group-courts">
                 <label htmlFor="sportType">Sport Type *</label>
                 <select
                   id="sportType"
@@ -234,8 +234,8 @@ const CourtManagement = () => {
               </div>
             </div>
 
-            <div className="form-row">
-              <div className="form-group">
+            <div className="form-row-courts">
+              <div className="form-group-courts">
                 <label htmlFor="venue">Venue *</label>
                 <select
                   id="venue"
@@ -253,7 +253,7 @@ const CourtManagement = () => {
                 </select>
               </div>
 
-              <div className="form-group">
+              <div className="form-group-courts">
                 <label htmlFor="pricePerHour">Price per Hour (₹) *</label>
                 <input
                   type="number"
@@ -269,10 +269,10 @@ const CourtManagement = () => {
               </div>
             </div>
 
-            <div className="form-section">
+            <div className="form-section-inner-courts">
               <h3>Operating Hours</h3>
-              <div className="form-row">
-                <div className="form-group">
+              <div className="form-row-courts">
+                <div className="form-group-courts">
                   <label htmlFor="startTime">Start Time</label>
                   <select
                     id="startTime"
@@ -286,7 +286,7 @@ const CourtManagement = () => {
                   </select>
                 </div>
 
-                <div className="form-group">
+                <div className="form-group-courts">
                   <label htmlFor="endTime">End Time</label>
                   <select
                     id="endTime"
@@ -302,17 +302,17 @@ const CourtManagement = () => {
               </div>
             </div>
 
-            <div className="form-actions">
+            <div className="form-actions-courts">
               <button 
                 type="submit" 
-                className="submit-btn"
+                className="btn-courts btn-submit-courts"
                 disabled={loading}
               >
                 {loading ? 'Saving...' : (editingCourt ? 'Update Court' : 'Create Court')}
               </button>
               <button 
                 type="button" 
-                className="cancel-btn"
+                className="btn-courts btn-cancel-courts"
                 onClick={resetForm}
               >
                 Cancel
@@ -323,66 +323,66 @@ const CourtManagement = () => {
       )}
 
       {/* Courts List */}
-      <div className="courts-section">
+      <div className="courts-section-courts">
         <h2>Your Courts</h2>
         
         {courts.length === 0 ? (
-          <div className="no-courts">
-            <div className="no-courts-icon">🎾</div>
+          <div className="no-courts-courts">
+            <div className="no-courts-icon-courts">🎾</div>
             <h3>No courts yet</h3>
             <p>Start by adding your first court!</p>
             <button 
-              className="add-first-btn"
+              className="btn-courts btn-add-first-courts"
               onClick={() => setShowForm(true)}
             >
               Add Your First Court
             </button>
           </div>
         ) : (
-          <div className="courts-grid">
+          <div className="courts-grid-courts">
             {courts.map(court => {
               const stats = getCourtStats(court);
               return (
-                <div key={court._id} className="court-card">
-                  <div className="court-header">
+                <div key={court._id} className="card-courts">
+                  <div className="card-header-courts">
                     <h3>{court.name}</h3>
-                    <span className={`sport-badge ${court.sportType.toLowerCase()}`}>
+                    <span className="badge-courts">
                       {court.sportType}
                     </span>
                   </div>
 
-                  <div className="court-info">
-                    <p className="court-venue">
+                  <div className="card-info-courts">
+                    <p className="venue-info-courts">
                       🏟️ {getVenueName(court.venue)}
                     </p>
-                    <p className="court-price">
+                    <p className="price-info-courts">
                       💰 ₹{court.pricePerHour}/hour
                     </p>
-                    <p className="court-hours">
+                    <p className="hours-info-courts">
                       ⏰ {court.operatingHours.start} - {court.operatingHours.end}
                     </p>
                   </div>
 
-                  <div className="court-stats">
-                    <div className="stat">
-                      <span className="stat-number">{stats.totalBookings}</span>
-                      <span className="stat-label">Total Bookings</span>
+                  <div className="card-stats-courts">
+                    <div className="stat-item-courts">
+                      <span className="stat-number-courts">{stats.totalBookings}</span>
+                      <span className="stat-label-courts">Total Bookings</span>
                     </div>
-                    <div className="stat">
-                      <span className="stat-number">{stats.todayBookings}</span>
-                      <span className="stat-label">Today</span>
+                    <div className="stat-item-courts">
+                      <span className="stat-number-courts">{stats.todayBookings}</span>
+                      <span className="stat-label-courts">Today</span>
                     </div>
                   </div>
 
-                  <div className="court-actions">
+                  <div className="card-actions-courts">
                     <button 
-                      className="edit-btn"
+                      className="btn-courts btn-edit-courts"
                       onClick={() => handleEdit(court)}
                     >
                       Edit
                     </button>
                     <button 
-                      className="delete-btn"
+                      className="btn-courts btn-delete-courts"
                       onClick={() => handleDelete(court._id)}
                     >
                       Delete
@@ -396,30 +396,30 @@ const CourtManagement = () => {
       </div>
 
       {/* Quick Stats */}
-      <div className="stats-section">
+      <div className="stats-section-courts">
         <h3>Court Statistics</h3>
-        <div className="stats-grid">
-          <div className="stat-card">
-            <div className="stat-number">{courts.length}</div>
-            <div className="stat-label">Total Courts</div>
+        <div className="stats-grid-courts">
+          <div className="stat-card-courts">
+            <div className="stat-number-courts">{courts.length}</div>
+            <div className="stat-label-courts">Total Courts</div>
           </div>
-          <div className="stat-card">
-            <div className="stat-number">
+          <div className="stat-card-courts">
+            <div className="stat-number-courts">
               {courts.reduce((sum, court) => sum + (court.bookings?.length || 0), 0)}
             </div>
-            <div className="stat-label">Total Bookings</div>
+            <div className="stat-label-courts">Total Bookings</div>
           </div>
-          <div className="stat-card">
-            <div className="stat-number">
+          <div className="stat-card-courts">
+            <div className="stat-number-courts">
               {courts.filter(court => court.operatingHours.start <= '08:00').length}
             </div>
-            <div className="stat-label">Early Morning Courts</div>
+            <div className="stat-label-courts">Early Morning Courts</div>
           </div>
-          <div className="stat-card">
-            <div className="stat-number">
+          <div className="stat-card-courts">
+            <div className="stat-number-courts">
               {courts.filter(court => court.operatingHours.end >= '22:00').length}
             </div>
-            <div className="stat-label">Late Night Courts</div>
+            <div className="stat-label-courts">Late Night Courts</div>
           </div>
         </div>
       </div>
@@ -427,4 +427,4 @@ const CourtManagement = () => {
   );
 };
 
-export default CourtManagement; 
+export default CourtManagement;
