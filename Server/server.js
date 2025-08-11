@@ -6,7 +6,10 @@ import {connection} from "./database/dbconnection.js";
 // import {errorMiddleware} from "./middlewares/error.js";
 import authRouter from "./routes/authRoutes.js";
 import userRouter from "./routes/userRoutes.js";
-
+import venueRouter from './routes/venueRoutes.js';
+import courtRouter from './routes/courtRoutes.js';
+import bookingRouter from './routes/bookingRoutes.js';
+import adminRouter from './routes/adminRoutes.js';
 
 export const app = express();
 
@@ -33,6 +36,10 @@ app.get('/', (req,res)=> res.send("API is working"))
 app.get('/test', (req,res)=> res.json({message: "Server is running"}))
 app.use('/api/auth', authRouter)
 app.use('/api/user', userRouter)
+app.use('/api/venues', venueRouter); // New venue routes
+app.use('/api/courts', courtRouter); // New court routes
+app.use('/api/bookings', bookingRouter); // New booking routes
+app.use('/api/admin', adminRouter); // New admin routes
 
 app.listen(port, ()=>
    console.log(`Sever listening on port ${port}
