@@ -121,7 +121,7 @@
   }
 }
 
-.auth-header-login {
+.auth-header {
   text-align: center;
   margin-bottom: 2rem;
 }
@@ -239,7 +239,30 @@
   color: var(--text-primary);
 }
 
-.form-input-login::placeholder {
+.form-input::placeholder {
+  color: var(--text-light);
+}
+
+/* Role select specific styling */
+.role-select {
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+  background-position: right 0.5rem center;
+  background-repeat: no-repeat;
+  background-size: 1.5em 1.5em;
+  padding-right: 2.5rem;
+}
+
+.role-select option {
+  background: var(--background-primary);
+  color: var(--text-primary);
+  padding: 0.5rem;
+}
+
+.role-select option:first-child {
   color: var(--text-light);
 }
 
@@ -291,6 +314,9 @@
   color: #131313;
   text-decoration: none;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: none;
+  border: none;
+  cursor: pointer;
 }
 
 .forgot-password-login:hover {
@@ -335,110 +361,6 @@
 
 .auth-button-login:active {
   transform: translateY(0);
-}
-
-.auth-button-login:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-}
-
-.auth-header-1-login ~ .auth-form-login .auth-button-login:disabled {
-  opacity: 0.6;
-}
-
-.auth-button-login:disabled:hover {
-  transform: none;
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-}
-
-.auth-header-1-login ~ .auth-form-login .auth-button-login:disabled:hover {
-  box-shadow: none;
-}
-
-.loading-spinner-login {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.spinner-login {
-  width: 20px;
-  height: 20px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top: 2px solid white;
-  border-radius: 50%;
-  animation: spin-login 1s linear infinite;
-}
-
-.auth-header-1-login ~ .auth-form-login .spinner-login {
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-}
-
-@keyframes spin-login {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.auth-divider-login {
-  text-align: center;
-  margin: 1.5rem 0;
-  position: relative;
-  color: var(--text-light);
-}
-
-.auth-divider-login::before {
-  content: "";
-  position: absolute;
-  top: 50%;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: var(--border-color);
-  z-index: 1;
-}
-
-.auth-divider-login span {
-  background: #f2f2f2;
-  padding: 0 1rem;
-  position: relative;
-  z-index: 2;
-}
-
-.social-login-login {
-  margin-bottom: 1.5rem;
-}
-
-.social-button-login {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  padding: 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: 0.5rem;
-  background: var(--background-primary);
-  color: var(--text-primary);
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.social-button-login:hover {
-  border-color: var(--primary-dark);
-  color: var(--primary-dark);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
 .auth-switch-login {
@@ -590,13 +512,44 @@
     padding: 0.875rem 0.875rem 0.875rem 0.5rem;
   }
 
-  .otp-input-login {
-    width: 2.5rem;
-    height: 2.5rem;
-    font-size: 1rem;
+  .role-select {
+    padding-right: 2rem;
   }
+}
 
-  .otp-toggle-login {
-    right: -2rem;
+/* Loading spinner styles */
+.auth-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.auth-button:disabled:hover {
+  transform: none;
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+}
+
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top: 2px solid white;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
