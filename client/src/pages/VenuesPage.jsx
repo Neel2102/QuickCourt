@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../CSS/VenuesPage.css';
+import Navbar from '../components/Navbar';
 
 const VenuesPage = () => {
   const [venues, setVenues] = useState([]);
@@ -109,6 +110,7 @@ const VenuesPage = () => {
 
   return (
     <div className="venues-page">
+       <Navbar/>
       <div className="venues-header">
         <h1>Find Your Perfect Court</h1>
         <p>Discover and book sports facilities near you</p>

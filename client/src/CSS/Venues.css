@@ -287,7 +287,8 @@
   font-weight: 400;
 }
 
-.book-now-btn {
+.book-now-btn,
+.view-venue-btn {
   background: #43b97f;
   color: white;
   border: none;
@@ -299,7 +300,8 @@
   transition: all 0.2s;
 }
 
-.book-now-btn:hover {
+.book-now-btn:hover,
+.view-venue-btn:hover {
   background: #2e7d5a;
   transform: translateY(-1px);
 }

@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getVenues, searchVenues } from '../../services/venueService';
+import { getCourts } from '../../services/courtService';
 import VenueCard from '../../components/venue/VenueCard';
 import SearchBar from '../../components/common/SearchBar';
 import VenueFilters from '../../components/venue/VenueFilters';
+import BookingModal from '../../components/booking/BookingModal';
+import { toast } from 'react-toastify';
 import '../../CSS/Venues.css';
 
 const Venues = () => {
@@ -19,6 +22,10 @@ const Venues = () => {
   });
   const [currentPage, setCurrentPage] = useState(1);
   const [venuesPerPage] = useState(12);
+  const [showBookingModal, setShowBookingModal] = useState(false);
+  const [selectedVenue, setSelectedVenue] = useState(null);
+  const [selectedCourt, setSelectedCourt] = useState(null);
+  const [venueCourts, setVenueCourts] = useState({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -35,8 +42,22 @@ const Venues = () => {
       const data = await getVenues();
       setVenues(data);
       setFilteredVenues(data);
+
+      // Fetch courts for each venue
+      const courtsData = {};
+      for (const venue of data) {
+        try {
+          const courts = await getCourts(venue._id);
+          courtsData[venue._id] = courts;
+        } catch (error) {
+          console.error(`Error fetching courts for venue ${venue._id}:`, error);
+          courtsData[venue._id] = [];
+        }
+      }
+      setVenueCourts(courtsData);
     } catch (error) {
       console.error('Error fetching venues:', error);
+      toast.error('Failed to load venues. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -103,8 +124,46 @@ const Venues = () => {
     navigate(`/venue/${venueId}`);
   };
 
-  const handleBookNow = (venueId) => {
-    navigate(`/venue/${venueId}`);
+  const handleBookNow = async (venueId) => {
+    try {
+      const venue = venues.find(v => v._id === venueId);
+      const courts = venueCourts[venueId] || [];
+
+      if (!venue) {
+        toast.error('Venue not found');
+        return;
+      }
+
+      if (courts.length === 0) {
+        toast.error('No courts available for this venue');
+        return;
+      }
+
+      // If only one court, select it automatically
+      if (courts.length === 1) {
+        setSelectedVenue(venue);
+        setSelectedCourt(courts[0]);
+        setShowBookingModal(true);
+      } else {
+        // Multiple courts - show court selection or navigate to venue details
+        navigate(`/venue/${venueId}`);
+      }
+    } catch (error) {
+      console.error('Error handling book now:', error);
+      toast.error('Failed to initiate booking. Please try again.');
+    }
+  };
+
+  const handleCloseBookingModal = () => {
+    setShowBookingModal(false);
+    setSelectedVenue(null);
+    setSelectedCourt(null);
+  };
+
+  const handleBookingSuccess = () => {
+    toast.success('Booking created successfully!');
+    handleCloseBookingModal();
+    // Optionally refresh data or navigate to bookings page
   };
 
   // Pagination
@@ -268,8 +327,18 @@ const Venues = () => {
           Reset Filters
         </button>
       </div>
+
+      {/* Booking Modal */}
+      {showBookingModal && selectedVenue && selectedCourt && (
+        <BookingModal
+          venue={selectedVenue}
+          court={selectedCourt}
+          onClose={handleCloseBookingModal}
+          onSuccess={handleBookingSuccess}
+        />
+      )}
     </div>
   );
 };
 
-export default Venues; 
+export default Venues;

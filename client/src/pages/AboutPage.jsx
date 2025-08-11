@@ -1,9 +1,11 @@
 import { Link } from 'react-router-dom';
 import '../CSS/AboutPage.css';
+import Navbar from '../components/Navbar';
 
 const AboutPage = () => {
   return (
-    <div className="about-page">
+      <div className="about-page">
+        <Navbar/>
       {/* Hero Section */}
       <section className="about-hero">
         <div className="hero-content">
