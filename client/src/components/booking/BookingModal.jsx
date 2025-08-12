@@ -219,15 +219,44 @@ const BookingModal = ({ court, venue, onClose }) => {
 
           {clientSecret ? (
             <Elements stripe={stripePromise} options={{ clientSecret }}>
-              <CheckoutForm 
-                bookingId={bookingId} 
-                totalPrice={totalPrice}
-                onPaymentSuccess={() => {
-                  toast.success('Payment initiated successfully!');
-                  onClose();
-                }}
-                onPaymentFailure={handlePaymentFailure} 
-              />
+              <div className="payment-section">
+                <div className="payment-header">
+                  <h3>Complete Your Booking</h3>
+                  <p>Your court has been reserved. Please complete the payment to confirm your booking.</p>
+                </div>
+                
+                <div className="booking-summary-card">
+                  <h4>Booking Summary</h4>
+                  <div className="summary-details">
+                    <div className="summary-row">
+                      <span>Date:</span>
+                      <span>{new Date(selectedDate).toLocaleDateString()}</span>
+                    </div>
+                    <div className="summary-row">
+                      <span>Time:</span>
+                      <span>{selectedStartTime} - {selectedEndTime}</span>
+                    </div>
+                    <div className="summary-row">
+                      <span>Court:</span>
+                      <span>{court.name} ({court.sportType})</span>
+                    </div>
+                    <div className="summary-row total">
+                      <span>Total Amount:</span>
+                      <span>₹{totalPrice}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <CheckoutForm 
+                  bookingId={bookingId} 
+                  totalPrice={totalPrice}
+                  onPaymentSuccess={() => {
+                    toast.success('Payment initiated successfully!');
+                    onClose();
+                  }}
+                  onPaymentFailure={handlePaymentFailure} 
+                />
+              </div>
             </Elements>
           ) : (
             <form onSubmit={submitBooking} className="booking-form">
@@ -243,6 +272,9 @@ const BookingModal = ({ court, venue, onClose }) => {
                   min={getMinDate()}
                   max={getMaxDate()}
                   required
+                  onClick={(e) => {
+                    e.target.showPicker && e.target.showPicker();
+                  }}
                 />
               </div>
 

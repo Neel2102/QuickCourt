@@ -24,7 +24,8 @@ const Button = ({
     warning: 'bg-yellow-600 text-white hover:bg-yellow-700 focus:ring-yellow-500',
     outline: 'border border-gray-300 text-gray-700 hover:bg-gray-50 focus:ring-gray-500',
     ghost: 'text-gray-700 hover:bg-gray-100 focus:ring-gray-500',
-    link: 'text-blue-600 hover:text-blue-700 underline focus:ring-blue-500'
+    link: 'text-blue-600 hover:text-blue-700 underline focus:ring-blue-500',
+    payment: 'bg-black text-white hover:bg-white hover:text-black border-2 border-black transition-all duration-300 hover:shadow-lg focus:ring-black focus:ring-offset-2'
   };
 
   const sizes = {
