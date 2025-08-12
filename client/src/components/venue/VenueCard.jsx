@@ -12,14 +12,31 @@ const VenueCard = ({ venue, onVenueClick, onBookNow }) => {
     onBookNow();
   };
 
+  // Function to get a working image URL or fallback
+  const getImageSrc = () => {
+    if (venue.photos && venue.photos.length > 0 && venue.photos[0]) {
+      // Check if it's a valid URL
+      const imageUrl = venue.photos[0];
+      if (imageUrl.startsWith('http') || imageUrl.startsWith('data:')) {
+        return imageUrl;
+      }
+    }
+    // Return a default sports venue image from a reliable source
+    return 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop&auto=format';
+  };
+
   return (
     <div className="venue-card-venuecard" onClick={handleVenueClick}>
       <div className="venue-image-venuecard">
-        {venue.photos && venue.photos.length > 0 ? (
-          <img src={venue.photos[0]} alt={venue.name} className="venue-img-venuecard" />
-        ) : (
-          <div className="placeholder-venuecard">🏟️</div>
-        )}
+        <img
+          src={getImageSrc()}
+          alt={venue.name}
+          className="venue-img-venuecard"
+          onError={(e) => {
+            // If image fails to load, use a different fallback
+            e.target.src = 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=500&h=300&fit=crop&auto=format';
+          }}
+        />
       </div>
       
       <div className="venue-content-venuecard">

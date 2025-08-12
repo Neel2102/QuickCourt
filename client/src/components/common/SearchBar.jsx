@@ -2,7 +2,7 @@ import React from 'react';
 
 const SearchBar = ({ value, onChange, placeholder = "Search...", className = "" }) => {
   return (
-    <div className={`search-bar ${className}`}>
+    <div className={`search-bar ${className}`}  style={{ width: '46%' }}>
       <input
         type="text"
         value={value}
@@ -10,7 +10,7 @@ const SearchBar = ({ value, onChange, placeholder = "Search...", className = "" 
         placeholder={placeholder}
         className="search-input"
       />
-      <div className="search-icon">🔍</div>
+      {/* <div className="search-icon">🔍</div> */}
     </div>
   );
 };

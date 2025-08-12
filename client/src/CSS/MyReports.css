@@ -43,7 +43,6 @@
 
 /* My Reports Container */
 .my-reports-container {
-  max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
   background: var(--background-secondary);

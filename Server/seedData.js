@@ -99,7 +99,7 @@ const venues = [
         },
         sportTypes: ['Tennis', 'Badminton', 'Football'],
         amenities: ['Parking', 'Shower Facilities', 'Equipment Rental', 'Pro Shop', 'Café'],
-        photos: ['https://example.com/elite-sports-1.jpg', 'https://example.com/elite-sports-2.jpg'],
+        photos: ['https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=500&h=300&fit=crop', 'https://images.unsplash.com/photo-1544966503-7cc5ac882d5f?w=500&h=300&fit=crop'],
         isApproved: true,
         rating: 4.8,
         numberOfReviews: 45
@@ -115,7 +115,7 @@ const venues = [
         },
         sportTypes: ['Tennis'],
         amenities: ['Clay Courts', 'Hard Courts', 'Ball Machine', 'Pro Shop', 'Tennis Academy'],
-        photos: ['https://example.com/tennis-paradise-1.jpg'],
+        photos: ['https://images.unsplash.com/photo-1622279457486-62dcc4a431d6?w=500&h=300&fit=crop'],
         isApproved: true,
         rating: 4.9,
         numberOfReviews: 32
@@ -131,7 +131,7 @@ const venues = [
         },
         sportTypes: ['Badminton'],
         amenities: ['Multiple Courts', 'Professional Coaching', 'Tournament Facilities', 'Equipment Rental'],
-        photos: ['https://example.com/badminton-center-1.jpg'],
+        photos: ['https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?w=500&h=300&fit=crop'],
         isApproved: true,
         rating: 4.7,
         numberOfReviews: 28
@@ -147,7 +147,7 @@ const venues = [
         },
         sportTypes: ['Football'],
         amenities: ['Multiple Fields', 'Floodlights', 'Parking', 'Refreshment Stand', 'Equipment Storage'],
-        photos: ['https://example.com/football-complex-1.jpg'],
+        photos: ['https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=500&h=300&fit=crop'],
         isApproved: true,
         rating: 4.6,
         numberOfReviews: 38
@@ -163,7 +163,7 @@ const venues = [
         },
         sportTypes: ['Cricket'],
         amenities: ['Professional Pitch', 'Pavilion', 'Scoreboard', 'Practice Nets', 'Parking'],
-        photos: ['https://example.com/cricket-ground-1.jpg'],
+        photos: ['https://images.unsplash.com/photo-1540747913346-19e32dc3e97e?w=500&h=300&fit=crop'],
         isApproved: true,
         rating: 4.5,
         numberOfReviews: 25

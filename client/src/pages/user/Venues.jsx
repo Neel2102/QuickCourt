@@ -232,7 +232,7 @@ const Venues = () => {
       <div className="venues-section-venues">
         {currentVenues.length === 0 ? (
           <div className="no-venues-venues">
-            <div className="no-venues-icon-venues">🔍</div>
+            {/* <div className="no-venues-icon-venues">🔍</div> */}
             <h3>No venues found</h3>
             <p>
               {searchTerm || Object.values(filters).some(f => f !== 'all' && f !== '')

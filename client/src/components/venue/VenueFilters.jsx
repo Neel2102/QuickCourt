@@ -1,67 +1,77 @@
 import React from 'react';
+import '../../CSS/VenueFilters.css';
 
-const VenueFilters = ({
-  city = '',
-  sport = '',
-  minPrice = '',
-  maxPrice = '',
-  sports = [],
-  onChange,
-  onClear
-}) => {
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    onChange && onChange({ name, value });
+const VenueFilters = ({ filters, onFilterChange }) => {
+  const handleFilterChange = (filterName, value) => {
+    onFilterChange({ [filterName]: value });
+  };
+
+  const handleClearFilters = () => {
+    onFilterChange({
+      sportType: 'all',
+      priceRange: 'all',
+      rating: 'all',
+      city: ''
+    });
   };
 
   return (
-    <div className="bg-white rounded-lg shadow-md border border-gray-200 p-4 grid grid-cols-1 md:grid-cols-4 gap-3">
-      <input
-        type="text"
-        name="city"
-        value={city}
-        onChange={handleChange}
-        placeholder="City"
-        className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-      />
+    <div className="venue-filters-container">
+      <div className="filters-row">
+        {/* City Filter */}
+        <div className="filter-group">
+          <label>City</label>
+          <input
+            type="text"
+            value={filters.city}
+            onChange={(e) => handleFilterChange('city', e.target.value)}
+            placeholder="Enter city name"
+            className="filter-input"
+          />
+        </div>
 
-      <select
-        name="sport"
-        value={sport}
-        onChange={handleChange}
-        className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-      >
-        <option value="">All Sports</option>
-        {sports.map((s) => (
-          <option key={s} value={s}>{s}</option>
-        ))}
-      </select>
+        {/* Sport Type Filter */}
+        <div className="filter-group">
+          <select
+            value={filters.sportType}
+            onChange={(e) => handleFilterChange('sportType', e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">All Sports</option>
+            <option value="Tennis">Tennis</option>
+            <option value="Badminton">Badminton</option>
+            <option value="Football">Football</option>
+            <option value="Cricket">Cricket</option>
+            <option value="Basketball">Basketball</option>
+          </select>
+        </div>
 
-      <input
-        type="number"
-        name="minPrice"
-        value={minPrice}
-        onChange={handleChange}
-        placeholder="Min Price"
-        className="px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-      />
+        {/* Price Range Filter */}
+        <div className="filter-group">
+          <label>Min Price</label>
+          <select
+            value={filters.priceRange}
+            onChange={(e) => handleFilterChange('priceRange', e.target.value)}
+            className="filter-select"
+          >
+            <option value="all">Any Price</option>
+            <option value="0-500">₹0 - ₹500</option>
+            <option value="500-1000">₹500 - ₹1000</option>
+            <option value="1000-2000">₹1000 - ₹2000</option>
+            <option value="2000">₹2000+</option>
+          </select>
+        </div>
 
-      <div className="flex items-center space-x-2">
-        <input
-          type="number"
-          name="maxPrice"
-          value={maxPrice}
-          onChange={handleChange}
-          placeholder="Max Price"
-          className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500"
-        />
-        <button
-          type="button"
-          onClick={onClear}
-          className="px-3 py-2 text-sm border border-gray-300 rounded-md hover:bg-gray-50"
-        >
-          Clear
-        </button>
+        {/* Max Price and Clear Button */}
+        <div className="filter-group">
+          <label>Max Price</label>
+          <button
+            onClick={handleClearFilters}
+            className="clear-btn"
+          >
+            Clear
+          </button>
+        </div>
       </div>
     </div>
   );

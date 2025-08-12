@@ -119,7 +119,7 @@ const MyReports = () => {
   }
 
   return (
-    <div className="my-reports-container" style={{ minHeight: '100vh', padding: '2rem', backgroundColor: '#f8fafc' }}>
+    <div className="my-reports-container" style={{ minHeight: '100vh', padding: '2rem' }}>
       <div className="my-reports-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
         <h1 style={{ margin: 0, fontSize: '2rem', color: '#1e293b' }}>My Reports</h1>
         <button

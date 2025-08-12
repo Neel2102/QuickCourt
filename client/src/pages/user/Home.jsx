@@ -95,7 +95,7 @@ const Home = () => {
           <SearchBar
             value={searchTerm}
             onChange={setSearchTerm}
-            placeholder="Search venues by name or location..."
+            placeholder="Search venues by name or location...🔍"
           />
           <div className="sport-filters-header">
             {sports.map(sport => (
