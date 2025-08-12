@@ -9,6 +9,7 @@ import Venues from "./user/Venues";
 import MyBookings from "./user/MyBookings";
 import Profile from "./user/Profile";
 import UserReviews from "./user/UserReviews";
+import MyReports from "../components/MyReports";
 import { getUserProfile } from "../services/userService";
 import VenueDetailsPage from "./VenueDetailsPage.jsx";
 import { useAuth } from "../contexts/AuthContext";
@@ -86,6 +87,7 @@ const UserDashboard = () => {
             <Route path="venues" element={<Venues />} />
             <Route path="my-bookings" element={<MyBookings />} />
             <Route path="my-reviews" element={<UserReviews />} />
+            <Route path="my-reports" element={<MyReports />} />
             <Route path="profile" element={<Profile />} />
             <Route path='venue/:id' element={<VenueDetailsPage/>}/>
             <Route path="*" element={<Navigate to="" replace />} />

@@ -1,6 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { getMyReports, updateReport, deleteReport } from '../services/reportService';
+import {
+  getMyReports,
+  updateReport,
+  deleteReport,
+  canEditReport,
+  canDeleteReport,
+  formatReportStatus,
+  formatReportType,
+  getStatusColorClass
+} from '../services/reportService';
 import ReportForm from './ReportForm';
 import '../CSS/MyReports.css';
 
@@ -24,10 +33,11 @@ const MyReports = () => {
     try {
       setLoading(true);
       const data = await getMyReports(statusFilter, typeFilter);
-      setReports(data);
+      setReports(data || []);
     } catch (error) {
-      console.error(error);
-      toast.error('Failed to load reports');
+      console.error('Error fetching reports:', error);
+      toast.error('Failed to load reports: ' + (error.message || 'Unknown error'));
+      setReports([]);
     } finally {
       setLoading(false);
     }
@@ -71,51 +81,87 @@ const MyReports = () => {
   };
 
   const getStatusBadge = (status) => {
-    const statusClasses = {
-      open: 'status-open',
-      in_review: 'status-in_review',
-      resolved: 'status-resolved'
-    };
-    
     return (
-      <span className={`status-badge ${statusClasses[status] || ''}`}>
-        {status.replace('_', ' ').toUpperCase()}
+      <span className={`status-badge ${getStatusColorClass(status)}`}>
+        {formatReportStatus(status)}
       </span>
     );
   };
 
   const getTypeLabel = (type) => {
-    return type.charAt(0).toUpperCase() + type.slice(1);
+    return formatReportType(type);
   };
 
   if (loading) {
     return (
-      <div className="my-reports-container">
-        <div className="loading">Loading your reports...</div>
+      <div className="my-reports-container" style={{ minHeight: '100vh', padding: '2rem', backgroundColor: '#f8fafc' }}>
+        <div className="loading-container" style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          padding: '4rem',
+          color: '#64748b',
+          fontSize: '1.125rem'
+        }}>
+          <div className="loading-spinner" style={{
+            width: '2rem',
+            height: '2rem',
+            border: '2px solid #e2e8f0',
+            borderTop: '2px solid #6366f1',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            marginRight: '1rem'
+          }}></div>
+          Loading your reports...
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="my-reports-container">
-      <div className="page-header">
-        <h1>My Reports</h1>
-        <p>View and manage reports you have filed</p>
-        <button 
-          className="file-report-btn"
+    <div className="my-reports-container" style={{ minHeight: '100vh', padding: '2rem', backgroundColor: '#f8fafc' }}>
+      <div className="my-reports-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+        <h1 style={{ margin: 0, fontSize: '2rem', color: '#1e293b' }}>My Reports</h1>
+        <button
+          className="new-report-button"
           onClick={() => setShowReportForm(true)}
+          style={{
+            background: '#6366f1',
+            color: 'white',
+            border: 'none',
+            padding: '0.75rem 1.5rem',
+            borderRadius: '0.5rem',
+            cursor: 'pointer',
+            fontWeight: '500'
+          }}
         >
-          🚨 File New Report
+          + File New Report
         </button>
       </div>
 
-      <div className="filters">
-        <div className="filter-group">
-          <label htmlFor="statusFilter">Status:</label>
+      <div className="reports-filters" style={{
+        display: 'flex',
+        gap: '1rem',
+        marginBottom: '2rem',
+        background: 'white',
+        padding: '1.5rem',
+        borderRadius: '0.75rem',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+        border: '1px solid #e2e8f0'
+      }}>
+        <div className="filter-group" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '150px' }}>
+          <label htmlFor="statusFilter" style={{ fontWeight: '500', color: '#1e293b', fontSize: '0.875rem' }}>Status:</label>
           <select
             id="statusFilter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
+            style={{
+              padding: '0.5rem 0.75rem',
+              border: '1px solid #e2e8f0',
+              borderRadius: '0.375rem',
+              background: 'white',
+              fontSize: '0.875rem'
+            }}
           >
             {statuses.map(status => (
               <option key={status} value={status}>
@@ -125,12 +171,19 @@ const MyReports = () => {
           </select>
         </div>
 
-        <div className="filter-group">
-          <label htmlFor="typeFilter">Type:</label>
+        <div className="filter-group" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', minWidth: '150px' }}>
+          <label htmlFor="typeFilter" style={{ fontWeight: '500', color: '#1e293b', fontSize: '0.875rem' }}>Type:</label>
           <select
             id="typeFilter"
             value={typeFilter}
             onChange={(e) => setTypeFilter(e.target.value)}
+            style={{
+              padding: '0.5rem 0.75rem',
+              border: '1px solid #e2e8f0',
+              borderRadius: '0.375rem',
+              background: 'white',
+              fontSize: '0.875rem'
+            }}
           >
             {types.map(type => (
               <option key={type} value={type}>
@@ -142,8 +195,17 @@ const MyReports = () => {
       </div>
 
       {reports.length === 0 ? (
-        <div className="no-reports">
-          <p>No reports found matching your criteria.</p>
+        <div className="no-reports" style={{
+          textAlign: 'center',
+          padding: '4rem 2rem',
+          background: 'white',
+          borderRadius: '0.75rem',
+          border: '1px solid #e2e8f0',
+          boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+        }}>
+          <p style={{ color: '#64748b', fontSize: '1.125rem', margin: 0 }}>
+            No reports found matching your criteria.
+          </p>
         </div>
       ) : (
         <div className="reports-list">
@@ -151,7 +213,7 @@ const MyReports = () => {
             <div key={report._id} className="report-card">
               <div className="report-header">
                 <div className="report-meta">
-                  <span className="report-type">{getTypeLabel(report.targetType)}</span>
+                  <span className="report-type">{formatReportType(report.targetType)}</span>
                   {getStatusBadge(report.status)}
                 </div>
                 <div className="report-date">
@@ -198,21 +260,21 @@ const MyReports = () => {
                   </div>
                 ) : (
                   <>
-                    {report.status === 'open' && (
-                      <>
-                        <button
-                          onClick={() => handleEdit(report)}
-                          className="edit-button"
-                        >
-                          Edit
-                        </button>
-                        <button
-                          onClick={() => handleDelete(report._id)}
-                          className="delete-button"
-                        >
-                          Delete
-                        </button>
-                      </>
+                    {canEditReport(report) && (
+                      <button
+                        onClick={() => handleEdit(report)}
+                        className="edit-button"
+                      >
+                        Edit
+                      </button>
+                    )}
+                    {canDeleteReport(report) && (
+                      <button
+                        onClick={() => handleDelete(report._id)}
+                        className="delete-button"
+                      >
+                        Delete
+                      </button>
                     )}
                   </>
                 )}
@@ -226,7 +288,7 @@ const MyReports = () => {
       {showReportForm && (
         <ReportForm
           onClose={() => setShowReportForm(false)}
-          onReportSubmitted={(report) => {
+          onReportSubmitted={() => {
             setShowReportForm(false);
             fetchReports(); // Refresh the reports list
             toast.success('Report filed successfully!');

@@ -80,29 +80,12 @@ const Home = () => {
         <div className="banner-content-header">
           <h1>Welcome to QuickCourt</h1>
           <p>Book your favorite sports facilities and join the game!</p>
-<<<<<<< Updated upstream
-          <div className="banner-buttons-header">
-            <button 
-              className="btn-header cta-button-header"
-              onClick={() => navigate('/venues')}
-            >
-              Explore Venues
-            </button>
-            <button 
-              className="btn-header report-button-header"
-              onClick={() => setShowReportForm(true)}
-            >
-              🚨 File Report
-            </button>
-          </div>
-=======
           <button
             className="btn-header cta-button-header"
             onClick={() => navigate('/user-dashboard/venues')}
           >
             Explore Venues
           </button>
->>>>>>> Stashed changes
         </div>
       </section>
 

@@ -1,26 +1,14 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 
-// Custom render function that includes providers
-export const renderWithProviders = (ui, options = {}) => {
-  const {
-    route = '/',
-    ...renderOptions
-  } = options;
-
-  window.history.pushState({}, 'Test page', route);
-
-  const Wrapper = ({ children }) => (
-    <BrowserRouter>
-      {children}
-      <ToastContainer />
-    </BrowserRouter>
-  );
-
-  return render(ui, { wrapper: Wrapper, ...renderOptions });
-};
+// Simple wrapper component for providers (for future testing setup)
+export const ProvidersWrapper = ({ children }) => (
+  <BrowserRouter>
+    {children}
+    <ToastContainer />
+  </BrowserRouter>
+);
 
 // Mock user for testing
 export const mockUser = {
@@ -99,6 +87,23 @@ export const mockBooking = {
   createdAt: '2024-01-10T10:00:00.000Z',
 };
 
+// Mock report data
+export const mockReport = {
+  _id: 'test-report-id',
+  reporter: {
+    _id: 'test-user-id',
+    name: 'Test User',
+    email: 'test@example.com',
+  },
+  targetType: 'user',
+  targetId: 'test-target-id',
+  reason: 'Inappropriate behavior',
+  actionNote: 'User was being rude in chat',
+  status: 'open',
+  createdAt: '2024-01-10T10:00:00.000Z',
+  updatedAt: '2024-01-10T10:00:00.000Z',
+};
+
 // Mock API responses
 export const mockApiResponse = (data, success = true, message = '') => ({
   success,
@@ -113,111 +118,34 @@ export const mockApiError = (message = 'API Error', status = 500) => ({
   status,
 });
 
-// Mock fetch function
-export const mockFetch = (response) => {
-  return jest.fn().mockResolvedValue({
+// Simple mock data for development/testing
+export const createMockFetch = (response) => {
+  return () => Promise.resolve({
     ok: response.success !== false,
     status: response.status || 200,
     json: async () => response,
   });
 };
 
-// Mock localStorage
-export const mockLocalStorage = () => {
+// Simple storage mock for development
+export const createMockStorage = () => {
   const store = {};
-  
+
   return {
-    getItem: jest.fn((key) => store[key] || null),
-    setItem: jest.fn((key, value) => {
+    getItem: (key) => store[key] || null,
+    setItem: (key, value) => {
       store[key] = value;
-    }),
-    removeItem: jest.fn((key) => {
+    },
+    removeItem: (key) => {
       delete store[key];
-    }),
-    clear: jest.fn(() => {
+    },
+    clear: () => {
       Object.keys(store).forEach(key => delete store[key]);
-    }),
+    },
   };
 };
 
-// Mock sessionStorage
-export const mockSessionStorage = () => {
-  const store = {};
-  
-  return {
-    getItem: jest.fn((key) => store[key] || null),
-    setItem: jest.fn((key, value) => {
-      store[key] = value;
-    }),
-    removeItem: jest.fn((key) => {
-      delete store[key];
-    }),
-    clear: jest.fn(() => {
-      Object.keys(store).forEach(key => delete store[key]);
-    }),
-  };
-};
 
-// Mock window.matchMedia
-export const mockMatchMedia = (matches = true) => {
-  Object.defineProperty(window, 'matchMedia', {
-    writable: true,
-    value: jest.fn().mockImplementation(query => ({
-      matches,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(), // deprecated
-      removeListener: jest.fn(), // deprecated
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    })),
-  });
-};
-
-// Mock IntersectionObserver
-export const mockIntersectionObserver = () => {
-  const mockIntersectionObserver = jest.fn();
-  mockIntersectionObserver.mockReturnValue({
-    observe: () => null,
-    unobserve: () => null,
-    disconnect: () => null,
-  });
-  window.IntersectionObserver = mockIntersectionObserver;
-};
-
-// Mock ResizeObserver
-export const mockResizeObserver = () => {
-  global.ResizeObserver = jest.fn().mockImplementation(() => ({
-    observe: jest.fn(),
-    unobserve: jest.fn(),
-    disconnect: jest.fn(),
-  }));
-};
-
-// Mock scrollTo
-export const mockScrollTo = () => {
-  window.scrollTo = jest.fn();
-};
-
-// Mock console methods
-export const mockConsole = () => {
-  const originalConsole = { ...console };
-  
-  beforeEach(() => {
-    console.log = jest.fn();
-    console.warn = jest.fn();
-    console.error = jest.fn();
-    console.info = jest.fn();
-  });
-  
-  afterEach(() => {
-    console.log = originalConsole.log;
-    console.warn = originalConsole.warn;
-    console.error = originalConsole.error;
-    console.info = originalConsole.info;
-  });
-};
 
 // Test data generators
 export const generateTestVenues = (count = 5) => {
@@ -248,72 +176,46 @@ export const generateTestUsers = (count = 5) => {
   }));
 };
 
-// Custom matchers for testing
-export const customMatchers = {
-  toHaveBeenCalledWithMatch: (mock, expected) => {
-    const calls = mock.mock.calls;
-    const pass = calls.some(call => {
-      try {
-        expect(call).toEqual(expect.arrayContaining([expected]));
-        return true;
-      } catch {
-        return false;
-      }
-    });
-    
-    if (pass) {
-      return {
-        message: () => `Expected mock to have been called with ${JSON.stringify(expected)}`,
-        pass: true,
-      };
-    } else {
-      return {
-        message: () => `Expected mock to have been called with ${JSON.stringify(expected)}, but it was called with ${JSON.stringify(calls)}`,
-        pass: false,
-      };
-    }
-  },
+export const generateTestReports = (count = 5) => {
+  const statuses = ['open', 'in_review', 'resolved'];
+  const types = ['user', 'venue', 'booking'];
+  const reasons = [
+    'Inappropriate behavior',
+    'Spam or fake content',
+    'Harassment',
+    'Violation of terms',
+    'Technical issue'
+  ];
+
+  return Array.from({ length: count }, (_, index) => ({
+    ...mockReport,
+    _id: `report-${index + 1}`,
+    targetType: types[index % types.length],
+    targetId: `target-${index + 1}`,
+    reason: reasons[index % reasons.length],
+    status: statuses[index % statuses.length],
+    actionNote: index % 2 === 0 ? `Additional note for report ${index + 1}` : '',
+    createdAt: new Date(Date.now() - (index * 24 * 60 * 60 * 1000)).toISOString(),
+  }));
 };
 
-// Setup function for common test configuration
-export const setupTests = () => {
-  beforeAll(() => {
-    mockMatchMedia();
-    mockIntersectionObserver();
-    mockResizeObserver();
-    mockScrollTo();
-  });
-  
-  beforeEach(() => {
-    jest.clearAllMocks();
-  });
-  
-  afterEach(() => {
-    jest.resetAllMocks();
-  });
-};
+
 
 // Export all utilities
 export default {
-  renderWithProviders,
+  ProvidersWrapper,
   mockUser,
   mockAdminUser,
   mockFacilityOwner,
   mockVenue,
   mockBooking,
+  mockReport,
   mockApiResponse,
   mockApiError,
-  mockFetch,
-  mockLocalStorage,
-  mockSessionStorage,
-  mockMatchMedia,
-  mockIntersectionObserver,
-  mockResizeObserver,
-  mockScrollTo,
-  mockConsole,
+  createMockFetch,
+  createMockStorage,
   generateTestVenues,
   generateTestBookings,
   generateTestUsers,
-  customMatchers,
-  setupTests,
-}; 
+  generateTestReports,
+};

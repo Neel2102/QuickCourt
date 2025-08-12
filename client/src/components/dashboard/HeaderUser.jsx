@@ -16,6 +16,10 @@ const HeaderUser = ({ onToggleSidebar, userName = 'User', userProfilePic = null 
         return 'Browse Venues';
       case 'my-bookings':
         return 'My Bookings';
+      case 'my-reviews':
+        return 'My Reviews';
+      case 'my-reports':
+        return 'My Reports';
       case 'profile':
         return 'Profile Settings';
       default:

@@ -9,6 +9,7 @@ const SIDEBAR_MENUS = {
     { path: 'venues', label: 'Venues', icon: '🏟️' },
     { path: 'my-bookings', label: 'My Bookings', icon: '📅' },
     { path: 'my-reviews', label: 'My Reviews', icon: '⭐' },
+    { path: 'my-reports', label: 'My Reports', icon: '🚩' },
     { path: 'profile', label: 'Profile', icon: '👤' },
   ],
   FacilityOwner: [
@@ -39,6 +40,32 @@ const Sidebar = ({ isOpen, onToggle, onNavClick, role = 'User', userName = 'User
   const location = useLocation();
   const menuItems = SIDEBAR_MENUS[role] || SIDEBAR_MENUS.User;
   const subtitle = SIDEBAR_SUBTITLES[role] || SIDEBAR_SUBTITLES.User;
+
+  // Helper function to get the base dashboard path
+  const getBasePath = () => {
+    switch (role) {
+      case 'User':
+        return '/user-dashboard';
+      case 'FacilityOwner':
+        return '/facility-dashboard';
+      case 'Admin':
+        return '/admin-dashboard';
+      default:
+        return '/user-dashboard';
+    }
+  };
+
+  // Helper function to build the full path
+  const buildPath = (itemPath) => {
+    const basePath = getBasePath();
+    return itemPath ? `${basePath}/${itemPath}` : basePath;
+  };
+
+  // Helper function to check if a nav item is active
+  const isNavItemActive = (itemPath) => {
+    const fullPath = buildPath(itemPath);
+    return location.pathname === fullPath;
+  };
 
   return (
     <>
@@ -71,11 +98,11 @@ const Sidebar = ({ isOpen, onToggle, onNavClick, role = 'User', userName = 'User
             <h3 className="nav-section-title">Menu</h3>
             <ul className="nav-list">
               {menuItems.map((item) => (
-                <li key={item.path} className="nav-item">
+                <li key={item.path || 'home'} className="nav-item">
                   <NavLink
-                    to={item.path ? `/${role === 'User' ? 'user-dashboard' : role === 'FacilityOwner' ? 'facility-dashboard' : 'admin-dashboard'}/${item.path}` : `/${role === 'User' ? 'user-dashboard' : role === 'FacilityOwner' ? 'facility-dashboard' : 'admin-dashboard'}`}
+                    to={buildPath(item.path)}
                     className={({ isActive }) =>
-                      `nav-link ${isActive || location.pathname === `/${role === 'User' ? 'user-dashboard' : role === 'FacilityOwner' ? 'facility-dashboard' : 'admin-dashboard'}/${item.path}` ? 'active' : ''}`
+                      `nav-link ${isActive || isNavItemActive(item.path) ? 'active' : ''}`
                     }
                     onClick={onNavClick}
                     end={item.path === ''}

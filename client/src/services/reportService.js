@@ -103,7 +103,7 @@ export const deleteReport = async (reportId) => {
     });
 
     const data = await response.json();
-    
+
     if (!data.success) {
       throw new Error(data.message || 'Failed to delete report');
     }
@@ -113,4 +113,68 @@ export const deleteReport = async (reportId) => {
     console.error('Error deleting report:', error);
     throw error;
   }
+};
+
+// Get report statistics for user dashboard
+export const getReportStats = async () => {
+  try {
+    const reports = await getMyReports();
+
+    const stats = {
+      total: reports.length,
+      open: reports.filter(r => r.status === 'open').length,
+      inReview: reports.filter(r => r.status === 'in_review').length,
+      resolved: reports.filter(r => r.status === 'resolved').length,
+      byType: {
+        user: reports.filter(r => r.targetType === 'user').length,
+        venue: reports.filter(r => r.targetType === 'venue').length,
+        booking: reports.filter(r => r.targetType === 'booking').length
+      }
+    };
+
+    return stats;
+  } catch (error) {
+    console.error('Error calculating report stats:', error);
+    throw error;
+  }
+};
+
+// Check if user can edit a report (only open reports can be edited)
+export const canEditReport = (report) => {
+  return report && report.status === 'open';
+};
+
+// Check if user can delete a report (only open reports can be deleted)
+export const canDeleteReport = (report) => {
+  return report && report.status === 'open';
+};
+
+// Format report status for display
+export const formatReportStatus = (status) => {
+  const statusMap = {
+    'open': 'Open',
+    'in_review': 'In Review',
+    'resolved': 'Resolved'
+  };
+  return statusMap[status] || status;
+};
+
+// Format report type for display
+export const formatReportType = (type) => {
+  const typeMap = {
+    'user': 'User',
+    'venue': 'Venue',
+    'booking': 'Booking'
+  };
+  return typeMap[type] || type;
+};
+
+// Get status color class for styling
+export const getStatusColorClass = (status) => {
+  const colorMap = {
+    'open': 'status-open',
+    'in_review': 'status-in_review',
+    'resolved': 'status-resolved'
+  };
+  return colorMap[status] || 'status-default';
 };

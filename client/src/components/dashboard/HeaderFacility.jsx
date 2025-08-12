@@ -18,6 +18,8 @@ const HeaderFacility = ({ onToggleSidebar, ownerName = 'Owner', ownerProfilePic 
         return 'Time Slots';
       case 'bookings-overview':
         return 'Bookings Overview';
+      case 'my-reports':
+        return 'My Reports';
       case 'profile':
         return 'Profile Settings';
       default:
