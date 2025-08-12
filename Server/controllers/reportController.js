@@ -2,6 +2,7 @@ import reportModel from '../models/reportModel.js';
 import userModel from '../models/userModel.js';
 import venueModel from '../models/venueModel.js';
 import bookingModel from '../models/bookingModel.js';
+import mongoose from 'mongoose';
 
 // Create a new report
 export const createReport = async (req, res) => {
@@ -25,24 +26,39 @@ export const createReport = async (req, res) => {
             });
         }
 
+        // Validate targetId is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(targetId)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid target ID format. Please provide a valid ID.'
+            });
+        }
+
         // Validate target exists
         let targetExists = false;
-        switch (targetType) {
-            case 'user':
-                targetExists = await userModel.findById(targetId);
-                break;
-            case 'venue':
-                targetExists = await venueModel.findById(targetId);
-                break;
-            case 'booking':
-                targetExists = await bookingModel.findById(targetId);
-                break;
+        try {
+            switch (targetType) {
+                case 'user':
+                    targetExists = await userModel.findById(targetId);
+                    break;
+                case 'venue':
+                    targetExists = await venueModel.findById(targetId);
+                    break;
+                case 'booking':
+                    targetExists = await bookingModel.findById(targetId);
+                    break;
+            }
+        } catch (error) {
+            return res.status(400).json({
+                success: false,
+                message: 'Invalid target ID format'
+            });
         }
 
         if (!targetExists) {
             return res.status(404).json({
                 success: false,
-                message: `${targetType} not found`
+                message: `${targetType} not found. Please check the ID and try again.`
             });
         }
 
@@ -260,6 +276,44 @@ export const deleteReport = async (req, res) => {
         res.status(500).json({
             success: false,
             message: 'Failed to delete report',
+            error: error.message
+        });
+    }
+};
+
+// Get sample IDs for testing reports (development helper)
+export const getSampleIds = async (req, res) => {
+    try {
+        // Get a few sample IDs from each collection
+        const sampleUser = await userModel.findOne({ isAdmin: false }).select('_id name email');
+        const sampleVenue = await venueModel.findOne({ isApproved: true }).select('_id name');
+        const sampleBooking = await bookingModel.findOne().select('_id user venue date');
+
+        res.json({
+            success: true,
+            data: {
+                user: sampleUser ? {
+                    id: sampleUser._id,
+                    name: sampleUser.name,
+                    email: sampleUser.email
+                } : null,
+                venue: sampleVenue ? {
+                    id: sampleVenue._id,
+                    name: sampleVenue.name
+                } : null,
+                booking: sampleBooking ? {
+                    id: sampleBooking._id,
+                    date: sampleBooking.date
+                } : null
+            },
+            message: 'These are sample IDs you can use for testing reports'
+        });
+
+    } catch (error) {
+        console.error('Error fetching sample IDs:', error);
+        res.status(500).json({
+            success: false,
+            message: 'Failed to fetch sample IDs',
             error: error.message
         });
     }

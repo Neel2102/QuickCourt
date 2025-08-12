@@ -20,4 +20,7 @@ reportRouter.put('/:id', protectRoute, reportController.updateReport);
 // User can delete their own report (only if status is 'open')
 reportRouter.delete('/:id', protectRoute, reportController.deleteReport);
 
+// Development helper - get sample IDs for testing
+reportRouter.get('/sample-ids', protectRoute, reportController.getSampleIds);
+
 export default reportRouter;
