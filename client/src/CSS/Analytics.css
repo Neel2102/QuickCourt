@@ -372,19 +372,19 @@
   align-items: center;
   gap: 1.5rem;
   padding: 1.5rem;
-  background: rgba(255, 255, 255, 0.15);
+  /* background: rgba(255, 255, 255, 0.15);
   border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2); */
+  /* backdrop-filter: blur(15px); */
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  /* box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05); */
 }
 
-.status-bar-analytics:hover {
+/* .status-bar-analytics:hover {
   background: rgba(255, 255, 255, 0.25);
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-}
+} */
 
 .status-info-analytics {
   display: flex;

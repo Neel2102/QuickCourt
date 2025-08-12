@@ -17,6 +17,7 @@ const Login = () => {
   const [showOtp, setShowOtp] = useState(true);
   const [otpError, setOtpError] = useState("");
   const [userEmail, setUserEmail] = useState("");
+  const [userId, setUserId] = useState("");
   const navigate = useNavigate();
   const location = useLocation();
   const { login, isAuthenticated, user, loading } = useAuth();
@@ -99,36 +100,37 @@ const Login = () => {
       const result = await login(formData.email, formData.password);
 
       if (result.success) {
-        if (result.user && result.user.isAccountVerified) {
-          
-          toast.success("Login successful! Welcome back.");
+        // User is verified and logged in successfully
+        toast.success("Login successful! Welcome back.");
 
-          // Navigate to appropriate dashboard or return location
-          const from = location.state?.from?.pathname;
-          const destination = getLoginRedirectPath(from, result.user.role);
-          navigate(destination, { replace: true });
-          return;
-        } else {
-          // Handle email verification flow
-          try {
-            const otpResponse = await fetch("/api/auth/send-verify-otp", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              credentials: "include",
-              body: JSON.stringify({ email: formData.email }),
-            });
+        // Navigate to appropriate dashboard or return location
+        const from = location.state?.from?.pathname;
+        const destination = getLoginRedirectPath(from, result.user.role);
+        navigate(destination, { replace: true });
+        return;
+      } else if (result.requiresVerification) {
+        // User credentials are correct but email is not verified
+        try {
+          const otpResponse = await fetch("/api/auth/send-verify-otp", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ email: formData.email }),
+          });
 
-            if (otpResponse.ok) {
-              setUserEmail(formData.email);
-              setShowEmailVerify(true);
-              toast.info("Please verify your email to continue.");
-            } else {
-              toast.error("Failed to send verification email.");
-            }
-          } catch (error) {
-            console.error("OTP send error:", error);
-            toast.error("Failed to send verification email.");
+          const otpData = await otpResponse.json();
+
+          if (otpResponse.ok && otpData.success) {
+            setUserEmail(formData.email);
+            setUserId(otpData.userId); // Store userId for verification
+            setShowEmailVerify(true);
+            toast.info("Please verify your email to continue.");
+          } else {
+            toast.error(otpData.message || "Failed to send verification email.");
           }
+        } catch (error) {
+          console.error("OTP send error:", error);
+          toast.error("Failed to send verification email.");
         }
       } else {
         toast.error(result.message || "Login failed. Please try again.");
@@ -177,7 +179,11 @@ const Login = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({ otp: otpString }),
+          body: JSON.stringify({
+            otp: otpString,
+            userId: userId,
+            email: userEmail
+          }),
         }
       );
       const data = await response.json();
@@ -226,7 +232,10 @@ const Login = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           credentials: "include",
-          body: JSON.stringify({}),
+          body: JSON.stringify({
+            userId: userId,
+            email: userEmail
+          }),
         }
       );
       const data = await response.json();
@@ -237,7 +246,7 @@ const Login = () => {
         setOtpError(data.message || "Failed to send OTP");
       }
     } catch (err) {
-      toast.error(data.message || "Failed to resend OTP. Please try again");
+      toast.error("Failed to resend OTP. Please try again");
       console.error("Resend error:", err);
     } finally {
       setIsLoading(false);
@@ -248,6 +257,8 @@ const Login = () => {
     setShowEmailVerify(false);
     setOtp(["", "", "", "", "", ""]);
     setOtpError("");
+    setUserId("");
+    setUserEmail("");
   };
 
   return (

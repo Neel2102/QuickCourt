@@ -6,43 +6,50 @@
   right: 0 !important;
   bottom: 0 !important;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
+  z-index: 10000 !important;
 
-  
   /* Center the modal content */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
   /* Padding for better experience */
-  padding: 20px 10px;
+  padding: 20px;
   box-sizing: border-box;
-  
-  /* Ensure minimum height for proper centering */
-  min-height: 100vh;
+
+  /* Force proper viewport positioning */
+  margin: 0 !important;
+  transform: none !important;
+
+  /* Ensure modal is always visible and scrollable */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 /* Modal Container */
 .booking-modal {
   background: white;
   border-radius: 12px;
-  width: 40%;
-  max-width: 400px; /* Made narrower */
-  max-height: 85vh; /* Reduced height for better fit */
-  
+  width: 90%;
+  max-width: 400px;
+  max-height: 90vh;
+
   /* Shadows and positioning */
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  
-  /* Allow the modal to grow and shrink as needed */
-  flex-shrink: 0;
-  
+
   /* Ensure modal stays within viewport */
-  max-width: calc(100vw - 20px);
-  
+  min-width: 300px;
+
   /* Ensure the modal can take full available height if needed */
   position: relative;
   display: flex;
   flex-direction: column;
+
+  /* Force proper positioning */
+  margin: 0 !important;
+  transform: none !important;
+  top: auto !important;
+  left: auto !important;
 }
 
 /* Modal Header */
@@ -694,13 +701,16 @@
 @media (max-width: 480px) {
   .booking-modal-overlay {
     padding: 5px;
+    align-items: center !important;
+    justify-content: center !important;
+    display: flex !important;
   }
-  
+
   .booking-modal {
-    margin: 0 auto;
+    width: 95%;
     border-radius: 8px;
-    max-width: calc(100vw - 10px);
-    max-height: 95vh;
+    max-width: calc(100vw - 20px);
+    max-height: 90vh;
   }
   
   .modal-header {
@@ -786,14 +796,16 @@
 @media (max-height: 800px) {
   .booking-modal-overlay {
     padding: 10px 5px;
-    align-items: center;
+    align-items: center !important;
+    justify-content: center !important;
+    display: flex !important;
   }
-  
+
   .booking-modal {
-    margin: 5px auto;
+    margin: auto;
     max-height: 90vh;
   }
-  
+
   .modal-content {
     padding: 15px;
     max-height: calc(90vh - 70px);
@@ -803,10 +815,13 @@
 @media (max-height: 600px) {
   .booking-modal-overlay {
     padding: 5px;
+    align-items: center !important;
+    justify-content: center !important;
+    display: flex !important;
   }
-  
+
   .booking-modal {
-    margin: 0 auto;
+    margin: auto;
     max-height: 95vh;
   }
   

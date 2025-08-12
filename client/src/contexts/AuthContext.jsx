@@ -101,15 +101,25 @@ export const AuthProvider = ({ children }) => {
       const data = await response.json();
 
       if (data.success && data.user) {
+        // User is verified and authenticated
         setUser(data.user);
         setIsAuthenticated(true);
-        
+
         // Store user data
         localStorage.setItem('user', JSON.stringify(data.user));
         localStorage.setItem('role', data.user.role);
         localStorage.setItem('isAuthenticated', 'true');
 
         return { success: true, user: data.user };
+      } else if (data.requiresVerification) {
+        // User credentials are correct but email verification is required
+        // Don't set as authenticated
+        return {
+          success: false,
+          requiresVerification: true,
+          user: data.user,
+          message: data.message || 'Email verification required'
+        };
       } else {
         return { success: false, message: data.message || 'Login failed' };
       }

@@ -214,8 +214,8 @@
 }
 
 .admin-role-userManagement {
-  background: var(--error-color);
-  color: var(--primary-light);
+  background: var(--primary-light);
+  color: var(--dark-text);
 }
 
 .facilityowner-role-userManagement {

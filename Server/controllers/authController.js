@@ -91,6 +91,29 @@ export const login = async (req,res) => {
             return res.status(401).json({success: false, message: 'Invalid Password', statusCode: 401})
         }
 
+        // Check if account is verified
+        if (!user.isAccountVerified) {
+            // Don't set authentication cookie for unverified users
+            const role = user.isAdmin ? 'Admin' : (user.isFacilityOwner ? 'FacilityOwner' : 'User');
+
+            return res.status(200).json({
+                success: false,
+                message: 'Please verify your email to continue',
+                requiresVerification: true,
+                user: {
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    isAccountVerified: user.isAccountVerified,
+                    isAdmin: Boolean(user.isAdmin),
+                    isFacilityOwner: Boolean(user.isFacilityOwner),
+                    role,
+                },
+                statusCode: 200
+            });
+        }
+
+        // User is verified, proceed with normal login
         const token = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: '7d'});
 
         res.cookie('token', token, {
@@ -99,7 +122,7 @@ export const login = async (req,res) => {
             maxAge: 7 * 24 * 60 * 60 * 1000,
             sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
         });
-        
+
         const role = user.isAdmin ? 'Admin' : (user.isFacilityOwner ? 'FacilityOwner' : 'User');
 
         return res.status(200).json({
@@ -164,14 +187,18 @@ export const logout = async (req,res) => {
 
 export const sendVerifyOtp = async (req,res) => {
     try {
+        const {userId, email} = req.body || {};
 
-        const {userId} = req.body || {};
+        let user;
 
-        if (!userId) {
-            return res.json({success: false, message: "User ID is required"});
+        // Support both userId and email for flexibility
+        if (userId) {
+            user = await userModel.findById(userId);
+        } else if (email) {
+            user = await userModel.findOne({email});
+        } else {
+            return res.json({success: false, message: "User ID or email is required"});
         }
-
-        const user = await userModel.findById(userId);
 
         if (!user) {
             return res.json({success: false, message: "User not found"});
@@ -206,24 +233,38 @@ export const sendVerifyOtp = async (req,res) => {
 
         await transporter.sendMail(mailOption);
 
-        res.json({ success: true, message: 'Verification OTP sent on your E-Mail'});
-        
+        res.json({
+            success: true,
+            message: 'Verification OTP sent on your E-Mail',
+            userId: user._id // Return userId for frontend to use in verification
+        });
+
     } catch (error) {
         return res.json({success:false , message: error.message});
     }
 }
 
 export const verifyEmail = async (req,res) => {
-    
-    const {userId, otp} = req.body;
 
-    if (!userId || !otp){
-        return res.json({success: false, message: "Missing Details"});
+    const {userId, email, otp} = req.body;
+
+    if (!otp){
+        return res.json({success: false, message: "OTP is required"});
     }
-    
+
+    if (!userId && !email) {
+        return res.json({success: false, message: "User ID or email is required"});
+    }
+
     try {
-        
-        const user = await userModel.findById(userId);
+        let user;
+
+        // Support both userId and email for verification
+        if (userId) {
+            user = await userModel.findById(userId);
+        } else if (email) {
+            user = await userModel.findOne({email});
+        }
 
         if(!user){
             return res.json({success: false, message: "User Not Found"});
@@ -238,12 +279,27 @@ export const verifyEmail = async (req,res) => {
         }
 
         user.isAccountVerified = true;
-
         user.verifyOtp = '';
         user.verifyOtpexpireAt = 0;
 
         await user.save();
-        return res.json({success: true, message: "Email Verified Successfully"});
+
+        // Determine user role
+        const role = user.isAdmin ? 'Admin' : (user.isFacilityOwner ? 'FacilityOwner' : 'User');
+
+        return res.json({
+            success: true,
+            message: "Email Verified Successfully",
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                isAccountVerified: user.isAccountVerified,
+                isAdmin: Boolean(user.isAdmin),
+                isFacilityOwner: Boolean(user.isFacilityOwner),
+                role,
+            }
+        });
 
     } catch (error) {
         return res.json({success:false , message: error.message});
@@ -252,9 +308,41 @@ export const verifyEmail = async (req,res) => {
 
 export const isAuthenticated = async (req, res) => {
     try {
-        return res.json({success: true});
+        const { token } = req.cookies;
+
+        if (!token) {
+            return res.json({ success: false, message: "Not authenticated" });
+        }
+
+        const tokenDecode = jwt.verify(token, process.env.JWT_SECRET);
+
+        if (!tokenDecode.id) {
+            return res.json({ success: false, message: "Invalid token" });
+        }
+
+        const user = await userModel.findById(tokenDecode.id).select("-password");
+
+        if (!user) {
+            return res.json({ success: false, message: "User not found" });
+        }
+
+        const role = user.isAdmin ? 'Admin' : (user.isFacilityOwner ? 'FacilityOwner' : 'User');
+
+        return res.json({
+            success: true,
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                isAccountVerified: user.isAccountVerified,
+                isAdmin: Boolean(user.isAdmin),
+                isFacilityOwner: Boolean(user.isFacilityOwner),
+                role,
+            }
+        });
     } catch (error) {
-        res.json ({success:false , message: error.message});
+        console.error('Auth check error:', error);
+        res.json({ success: false, message: "Authentication failed" });
     }
 }
 

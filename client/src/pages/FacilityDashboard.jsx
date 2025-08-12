@@ -75,6 +75,8 @@ const ManageCourtsSection = () => {
   const [selectedVenue, setSelectedVenue] = useState('');
   const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
+  const [showEditForm, setShowEditForm] = useState(false);
+  const [editingCourt, setEditingCourt] = useState(null);
   const [newCourt, setNewCourt] = useState({
     name: '',
     sportType: '',
@@ -145,9 +147,77 @@ const ManageCourtsSection = () => {
           pricePerHour: '',
           operatingHours: { start: '08:00', end: '22:00' }
         });
+        alert('Court added successfully!');
+      } else {
+        alert('Failed to add court: ' + (data.message || 'Unknown error'));
       }
     } catch (error) {
       console.error('Error adding court:', error);
+      alert('Error adding court: ' + error.message);
+    }
+  };
+
+  const handleEditCourt = (court) => {
+    setEditingCourt(court);
+    setNewCourt({
+      name: court.name,
+      sportType: court.sportType,
+      pricePerHour: court.pricePerHour,
+      operatingHours: court.operatingHours
+    });
+    setShowEditForm(true);
+  };
+
+  const handleUpdateCourt = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`/api/courts/${editingCourt._id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify(newCourt)
+      });
+
+      const data = await response.json();
+      if (data.success) {
+        fetchCourts();
+        setShowEditForm(false);
+        setEditingCourt(null);
+        setNewCourt({
+          name: '',
+          sportType: '',
+          pricePerHour: '',
+          operatingHours: { start: '08:00', end: '22:00' }
+        });
+        alert('Court updated successfully!');
+      } else {
+        alert('Failed to update court: ' + (data.message || 'Unknown error'));
+      }
+    } catch (error) {
+      console.error('Error updating court:', error);
+      alert('Error updating court: ' + error.message);
+    }
+  };
+
+  const handleDeleteCourt = async (courtId, courtName) => {
+    if (window.confirm(`Are you sure you want to delete "${courtName}"? This action cannot be undone.`)) {
+      try {
+        const response = await fetch(`/api/courts/${courtId}`, {
+          method: 'DELETE',
+          credentials: 'include'
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          fetchCourts();
+          alert('Court deleted successfully!');
+        } else {
+          alert('Failed to delete court: ' + (data.message || 'Unknown error'));
+        }
+      } catch (error) {
+        console.error('Error deleting court:', error);
+        alert('Error deleting court: ' + error.message);
+      }
     }
   };
 
@@ -200,8 +270,18 @@ const ManageCourtsSection = () => {
                 <p className="hours-facilitydashboard">{court.operatingHours.start} - {court.operatingHours.end}</p>
               </div>
               <div className="court-actions-facilitydashboard">
-                <button className="edit-btn-facilitydashboard">Edit</button>
-                <button className="delete-btn-facilitydashboard">Delete</button>
+                <button
+                  className="edit-btn-facilitydashboard"
+                  onClick={() => handleEditCourt(court)}
+                >
+                  Edit
+                </button>
+                <button
+                  className="delete-btn-facilitydashboard"
+                  onClick={() => handleDeleteCourt(court._id, court.name)}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           ))}
@@ -278,6 +358,100 @@ const ManageCourtsSection = () => {
               <div className="form-actions-facilitydashboard">
                 <button type="button" onClick={() => setShowAddForm(false)}>Cancel</button>
                 <button type="submit" className="btn-facilitydashboard">Add Court</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showEditForm && editingCourt && (
+        <div className="modal-overlay-facilitydashboard">
+          <div className="modal-facilitydashboard">
+            <div className="modal-header-facilitydashboard">
+              <h3>Edit Court</h3>
+              <button onClick={() => {
+                setShowEditForm(false);
+                setEditingCourt(null);
+                setNewCourt({
+                  name: '',
+                  sportType: '',
+                  pricePerHour: '',
+                  operatingHours: { start: '08:00', end: '22:00' }
+                });
+              }}>×</button>
+            </div>
+            <form onSubmit={handleUpdateCourt} className="court-form-facilitydashboard">
+              <div className="form-group-facilitydashboard">
+                <label>Court Name</label>
+                <input
+                  type="text"
+                  value={newCourt.name}
+                  onChange={(e) => setNewCourt({...newCourt, name: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="form-group-facilitydashboard">
+                <label>Sport Type</label>
+                <select
+                  value={newCourt.sportType}
+                  onChange={(e) => setNewCourt({...newCourt, sportType: e.target.value})}
+                  required
+                >
+                  <option value="">Select sport</option>
+                  <option value="Badminton">Badminton</option>
+                  <option value="Tennis">Tennis</option>
+                  <option value="Football">Football</option>
+                  <option value="Basketball">Basketball</option>
+                  <option value="Cricket">Cricket</option>
+                </select>
+              </div>
+              <div className="form-group-facilitydashboard">
+                <label>Price per Hour (₹)</label>
+                <input
+                  type="number"
+                  value={newCourt.pricePerHour}
+                  onChange={(e) => setNewCourt({...newCourt, pricePerHour: e.target.value})}
+                  required
+                />
+              </div>
+              <div className="form-row-facilitydashboard">
+                <div className="form-group-facilitydashboard">
+                  <label>Opening Time</label>
+                  <input
+                    type="time"
+                    value={newCourt.operatingHours.start}
+                    onChange={(e) => setNewCourt({
+                      ...newCourt,
+                      operatingHours: {...newCourt.operatingHours, start: e.target.value}
+                    })}
+                    required
+                  />
+                </div>
+                <div className="form-group-facilitydashboard">
+                  <label>Closing Time</label>
+                  <input
+                    type="time"
+                    value={newCourt.operatingHours.end}
+                    onChange={(e) => setNewCourt({
+                      ...newCourt,
+                      operatingHours: {...newCourt.operatingHours, end: e.target.value}
+                    })}
+                    required
+                  />
+                </div>
+              </div>
+              <div className="form-actions-facilitydashboard">
+                <button type="button" onClick={() => {
+                  setShowEditForm(false);
+                  setEditingCourt(null);
+                  setNewCourt({
+                    name: '',
+                    sportType: '',
+                    pricePerHour: '',
+                    operatingHours: { start: '08:00', end: '22:00' }
+                  });
+                }}>Cancel</button>
+                <button type="submit" className="btn-facilitydashboard">Update Court</button>
               </div>
             </form>
           </div>
@@ -392,7 +566,7 @@ const BookingsOverviewSection = () => {
                   <p><strong>Amount:</strong> ₹{booking.totalPrice}</p>
                 </div>
               </div>
-              <div className="booking-actions-facilitydashboard">
+              {/* <div className="booking-actions-facilitydashboard">
                 {booking.status === 'Confirmed' && (
                   <button 
                     className="complete-btn-facilitydashboard"
@@ -407,7 +581,7 @@ const BookingsOverviewSection = () => {
                 >
                   View Details
                 </button>
-              </div>
+              </div> */}
             </div>
           ))}
         </div>

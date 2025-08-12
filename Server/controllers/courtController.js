@@ -56,6 +56,19 @@ export const getOwnerCourts = async (req, res) => {
 export const updateCourt = async (req, res) => {
     try {
         const { id } = req.params;
+        const ownerId = req.user._id;
+
+        // First find the court and populate venue to check ownership
+        const court = await courtModel.findById(id).populate('venue');
+        if (!court) {
+            return res.status(404).json({ success: false, message: 'Court not found' });
+        }
+
+        // Check if the user owns the venue that contains this court
+        if (court.venue.owner.toString() !== ownerId.toString()) {
+            return res.status(403).json({ success: false, message: 'Unauthorized to update this court' });
+        }
+
         const updatedCourt = await courtModel.findByIdAndUpdate(id, req.body, { new: true });
         res.json({ success: true, message: 'Court updated successfully', court: updatedCourt });
     } catch (error) {
@@ -67,9 +80,22 @@ export const updateCourt = async (req, res) => {
 export const deleteCourt = async (req, res) => {
     try {
         const { id } = req.params;
+        const ownerId = req.user._id;
+
+        // First find the court and populate venue to check ownership
+        const court = await courtModel.findById(id).populate('venue');
+        if (!court) {
+            return res.status(404).json({ success: false, message: 'Court not found' });
+        }
+
+        // Check if the user owns the venue that contains this court
+        if (court.venue.owner.toString() !== ownerId.toString()) {
+            return res.status(403).json({ success: false, message: 'Unauthorized to delete this court' });
+        }
+
         await courtModel.findByIdAndDelete(id);
         res.json({ success: true, message: 'Court deleted successfully' });
     } catch (error) {
         res.status(500).json({ success: false, message: 'Failed to delete court', error: error.message });
     }
-}; 
+};
